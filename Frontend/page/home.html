@@ -188,11 +188,62 @@ nav {
     padding: 15px;
     border-radius: 8px;
     transition: all 0.3s;
+    position: relative;
 }
 
 .menu-items li a:hover {
     background: rgba(0, 217, 255, 0.1);
     color: #00D9FF;
+    transform: translateX(5px);
+}
+
+/* Стилі для пункту меню з підменю */
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+/* Підменю */
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.submenu li a:hover {
+    color: #00D9FF;
+    background: rgba(0, 217, 255, 0.1);
     transform: translateX(5px);
 }
 
@@ -254,26 +305,108 @@ nav {
     to { opacity: 1; }
 }
 
+/* Картка мови програмування */
 .language-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    perspective: 1000px;
+    width: 280px;
+    height: 320px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.language-btn:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-front {
     background: rgba(13, 14, 36, 0.8);
     border: 3px solid #00D9FF;
-    border-radius: 20px;
-    padding: 70px;
-    cursor: pointer;
-    transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    gap: 15px;
 }
 
-.language-btn:hover {
-    transform: translateY(-10px) scale(1.05);
+.card-back {
+    background: rgba(0, 217, 255, 0.95);
+    transform: rotateY(180deg);
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.language-btn:hover .card-front {
     box-shadow: 0 10px 40px rgba(0, 217, 255, 0.6);
-    border-color: #00FFF7;
 }
 
-.language-btn img {
+.card-front img {
     width: 120px;
     height: 120px;
-    display: block;
+}
+
+.card-front .name {
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.card-back-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card-back .name {
+    color: #0D0E24;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.card-back .description {
+    color: #0D0E24;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.start-btn {
+    background: #0D0E24;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: auto;
+}
+
+.start-btn:hover {
+    background: #1a1d4a;
+    transform: scale(1.05);
 }
 
 /* Контейнер для анімації */
@@ -343,9 +476,18 @@ nav {
         font-size: 24px;
     }
     
-    .language-btn img {
-        width: 200px;
-        height: 200px;
+    .language-btn {
+        width: 240px;
+        height: 280px;
+    }
+    
+    .card-front img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .card-back .description {
+        font-size: 13px;
     }
 }
 </style>
@@ -370,14 +512,25 @@ nav {
                 Головна
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="16 18 22 12 16 6"></polyline>
                     <polyline points="8 6 2 12 8 18"></polyline>
                 </svg>
                 Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="СSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
         </li>
     </ul>
 </div>
@@ -417,27 +570,122 @@ nav {
     <div class="languages-container">
         <!--Перший ряд-->
         <div class="language-buttons">
-            <button class="language-btn" onclick="selectLanguage('python')">
-                <img src="image\python_5968350 (1).png" alt="Python">
-            </button>
-            <button class="language-btn" onclick="selectLanguage('cpp')">
-                <img src="image\c_6132222 (2).png" alt="C++">
-            </button>
-            <button class="language-btn" onclick="selectLanguage('cs')">
-                <img src="image\c-sharp_6132221.png" alt="C#">
-            </button>
+            <!-- Python -->
+            <div class="language-btn">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="image\python_5968350 (1).png" alt="Python">
+                        <div class="name">Python</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-back-content">
+                            <div class="name">Python</div>
+                            <div class="description">
+                                Універсальна мова програмування для веб-розробки, аналізу даних та штучного інтелекту
+                            </div>
+                        </div>
+                        <button class="start-btn" onclick="selectLanguage('python')">Почати навчання</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C++ -->
+            <div class="language-btn">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="image\c_6132222 (2).png" alt="C++">
+                        <div class="name">C++</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-back-content">
+                            <div class="name">C++</div>
+                            <div class="description">
+                                Потужна мова для системного програмування, ігор та високопродуктивних додатків
+                            </div>
+                        </div>
+                        <button class="start-btn" onclick="selectLanguage('cpp')">Почати навчання</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C# -->
+            <div class="language-btn">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="image\c-sharp_6132221.png" alt="C#">
+                        <div class="name">C#</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-back-content">
+                            <div class="name">C#</div>
+                            <div class="description">
+                                Сучасна мова для розробки Windows-додатків, ігор на Unity та веб-сервісів
+                            </div>
+                        </div>
+                        <button class="start-btn" onclick="selectLanguage('cs')">Почати навчання</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <!--Другий ряд-->
         <div class="language-buttons">
-            <button class="language-btn" onclick="selectLanguage('javascript')">
-                <img src="image\js-file_8422177.png" alt="JavaScript">
-            </button>
-            <button class="language-btn" onclick="selectLanguage('html')">
-                <img src="image\html-5_5968267.png" alt="HTML">
-            </button>
-            <button class="language-btn" onclick="selectLanguage('css')">
-                <img src="image\css-3_5968242.png" alt="CSS">
-            </button>
+            <!-- JavaScript -->
+            <div class="language-btn">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="image\js-file_8422177.png" alt="JavaScript">
+                        <div class="name">JavaScript</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-back-content">
+                            <div class="name">JavaScript</div>
+                            <div class="description">
+                                Основна мова для інтерактивних веб-сайтів та сучасних веб-додатків
+                            </div>
+                        </div>
+                        <button class="start-btn" onclick="selectLanguage('javascript')">Почати навчання</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HTML -->
+            <div class="language-btn">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="image\html-5_5968267.png" alt="HTML">
+                        <div class="name">HTML</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-back-content">
+                            <div class="name">HTML</div>
+                            <div class="description">
+                                Основа всіх веб-сторінок - структура та контент вашого сайту
+                            </div>
+                        </div>
+                        <button class="start-btn" onclick="selectLanguage('html')">Почати навчання</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSS -->
+            <div class="language-btn">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="image\css-3_5968242.png" alt="CSS">
+                        <div class="name">CSS</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-back-content">
+                            <div class="name">CSS</div>
+                            <div class="description">
+                                Стилізація веб-сторінок - кольори, шрифти, анімації та дизайн
+                            </div>
+                        </div>
+                        <button class="start-btn" onclick="selectLanguage('css')">Почати навчання</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -500,6 +748,15 @@ overlay.addEventListener('click', () => {
     overlay.classList.remove('active');
 });
 
+// Функціонал для розкриття підменю "Курси"
+const menuToggle = document.querySelector('.menu-toggle');
+const menuItemWithSubmenu = document.querySelector('.menu-item-with-submenu');
+
+menuToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    menuItemWithSubmenu.classList.toggle('active');
+});
+
 // Кнопка входу - перехід на login.html
 const loginBtn = document.getElementById('loginBtn');
 loginBtn.addEventListener('click', () => {
@@ -510,9 +767,23 @@ loginBtn.addEventListener('click', () => {
 function selectLanguage(language) {
     console.log('Вибрана мова:', language);
     if (language === 'javascript') {
-        window.location.href = 'js-start.html'; 
+        window.location.href = 'JavaScripthome.html'; 
     }
-    // Тут можна додати переходи на інші курси
+    if (language === 'python') {
+        window.location.href = 'Pythonhome.html'; 
+    }
+    if (language === 'cpp') {
+        window.location.href = 'C++home.html'; 
+    }
+    if (language === 'cs') {
+        window.location.href = 'СSharphome.html'; 
+    }
+    if (language === 'html') {
+        window.location.href = 'HTMLhome.html'; 
+    }
+    if (language === 'css') {
+        window.location.href = 'CSShome.html'; 
+    }
 }
 </script>
 </body>
