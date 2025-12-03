@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript - Теорія | CodeCraft</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1c40 0%, #2f3485 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 25fr;
+    align-items: center;
+    padding: 15px 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 14, 36, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.menu-btn {
+    background: transparent;
+    border: 2px solid #00D9FF;
+    color: #00D9FF;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    width: 50px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: #00d9ff;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Кнопка входу */
+.login-btn {
+    background: transparent;
+    border: 2px solid #00d9ff;
+    color: #00D9FF;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+.login-btn:hover {
+    background: #00D9FF;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(13, 14, 36, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 80px 30px 30px 30px;
+    transition: left 0.4s ease;
+    z-index: 99;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 28px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.menu-items li a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+    z-index: 98;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    position: relative;
+    z-index: 1;
+}
+
+.theory-sidebar {
+    position: fixed;
+    right: 0;
+    top: 80px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    background: rgba(13, 14, 36, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px;
+    overflow-y: auto;
+    border-left: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.theory-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theory-sidebar::-webkit-scrollbar-track {
+    background: rgba(13, 14, 36, 0.5);
+}
+
+.theory-sidebar::-webkit-scrollbar-thumb {
+    background: #00D9FF;
+    border-radius: 4px;
+}
+
+.sidebar-title {
+    color: #00D9FF;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.theory-nav {
+    list-style: none;
+}
+
+.theory-nav > li {
+    margin-bottom: 12px;
+}
+
+.theory-topic {
+    position: relative;
+}
+
+.topic-toggle {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.topic-toggle:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.topic-arrow {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.theory-topic.active .topic-arrow {
+    transform: rotate(180deg);
+}
+
+.subtopic-list {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 10px;
+}
+
+.theory-topic.active .subtopic-list {
+    max-height: 600px;
+}
+
+.subtopic-list li {
+    margin-top: 8px;
+}
+
+.subtopic-list a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+}
+
+.subtopic-list a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.subtopic-list a.active {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 60px;
+    margin-right: 280px;
+    max-width: calc(100% - 280px);
+}
+
+.theory-section {
+    background: rgba(13, 14, 36, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    scroll-margin-top: 100px;
+}
+
+.theory-section h2 {
+    color: #00D9FF;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.theory-section h3 {
+    color: #00D9FF;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.theory-section p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.theory-section ul {
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 25px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.theory-section li {
+    margin-bottom: 8px;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    color: #00FF88;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+th {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    font-weight: 600;
+}
+
+td {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.test-btn {
+    background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+    color: #0D0E24;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 30px;
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+}
+
+.test-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+}
+
+@media(max-width: 1200px) {
+    .theory-sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-right: 240px;
+        max-width: calc(100% - 240px);
+    }
+}
+
+@media(max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+    
+    .logo-nav {
+        font-size: 24px;
+    }
+    
+    .theory-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-right: 0;
+        max-width: 100%;
+        padding: 30px 20px;
+    }
+    
+    .theory-section {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-title">CodeCraft</div>
+    <ul class="menu-items">
+        <li>
+            <a href="home.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Головна
+            </a>
+        </li>
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="CSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<nav>
+    <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+    <div class="logo-nav">CodeCraft</div>
+    <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Вхід
+        </button>
+    </div>
+</nav>
+
+<div class="content-wrapper">
+    <div class="theory-sidebar">
+        <div class="sidebar-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Зміст курсу
+        </div>
+         <ul class="theory-nav">
+            <li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 1: Основи JavaScript
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t1-1">1.1. Змінні: let, const, var</a></li>
+        <li><a href="#t1-2">1.2. Типи даних</a></li>
+        <li><a href="#t1-3">1.3. Оператори</a></li>
+        <li><a href="#t1-4">1.4. Умови: if, else if, else</a></li>
+        <li><a href="#t1-5">1.5. Тернарний оператор</a></li>
+        <li><a href="#t1-6">1.6. Цикли (for, while, for…of)</a></li>
+        <li><a href="#t1-7">1.7. Рядки (strings)</a></li>
+        <li><a href="#t1-8">1.8. Булеві значення</a></li>
+        <li><a href="#t1-9">1.9. Ввід/вивід інформації</a></li>
+        <li><a href="#t1-10">1.10. Коментарі</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 2: Функції та області видимості
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t2-1">2.1. Створення функції</a></li>
+        <li><a href="#t2-2">2.2. Параметри та аргументи</a></li>
+        <li><a href="#t2-3">2.3. Повернення значення (return)</a></li>
+        <li><a href="#t2-4">2.4. Стрілкові функції (Arrow functions)</a></li>
+        <li><a href="#t2-5">2.5. Функції за замовчуванням</a></li>
+        <li><a href="#t2-6">2.6. Область видимості (scope)</a></li>
+        <li><a href="#t2-7">2.7. Замикання (Closures)</a></li>
+        <li><a href="#t2-8">2.8. Рекурсія</a></li>
+        <li><a href="#t2-9">2.9. Анонімні функції</a></li>
+        <li><a href="#t2-10">2.10. Колбек-функції</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 3: Масиви та об’єкти
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t3-1">3.1. Масиви: створення та основи</a></li>
+        <li><a href="#t3-2">3.2. Методи масивів: push(), pop(), shift(), unshift()</a></li>
+        <li><a href="#t3-3">3.3. Методи перебору масивів (forEach, map, filter, find)</a></li>
+        <li><a href="#t3-4">3.4. Рядки як масиви символів</a></li>
+        <li><a href="#t3-5">3.5. Розпакування масивів (spread)</a></li>
+        <li><a href="#t3-6">3.6. Об’єкти: створення</a></li>
+        <li><a href="#t3-7">3.7. Додавання, видалення та зміна властивостей</a></li>
+        <li><a href="#t3-8">3.8. Методи об’єкта :</a></li>
+        <li><a href="#t3-9">3.9. Перебір об’єкта (for...in, Object.keys, Object.values)</a></li>
+        <li><a href="#t3-10">3.10. Деструктуризація масивів та об’єктів</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 4: DOM (Document Object Model)
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t4-1">4.1. Структура DOM</a></li>
+        <li><a href="#t4-2">4.2. Отримання елементів</a></li>
+        <li><a href="#t4-3">4.3. Зміна контенту</a></li>
+        <li><a href="#t4-4">4.4. Зміна стилів</a></li>
+        <li><a href="#t4-5">4.5. Робота з атрибутами</a></li>
+        <li><a href="#t4-6">4.6. Створення та видалення елементів</a></li>
+        <li><a href="#t4-7">4.7. Навігація по DOM</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 5: Події
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t5-1">5.1. Основні типи подій</a></li>
+        <li><a href="#t5-2">5.2. Додавання обробників подій</a></li>
+        <li><a href="#t5-3">5.3. Події форм і полів вводу</a></li>
+        <li><a href="#t5-4">5.4. Події клавіатури</a></li>
+        <li><a href="#t5-5">5.5. Події миші</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 6: Класи
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t6-1">6.1. Створення класу</a></li>
+        <li><a href="#t6-2">6.2. Наслідування</a></li>
+        <li><a href="#t6-3">6.3. Статичні методи</a></li>
+        <li><a href="#t6-4">6.4. Геттери та сеттери</a></li>
+        <li><a href="#t6-5">6.5. Приватні та публічні поля</a></li>
+        <li><a href="#t6-6">6.6. Абстракція і інкапсуляція</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 7: Асинхронність
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t7-1">7.1. Проміси (Promise)</a></li>
+        <li><a href="#t7-2">7.2. async / await</a></li>
+        <li><a href="#t7-3">7.3. Використання fetch()</a></li>
+        <li><a href="#t7-4">7.4. Обробка помилок</a></li>
+        <li><a href="#t7-5">7.5. Паралельне виконання промісів</a></li>
+        <li><a href="#t7-6">7.6. Promise.race()</a></li>
+    </ul>
+</li>
+        </ul>
+    </div>
+
+    <main class="main-content">
+    <section class="theory-section" id="t1-1">
+        <h2 style="text-align:center;">ТЕМА 1: Основи JavaScript</h2>
+
+        <!-- 1.1 Змінні -->
+        <h3 id="t1-1" style="text-decoration: underline;">1.1 Змінні: let, const, var</h3>
+        <p>JavaScript дозволяє створювати змінні трьома способами:</p>
+        <ul>
+            <li><strong>let</strong> — змінна, значення можна змінювати;</li>
+            <li><strong>const</strong> — константа, значення не можна змінювати;</li>
+            <li><strong>var</strong> — старий спосіб оголошення змінних, використання якого не рекомендується через проблеми з областю видимості.</li>
+        </ul>
+        <div class="code-block">
+            <code>
+let age = 20;<br>
+const PI = 3.14;<br>
+<br>
+age = 21;     // ✔ можна змінити<br>
+// PI = 4;    // ❌ помилка — const не змінюється
+            </code>
+        </div>
+
+        <!-- 1.2 Типи даних -->
+        <h3 id="t1-2" style="text-decoration: underline;">1.2 Типи даних</h3>
+        <p>Основні типи даних у JavaScript:</p>
+        <ul>
+            <li><strong>number</strong> — числа (цілі та дробові);</li>
+            <li><strong>string</strong> — рядки тексту;</li>
+            <li><strong>boolean</strong> — логічні значення (true / false);</li>
+            <li><strong>object</strong> — об'єкти, словники;</li>
+            <li><strong>undefined</strong> — змінна оголошена, але без значення;</li>
+            <li><strong>null</strong> — спеціальне значення «немає значення»;</li>
+            <li><strong>bigint</strong> — великі цілі числа;</li>
+            <li><strong>symbol</strong> — унікальні ідентифікатори.</li>
+        </ul>
+        <div class="code-block">
+            <code>
+let a = 42;          // number<br>
+let name = "Alice";  // string<br>
+let isAdmin = true;  // boolean<br>
+let nothing = null;  // null<br>
+let x;               // undefined
+            </code>
+        </div>
+
+        <!-- 1.3 Оператори -->
+        <h3 id="t1-3" style="text-decoration: underline;">1.3 Оператори</h3>
+        <p>JavaScript підтримує різні оператори:</p>
+        <ul>
+            <li>Арифметичні: +, -, *, /, %, **;</li>
+            <li>Логічні: &&, ||, !;</li>
+            <li>Порівняння: ==, ===, !=, !==, &gt;, &lt;, &gt;=, &lt;=</li>
+        </ul>
+        <div class="code-block">
+            <code>
+let a = 10;<br>
+let b = 3;<br>
+console.log(a + b);  // 13<br>
+console.log(a * b);  // 30<br>
+console.log(a > b);  // true<br>
+console.log(a === b); // false — строгe порівняння
+            </code>
+        </div>
+
+        <!-- 1.4 Умови -->
+        <h3 id="t1-4" style="text-decoration: underline;">1.4 Умови: if, else if, else</h3>
+        <p>Умовні конструкції дозволяють виконувати код лише при виконанні певної умови.</p>
+        <div class="code-block">
+            <code>
+let age = 17;<br>
+if (age >= 18) {<br>
+    console.log("Повнолітній");<br>
+} else {<br>
+    console.log("Неповнолітній");<br>
+}
+            </code>
+        </div>
+
+        <!-- 1.5 Тернарний оператор -->
+        <h3 id="t1-5" style="text-decoration: underline;">1.5 Тернарний оператор</h3>
+        <p>Скорочений запис умовного виразу:</p>
+        <div class="code-block">
+            <code>
+let age = 18;<br>
+let msg = age >= 18 ? "Дорослий" : "Дитина";<br>
+console.log(msg);
+            </code>
+        </div>
+
+        <!-- 1.6 Цикли -->
+        <h3 id="t1-6" style="text-decoration: underline;">1.6 Цикли (for, while, for…of)</h3>
+        <p>Цикли виконують повторювані дії:</p>
+        <div class="code-block">
+            <code>
+// for<br>
+for (let i = 0; i &lt; 5; i++) {<br>
+    console.log(i);<br>
+}<br><br>
+// while<br>
+let i = 3;<br>
+while (i &gt; 0) {<br>
+    console.log(i);<br>
+    i--;<br>
+}<br><br>
+// for…of<br>
+for (let char of "JavaScript") {<br>
+    console.log(char);<br>
+}
+            </code>
+        </div>
+
+        <!-- 1.7 Рядки -->
+        <h3 id="t1-7" style="text-decoration: underline;">1.7 Рядки (strings)</h3>
+        <p>Рядки можна створювати у ' ', " " або ` ` (шаблонні рядки). Підтримуються методи для роботи з рядками:</p>
+        <ul>
+            <li>об'єднання (+)</li>
+            <li>форматування (`${}`)</li>
+            <li>отримання символу за індексом [ ]</li>
+            <li>методи: <code>toUpperCase(), toLowerCase(), slice(), substring()</code></li>
+        </ul>
+        <div class="code-block">
+            <code>
+let text = "JavaScript";<br>
+console.log(text[0]);        // J<br>
+console.log(text.toUpperCase()); // JAVASCRIPT<br>
+// Шаблонні рядки:<br>
+let name = "Alice";<br>
+console.log(`Привіт, ${name}!`);
+            </code>
+        </div>
+
+        <!-- 1.8 Булеві значення -->
+        <h3 id="t1-8" style="text-decoration: underline;">1.8 Булеві значення</h3>
+        <p>Булевий тип приймає тільки два значення: <strong>true</strong> або <strong>false</strong>. Використовується для умов.</p>
+        <div class="code-block">
+            <code>
+let isAdult = 17 >= 18;<br>
+console.log(isAdult); // false
+            </code>
+        </div>
+
+        <!-- 1.9 Ввід/вивід -->
+        <h3 id="t1-9" style="text-decoration: underline;">1.9 Ввід/вивід інформації</h3>
+        <p>У браузері:</p>
+<ul>
+<li><strong>alert()</strong> — вивід повідомлення</li>
+<li><strong>prompt()</strong> — введення тексту</li>
+<li><strong>console.log()</strong> — вивід у консоль</li>
+</ul>
+<div class="code-block">
+<code>
+let name = prompt("Введи ім'я:");<br>
+console.log("Привіт,", name);<br>
+alert(`Вітаю, ${name}!`);
+</code>
+</div>
+
+        <!-- 1.10 Коментарі -->
+        <h3 id="t1-10" style="text-decoration: underline;">1.10 Коментарі</h3>
+        <p>Коментарі допомагають пояснювати код:</p>
+        <ul>
+            <li>Однорядкові: <code>//</code></li>
+            <li>Багаторядкові: <code>/* ... */</code></li>
+        </ul>
+        <div class="code-block">
+            <code>
+// Це однорядковий коментар
+
+/*
+Це
+багаторядковий
+коментар
+*/
+            </code></div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 1</button>
+    </section>
+
+    <section class="theory-section" id="t2-1">
+        <h2 style="text-align:center;">ТЕМА 2: Функції та області видимості (JavaScript)</h2>
+
+        <!-- 2.1 Створення функції -->
+        <h3 id="t2-1" style="text-decoration: underline;">2.1 Створення функції</h3>
+        <p>Функція — це блок коду, який можна викликати багато разів. Основні способи створення:</p>
+        <ul>
+            <li><strong>Function Declaration</strong> — оголошення функції;</li>
+            <li><strong>Function Expression</strong> — присвоєння функції змінній.</li>
+        </ul>
+        <div class="code-block">
+            <code>
+// Function Declaration
+function greet() {
+    console.log("Привіт!");
+}
+greet();
+
+// Function Expression
+const sayHello = function() {
+    console.log("Hello!");
+}
+sayHello();
+            </code>
+        </div>
+
+        <!-- 2.2 Параметри та аргументи -->
+        <h3 id="t2-2" style="text-decoration: underline;">2.2 Параметри та аргументи</h3>
+        <p>Функції можуть приймати вхідні значення — параметри, а при виклику передавати аргументи.</p>
+        <div class="code-block">
+            <code>
+function greet(name) {
+    console.log(`Привіт, ${name}!`);
+}
+
+greet("Alice");
+greet("Bob");
+            </code>
+        </div>
+
+        <!-- 2.3 Повернення значення -->
+        <h3 id="t2-3" style="text-decoration: underline;">2.3 Повернення значення (return)</h3>
+        <p>Функція може повертати результат за допомогою ключового слова <code>return</code>.</p>
+        <div class="code-block">
+            <code>
+function add(a, b) {
+    return a + b;
+}
+
+let sum = add(5, 3);
+console.log(sum); // 8
+            </code>
+        </div>
+
+        <!-- 2.4 Стрілкові функції -->
+        <h3 id="t2-4" style="text-decoration: underline;">2.4 Стрілкові функції (Arrow functions)</h3>
+        <p>Сучасний скорочений синтаксис функцій. Зручні для коротких функцій та колбеків.</p>
+        <div class="code-block">
+            <code>
+const multiply = (a, b) => a * b;
+console.log(multiply(4, 5)); // 20
+            </code>
+        </div>
+
+        <!-- 2.5 Функції за замовчуванням -->
+        <h3 id="t2-5" style="text-decoration: underline;">2.5 Функції за замовчуванням</h3>
+        <p>Параметри можуть мати стандартні значення.</p>
+        <div class="code-block">
+            <code>
+function greet(name = "Гість") {
+    console.log(`Привіт, ${name}!`);
+}
+
+greet();         // Привіт, Гість!
+greet("Alice");  // Привіт, Alice!
+            </code>
+        </div>
+
+        <!-- 2.6 Область видимості -->
+        <h3 id="t2-6" style="text-decoration: underline;">2.6 Область видимості (scope)</h3>
+        <p>Є три типи області видимості:</p>
+        <ul>
+            <li><strong>Global</strong> — доступна у всій програмі;</li>
+            <li><strong>Local</strong> — всередині функції;</li>
+            <li><strong>Block</strong> — всередині фігурних дужок {} (для let та const).</li>
+        </ul>
+        <div class="code-block">
+            <code>
+let x = 10; // глобальна
+
+function test() {
+    let y = 5; // локальна
+    console.log(x, y);
+}
+
+test();
+// console.log(y); // ❌ помилка — y недоступна
+            </code>
+        </div>
+
+        <!-- 2.7 Замикання -->
+        <h3 id="t2-7" style="text-decoration: underline;">2.7 Замикання (Closures)</h3>
+        <p>Функція всередині іншої функції може "пам'ятати" змінні зовнішньої функції.</p>
+        <div class="code-block">
+            <code>
+function counter() {
+    let count = 0;
+    return function() {
+        count++;
+        console.log(count);
+    };
+}
+
+let c = counter();
+c(); // 1
+c(); // 2
+c(); // 3
+            </code>
+        </div>
+
+        <!-- 2.8 Рекурсія -->
+        <h3 id="t2-8" style="text-decoration: underline;">2.8 Рекурсія</h3>
+        <p>Функція, що викликає сама себе. Використовується для обчислення факторіалів, обходу дерев тощо.</p>
+        <div class="code-block">
+            <code>
+function factorial(n) {
+    if (n === 1) return 1;
+    return n * factorial(n - 1);
+}
+
+console.log(factorial(5)); // 120
+            </code>
+        </div>
+
+        <!-- 2.9 Анонімні функції -->
+        <h3 id="t2-9" style="text-decoration: underline;">2.9 Анонімні функції</h3>
+        <p>Функції без імені, часто використовуються як колбеки.</p>
+        <div class="code-block">
+            <code>
+setTimeout(function() {
+    console.log("Через 2 секунди");
+}, 2000);
+            </code>
+        </div>
+
+        <!-- 2.10 Колбек-функції -->
+        <h3 id="t2-10" style="text-decoration: underline;">2.10 Колбек-функції</h3>
+        <p>Функція, яка передається в іншу функцію як аргумент і виконується всередині неї.</p>
+        <div class="code-block">
+            <code>
+function process(value, callback) {
+    callback(value);
+}
+
+process("Привіт", text => console.log(text));
+            </code>
+        </div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 2</button>
+    </section>
+
+    <section class="theory-section" id="t3-1">
+        <h2 style="text-align:center;">ТЕМА 3: Масиви та об’єкти (JavaScript)</h2>
+
+        <!-- 3.1 Масиви: створення та основи -->
+        <h3 id="t3-1" style="text-decoration: underline;">3.1 Масиви: створення та основи</h3>
+        <p>Масив — структура даних, що зберігає список елементів у певному порядку. Можна зберігати числа, рядки, об’єкти або навіть інші масиви.</p>
+        <ul>
+            <li>Створення через квадратні дужки: <code>[]</code></li>
+            <li>Створення через конструктор: <code>new Array()</code></li>
+        </ul>
+        <div class="code-block">
+            <code>
+let numbers = [1, 2, 3];
+let fruits = ["apple", "banana", "orange"];
+
+console.log(numbers[0]);   // 1
+console.log(fruits.length); // 3
+            </code>
+        </div>
+
+        <!-- 3.2 Методи масивів -->
+        <h3 id="t3-2" style="text-decoration: underline;">3.2 Методи масивів: push(), pop(), shift(), unshift()</h3>
+        <p>Основні методи для роботи з масивами:</p>
+        <ul>
+            <li><strong>push()</strong> — додати елемент у кінець масиву;</li>
+            <li><strong>pop()</strong> — видалити останній елемент;</li>
+            <li><strong>unshift()</strong> — додати елемент на початок;</li>
+            <li><strong>shift()</strong> — видалити перший елемент.</li>
+        </ul>
+        <div class="code-block">
+            <code>
+let arr = [1, 2, 3];
+
+arr.push(4);      // [1, 2, 3, 4]
+arr.pop();        // [1, 2, 3]
+arr.unshift(0);   // [0, 1, 2, 3]
+arr.shift();      // [1, 2, 3]
+
+console.log(arr);
+            </code>
+        </div>
+
+        <!-- 3.3 Методи перебору масивів -->
+        <h3 id="t3-3" style="text-decoration: underline;">3.3 Методи перебору масивів (forEach, map, filter, find)</h3>
+        <p>Методи для обробки елементів без використання класичних циклів:</p>
+        <ul>
+            <li><strong>forEach()</strong> — виконує функцію для кожного елемента;</li>
+            <li><strong>map()</strong> — створює новий масив, змінюючи елементи;</li>
+            <li><strong>filter()</strong> — повертає елементи, що задовольняють умову;</li>
+            <li><strong>find()</strong> — повертає перший елемент, що відповідає умові.</li>
+        </ul>
+        <div class="code-block">
+            <code>
+let nums = [1, 2, 3, 4, 5];
+
+nums.forEach(n => console.log(n));
+
+let doubled = nums.map(n => n * 2); // [2, 4, 6, 8, 10]
+
+let even = nums.filter(n => n % 2 === 0); // [2, 4]
+
+let found = nums.find(n => n > 3); // 4
+            </code>
+        </div>
+
+        <!-- 3.4 Рядки як масиви символів -->
+        <h3 id="t3-4" style="text-decoration: underline;">3.4 Рядки як масиви символів</h3>
+        <p>Рядки можна розглядати як масив символів. Можна отримати символ за індексом або перебирати через цикл.</p>
+        <div class="code-block">
+            <code>
+let text = "JavaScript";
+
+console.log(text[0]); // J
+console.log(text[4]); // S
+            </code>
+        </div>
+
+        <!-- 3.5 Розпакування масивів (spread) -->
+        <h3 id="t3-5" style="text-decoration: underline;">3.5 Розпакування масивів (spread)</h3>
+        <p>Оператор <code>...</code> дозволяє копіювати елементи масиву або об’єднувати масиви.</p>
+        <div class="code-block">
+            <code>
+let a = [1, 2, 3];
+let b = [...a, 4, 5];
+
+console.log(b); // [1, 2, 3, 4, 5]
+            </code>
+        </div>
+
+        <!-- 3.6 Об’єкти: створення -->
+        <h3 id="t3-6" style="text-decoration: underline;">3.6 Об’єкти: створення</h3>
+        <p>Об’єкт — це структура «ключ: значення». Може містити числа, рядки, масиви, інші об’єкти або функції.</p>
+        <div class="code-block">
+            <code>
+let user = {
+    name: "Alice",
+    age: 20
+};
+
+console.log(user.name);    // Alice
+console.log(user["age"]);  // 20
+            </code>
+        </div>
+
+        <!-- 3.7 Додавання, видалення та зміна властивостей -->
+        <h3 id="t3-7" style="text-decoration: underline;">3.7 Додавання, видалення та зміна властивостей</h3>
+        <p>Властивості об’єктів можна змінювати динамічно.</p>
+        <div class="code-block">
+            <code>
+let car = {
+    brand: "BMW",
+    year: 2020
+};
+
+car.color = "black";  // додаємо
+car.year = 2023;      // змінюємо
+delete car.brand;     // видаляємо
+
+console.log(car);
+            </code>
+        </div>
+
+        <!-- 3.8 Методи об’єкта -->
+        <h3 id="t3-8" style="text-decoration: underline;">3.8 Методи об’єкта</h3>
+        <p>Метод — це функція, яка належить об’єкту. Використовує <code>this</code> для доступу до властивостей.</p>
+        <div class="code-block">
+            <code>
+let person = {
+    name: "Bob",
+    sayHello() {
+        console.log("Привіт, я " + this.name);
+    }
+};
+
+person.sayHello();
+            </code>
+        </div>
+
+        <!-- 3.9 Перебір об’єкта -->
+        <h3 id="t3-9" style="text-decoration: underline;">3.9 Перебір об’єкта (for...in, Object.keys, Object.values)</h3>
+        <p>Для читання властивостей об’єкта використовують різні способи:</p>
+        <ul>
+            <li><strong>for...in</strong> — перебір ключів;</li>
+            <li><strong>Object.keys()</strong> — повертає масив ключів;</li>
+            <li><strong>Object.values()</strong> — повертає масив значень.</li>
+        </ul>
+        <div class="code-block">
+            <code>
+let user = {name: "Ann", age: 25};
+
+for (let key in user) {
+    console.log(key, user[key]);
+}
+
+console.log(Object.keys(user));   // ["name", "age"]
+console.log(Object.values(user)); // ["Ann", 25]
+            </code>
+        </div>
+
+        <!-- 3.10 Деструктуризація масивів та об’єктів -->
+        <h3 id="t3-10" style="text-decoration: underline;">3.10 Деструктуризація масивів та об’єктів</h3>
+        <p>Дозволяє швидко витягувати значення з масивів або об’єктів у змінні.</p>
+        <div class="code-block">
+            <code>
+let arr = [10, 20, 30];
+let [a, b, c] = arr;
+
+let person = {name: "Ira", age: 18};
+let {name, age} = person;
+
+console.log(a, b, c); // 10 20 30
+console.log(name, age); // Ira 18
+            </code>
+        </div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 3</button>
+    </section>
+
+    <section class="theory-section" id="t4-1">
+        <h2 style="text-align:center;">ТЕМА 4: DOM (Document Object Model)</h2>
+
+        <!-- 4.1 Структура DOM -->
+        <h3 id="t4-1" style="text-decoration: underline;">4.1 Структура DOM</h3>
+        <p>DOM (Document Object Model) — це об’єктне представлення HTML-документа у вигляді дерева. Кожен елемент HTML-документа стає вузлом (node), до якого можна звертатися через JavaScript.</p>
+        <p>Основні типи вузлів:</p>
+        <ul>
+            <li><strong>Element</strong> — HTML-елементи (&lt;div&gt;, &lt;p&gt;, &lt;a&gt; тощо)</li>
+            <li><strong>Text</strong> — текст всередині тегів</li>
+            <li><strong>Attribute</strong> — атрибути елементів (class, id, href)</li>
+        </ul>
+        <p>HTML-документ виглядає як дерево: &lt;html&gt; → &lt;body&gt; → &lt;div&gt; → &lt;p&gt;...</p>
+
+        <!-- 4.2 Отримання елементів -->
+        <h3 id="t4-2" style="text-decoration: underline;">4.2 Отримання елементів</h3>
+        <p>Щоб працювати з елементами, спочатку потрібно їх знайти:</p>
+        <ul>
+            <li><strong>За id:</strong> <code>document.getElementById("main-title")</code></li>
+            <li><strong>За класом:</strong> <code>document.getElementsByClassName("btn")</code></li>
+            <li><strong>За CSS-селекторами:</strong> <code>document.querySelector(".btn")</code> — перший елемент, <code>document.querySelectorAll(".btn")</code> — всі підходящі</li>
+        </ul>
+        <div class="code-block">
+            <code>
+// За id
+const title = document.getElementById("main-title");
+
+// За класом
+const buttons = document.getElementsByClassName("btn");
+
+// CSS-селектор
+const firstBtn = document.querySelector(".btn");
+const allBtns = document.querySelectorAll(".btn");
+            </code>
+        </div>
+
+        <!-- 4.3 Зміна контенту -->
+        <h3 id="t4-3" style="text-decoration: underline;">4.3 Зміна контенту</h3>
+        <p>Можна змінювати текст або HTML-контент елементів:</p>
+        <ul>
+            <li><strong>textContent</strong> — змінює текст без HTML-тегів</li>
+            <li><strong>innerHTML</strong> — змінює HTML-код всередині елемента</li>
+        </ul>
+        <div class="code-block">
+            <code>
+const p = document.querySelector("p");
+
+// Зміна тексту
+p.textContent = "Новий текст";
+
+// HTML-контент
+p.innerHTML = "<b>Жирний текст</b>";
+            </code>
+        </div>
+
+        <!-- 4.4 Зміна стилів -->
+        <h3 id="t4-4" style="text-decoration: underline;">4.4 Зміна стилів</h3>
+        <p>Через JavaScript можна змінювати CSS-стилі елементів:</p>
+        <div class="code-block">
+            <code>
+p.style.color = "blue";
+p.style.fontSize = "18px";
+p.style.backgroundColor = "yellow";
+            </code>
+        </div>
+
+        <!-- 4.5 Робота з атрибутами -->
+        <h3 id="t4-5" style="text-decoration: underline;">4.5 Робота з атрибутами</h3>
+        <p>Атрибути елементів можна читати, змінювати або видаляти:</p>
+        <div class="code-block">
+            <code>
+const link = document.querySelector("a");
+
+// Читання атрибуту
+console.log(link.getAttribute("href"));
+
+// Зміна атрибуту
+link.setAttribute("href", "https://example.com");
+
+// Видалення атрибуту
+link.removeAttribute("target");
+            </code>
+        </div>
+
+        <!-- 4.6 Створення та видалення елементів -->
+        <h3 id="t4-6" style="text-decoration: underline;">4.6 Створення та видалення елементів</h3>
+        <p>JavaScript дозволяє динамічно додавати та видаляти елементи на сторінці:</p>
+        <div class="code-block">
+            <code>
+// Створення елемента
+const div = document.createElement("div");
+div.textContent = "Новий блок";
+
+// Додавання до DOM
+document.body.appendChild(div);
+
+// Видалення елемента
+div.remove();
+            </code>
+        </div>
+
+        <!-- 4.7 Навігація по DOM -->
+        <h3 id="t4-7" style="text-decoration: underline;">4.7 Навігація по DOM</h3>
+        <p>Можна переміщатися між вузлами, доступаючись до батьків, дітей і сусідів:</p>
+        <ul>
+            <li><strong>children</strong> — всі дочірні елементи</li>
+            <li><strong>parentElement</strong> — батьківський елемент</li>
+            <li><strong>nextElementSibling / previousElementSibling</strong> — наступний/попередній сусід</li>
+        </ul>
+        <div class="code-block">
+            <code>
+const ul = document.querySelector("ul");
+
+// Доступ до дітей
+console.log(ul.children);
+
+// Доступ до батька
+console.log(ul.parentElement);
+
+// Доступ до наступного/попереднього сусіда
+console.log(ul.nextElementSibling);
+console.log(ul.previousElementSibling);
+            </code>
+        </div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 4</button>
+    </section>
+
+    <section class="theory-section" id="t5-1">
+        <h2 style="text-align:center;">ТЕМА 5: Події (Events)</h2>
+
+        <!-- 5.1 Основні типи подій -->
+        <h3 id="t5-1" style="text-decoration: underline;">5.1 Основні типи подій</h3>
+        <p>Події — це дії користувача або браузера, на які можна реагувати за допомогою JavaScript. Наприклад, кліки мишкою, натискання клавіш, зміни форми або завантаження сторінки.</p>
+        <ul>
+            <li><strong>Мишка:</strong> <code>click</code>, <code>dblclick</code>, <code>mouseover</code>, <code>mouseout</code>, <code>mousemove</code></li>
+            <li><strong>Клавіатура:</strong> <code>keydown</code>, <code>keyup</code>, <code>keypress</code></li>
+            <li><strong>Форми:</strong> <code>submit</code>, <code>input</code>, <code>change</code>, <code>focus</code>, <code>blur</code></li>
+            <li><strong>Окремі події браузера:</strong> <code>load</code>, <code>resize</code>, <code>scroll</code>, <code>error</code></li>
+        </ul>
+
+        <!-- 5.2 Додавання обробників подій -->
+        <h3 id="t5-2" style="text-decoration: underline;">5.2 Додавання обробників подій</h3>
+        <p>Обробники подій дозволяють виконувати код у відповідь на певну дію.</p>
+        <ul>
+            <li><strong>Стрілкова функція:</strong> компактний синтаксис, <code>this</code> не змінюється</li>
+            <li><strong>Звичайна функція:</strong> має власне <code>this</code>, корисно в об’єктних методах</li>
+        </ul>
+        <div class="code-block">
+            <code>
+const btn = document.querySelector("#myBtn");
+
+// Стрілкова функція
+btn.addEventListener("click", () => {
+    console.log("Кнопка натиснута!");
+});
+
+// Звичайна функція
+btn.addEventListener("click", function() {
+    console.log("Ще один обробник");
+});
+            </code>
+        </div>
+
+        <!-- 5.3 Події форм і полів вводу -->
+        <h3 id="t5-3" style="text-decoration: underline;">5.3 Події форм і полів вводу</h3>
+        <p>Можна реагувати на введення користувача або відправку форми:</p>
+        <ul>
+            <li><strong>input</strong> — кожна зміна в полі вводу</li>
+            <li><strong>change</strong> — зміна значення після виходу з поля</li>
+            <li><strong>submit</strong> — відправка форми, можна скасувати стандартну поведінку</li>
+        </ul>
+        <div class="code-block">
+            <code>
+const input = document.querySelector("#name");
+
+input.addEventListener("input", () => {
+    console.log("Введено:", input.value);
+});
+
+const form = document.querySelector("form");
+form.addEventListener("submit", (e) => {
+    e.preventDefault(); // відміна перезавантаження
+    console.log("Форма відправлена");
+});
+            </code>
+        </div>
+
+        <!-- 5.4 Події клавіатури -->
+        <h3 id="t5-4" style="text-decoration: underline;">5.4 Події клавіатури</h3>
+        <p>Можна відстежувати натискання клавіш на всій сторінці або в окремому елементі:</p>
+        <div class="code-block">
+            <code>
+document.addEventListener("keydown", (e) => {
+    console.log("Натиснуто клавішу:", e.key);
+});
+
+// keyup — коли клавішу відпустили
+// keypress — застарілий метод для букв/цифр
+            </code>
+        </div>
+
+        <!-- 5.5 Події миші -->
+        <h3 id="t5-5" style="text-decoration: underline;">5.5 Події миші</h3>
+        <p>Можна реагувати на різні дії користувача з мишею:</p>
+        <ul>
+            <li><strong>click</strong> — клік по елементу</li>
+            <li><strong>dblclick</strong> — подвійний клік</li>
+            <li><strong>mouseover / mouseout</strong> — наведення та вихід курсора</li>
+            <li><strong>mousemove</strong> — рух миші над елементом</li>
+        </ul>
+        <div class="code-block">
+            <code>
+const box = document.querySelector(".box");
+
+box.addEventListener("mouseover", () => {
+    box.style.backgroundColor = "lightblue";
+});
+
+box.addEventListener("mouseout", () => {
+    box.style.backgroundColor = "white";
+});
+            </code>
+        </div>
+
+        <!-- 5.6 Делегування подій -->
+        <h3 id="t5-6" style="text-decoration: underline;">5.6 Делегування подій</h3>
+        <p>Обробник можна повісити на батьківський елемент, і він буде реагувати на дочірні елементи. Зручно для динамічно створених елементів.</p>
+        <div class="code-block">
+            <code>
+const list = document.querySelector("ul");
+
+list.addEventListener("click", (e) => {
+    if (e.target.tagName === "LI") {
+        console.log("Натиснуто на елемент списку:", e.target.textContent);
+    }
+});
+            </code>
+        </div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 5</button>
+    </section>
+
+    <section class="theory-section" id="t6-1">
+        <h2 style="text-align:center;">ТЕМА 6: Класи (Classes)</h2>
+
+        <!-- 6.1 Створення класу -->
+        <h3 id="t6-1" style="text-decoration: underline;">6.1 Створення класу</h3>
+        <p>Клас — це шаблон для створення об’єктів з властивостями та методами. Він робить код більш структурованим і зрозумілим.</p>
+        <div class="code-block">
+            <code>
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log(`Привіт, я ${this.name}`);
+  }
+}
+
+const user = new Person("Олег", 25);
+user.greet(); // Привіт, я Олег
+            </code>
+        </div>
+        <p><strong>Пояснення:</strong> <code>constructor</code> — спеціальний метод, який викликається при створенні нового об’єкта. Методи класу можна викликати через екземпляр.</p>
+
+        <!-- 6.2 Методи класу -->
+        <h3 id="t6-2" style="text-decoration: underline;">6.2 Методи класу</h3>
+        <p>Методи класа дозволяють працювати з даними об’єкта. Є два типи:</p>
+        <ul>
+            <li><strong>Звичайні методи</strong> — працюють з конкретним об’єктом.</li>
+            <li><strong>Статичні методи</strong> — доступні без створення екземпляра класу.</li>
+        </ul>
+        <div class="code-block">
+            <code>
+class Calculator {
+  static add(a, b) {
+    return a + b;
+  }
+
+  multiply(a, b) {
+    return a * b;
+  }
+}
+
+console.log(Calculator.add(5, 3)); // 8
+
+const calc = new Calculator();
+console.log(calc.multiply(5, 3)); // 15
+            </code>
+        </div>
+
+        <!-- 6.3 Наслідування класів -->
+        <h3 id="t6-3" style="text-decoration: underline;">6.3 Наслідування класів</h3>
+        <p>Клас може наслідувати властивості та методи іншого класу, використовуючи <code>extends</code>. Для виклику конструктора батьківського класу використовують <code>super()</code>.</p>
+        <div class="code-block">
+            <code>
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} робить звук`);
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log(`${this.name} гав!`);
+  }
+}
+
+const dog = new Dog("Рекс");
+dog.speak(); // Рекс гав!
+            </code>
+        </div>
+
+        <!-- 6.4 Геттери та сеттери -->
+        <h3 id="t6-4" style="text-decoration: underline;">6.4 Геттери та сеттери</h3>
+        <p>Геттер дозволяє отримати значення властивості, а сеттер — змінити його. Це допомагає контролювати доступ.</p>
+        <div class="code-block">
+            <code>
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  get area() {
+    return this.width * this.height;
+  }
+
+  set setWidth(value) {
+    this.width = value;
+  }
+}
+
+const rect = new Rectangle(5, 10);
+console.log(rect.area); // 50
+rect.setWidth = 7;
+console.log(rect.area); // 70
+            </code>
+        </div>
+
+        <!-- 6.5 Приватні та публічні поля -->
+        <h3 id="t6-5" style="text-decoration: underline;">6.5 Приватні та публічні поля</h3>
+        <p>Приватні поля позначаються <code>#</code> і недоступні зовні класу. Публічні поля можна змінювати без обмежень.</p>
+        <div class="code-block">
+            <code>
+class BankAccount {
+  #balance; // приватне поле
+
+  constructor(balance) {
+    this.#balance = balance;
+  }
+
+  deposit(amount) {
+    this.#balance += amount;
+  }
+
+  getBalance() {
+    return this.#balance;
+  }
+}
+
+const account = new BankAccount(100);
+account.deposit(50);
+console.log(account.getBalance()); // 150
+            </code>
+        </div>
+
+        <!-- 6.6 Абстракція та інкапсуляція -->
+        <h3 id="t6-6" style="text-decoration: underline;">6.6 Абстракція та інкапсуляція</h3>
+        <p>Абстракція — ховаємо деталі реалізації, показуємо тільки потрібний інтерфейс. Інкапсуляція — контроль доступу до властивостей.</p>
+        <div class="code-block">
+            <code>
+class User {
+  #password; // приватна властивість
+
+  constructor(name, password) {
+    this.name = name;
+    this.#password = password;
+  }
+
+  checkPassword(pass) {
+    return this.#password === pass;
+  }
+}
+
+const user1 = new User("Alice", "12345");
+console.log(user1.checkPassword("12345")); // true
+console.log(user1.checkPassword("0000"));  // false
+            </code>
+        </div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 6</button>
+    </section>
+
+    <section class="theory-section" id="t7-1">
+        <h2 style="text-align:center;">ТЕМА 7: Асинхронність (Async/Await)</h2>
+
+        <p>Асинхронність у JavaScript дозволяє виконувати операції, що займають час (наприклад, запити до сервера або таймери), не блокуючи головний потік браузера. Це забезпечує плавну роботу інтерфейсу та швидке реагування.</p>
+
+        <!-- 7.1 Проміси -->
+        <h3 id="t7-1" style="text-decoration: underline;">7.1 Проміси (Promise)</h3>
+        <p>Проміс — це об’єкт, який представляє результат асинхронної операції. Він може перебувати у трьох станах:</p>
+        <ul>
+            <li><strong>pending</strong> — очікування</li>
+            <li><strong>fulfilled</strong> — успішне виконання (<code>resolve</code>)</li>
+            <li><strong>rejected</strong> — помилка (<code>reject</code>)</li>
+        </ul>
+        <div class="code-block">
+            <code>
+const promise = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("Готово!"), 2000);
+});
+
+promise.then(msg => console.log(msg)); // Через 2 секунди: Готово!
+            </code>
+        </div>
+        <p>Проміси можна обробляти через <code>then</code> (успіх) та <code>catch</code> (помилка).</p>
+
+        <!-- 7.2 async / await -->
+        <h3 id="t7-2" style="text-decoration: underline;">7.2 async / await</h3>
+        <p>Сучасний синтаксис для роботи з промісами. <code>async</code> робить функцію асинхронною, а <code>await</code> очікує завершення промісу.</p>
+        <div class="code-block">
+            <code>
+async function loadData() {
+  return "Дані завантажено";
+}
+
+loadData().then(console.log); // Дані завантажено
+            </code>
+        </div>
+        <p>Можна використовувати <code>await</code> всередині <code>async</code> для синхронного вигляду асинхронного коду.</p>
+
+        <!-- 7.3 Використання fetch() -->
+        <h3 id="t7-3" style="text-decoration: underline;">7.3 Використання fetch()</h3>
+        <p><code>fetch()</code> — вбудована функція для HTTP-запитів. Повертає проміс навіть при помилці на сервері.</p>
+        <div class="code-block">
+            <code>
+async function getUser() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/users/1");
+  const data = await response.json();
+  console.log(data);
+}
+
+getUser();
+            </code>
+        </div>
+
+        <!-- 7.4 Обробка помилок -->
+        <h3 id="t7-4" style="text-decoration: underline;">7.4 Обробка помилок</h3>
+        <p>Для безпечного виконання асинхронного коду використовують <code>try...catch</code>:</p>
+        <div class="code-block">
+            <code>
+async function fetchData() {
+  try {
+    const response = await fetch("https://wrong-url.com");
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log("Помилка:", error.message);
+  }
+}
+
+fetchData();
+            </code>
+        </div>
+
+        <!-- 7.5 Паралельне виконання промісів -->
+        <h3 id="t7-5" style="text-decoration: underline;">7.5 Паралельне виконання промісів</h3>
+        <p>Можна запускати кілька промісів одночасно через <code>Promise.all</code>. Результат повертається як масив. Якщо хоча б один проміс відхиляється — весь <code>all</code> відхиляється.</p>
+        <div class="code-block">
+            <code>
+async function loadAll() {
+  const [user, posts] = await Promise.all([
+    fetch("https://jsonplaceholder.typicode.com/users/1").then(res => res.json()),
+    fetch("https://jsonplaceholder.typicode.com/posts/1").then(res => res.json())
+  ]);
+  
+  console.log(user, posts);
+}
+
+loadAll();
+            </code>
+        </div>
+
+        <!-- 7.6 Promise.race() -->
+        <h3 id="t7-6" style="text-decoration: underline;">7.6 Promise.race()</h3>
+        <p><code>Promise.race</code> повертає результат першого виконаного промісу, решта ігнорується. Зручно для таймаутів та швидких відповідей.</p>
+        <div class="code-block">
+            <code>
+const p1 = new Promise(res => setTimeout(() => res("Перша"), 1000));
+const p2 = new Promise(res => setTimeout(() => res("Друга"), 500));
+
+Promise.race([p1, p2]).then(console.log); // Друга
+            </code>
+        </div>
+
+        <!-- Поради та рекомендації -->
+        <h3 id="t7-7" style="text-decoration: underline;">7.7 Поради та рекомендації</h3>
+        <ul>
+            <li>Завжди обробляйте помилки <code>try...catch</code> при використанні <code>await</code>.</li>
+            <li>Використовуйте <code>Promise.all</code> для паралельних запитів.</li>
+            <li>Для обмеження часу очікування застосовуйте <code>Promise.race</code> з таймаутом.</li>
+            <li>Пам’ятайте: <code>fetch</code> не відхиляє проміс при HTTP-помилках (404, 500), тому перевіряйте <code>response.ok</code>.</li>
+        </ul>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 7</button>
+    </section>
+
+
+<script>
+
+
+// Генерація 100 анімованих зірок на фоні
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(star);
+}
+
+// Відкриття/закриття бічного меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+    sideMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+    sideMenu.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+// Підменю "Курси" у боковому меню
+const menuToggles = document.querySelectorAll('.menu-toggle');
+menuToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentItem = toggle.parentElement;
+        parentItem.classList.toggle('active');
+    });
+});
+
+// Відкриття/закриття підтеми у правому меню
+const topicToggles = document.querySelectorAll('.topic-toggle');
+
+topicToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentTopic = toggle.parentElement;
+
+        // Закриваємо інші відкриті теми
+        topicToggles.forEach(t => {
+            if (t !== toggle) {
+                t.parentElement.classList.remove('active');
+            }
+        });
+
+        // Відкриваємо або закриваємо поточну тему
+        parentTopic.classList.toggle('active');
+    });
+});
+
+// Кнопка входу
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', () => {
+    window.location.href = 'login.html';
+});
+
+</script>
+</body>
+</html>
