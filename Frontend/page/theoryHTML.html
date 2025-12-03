@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python - Теорія | CodeCraft</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1c40 0%, #2f3485 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 25fr;
+    align-items: center;
+    padding: 15px 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 14, 36, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.menu-btn {
+    background: transparent;
+    border: 2px solid #00D9FF;
+    color: #00D9FF;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    width: 50px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: #00d9ff;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Кнопка входу */
+.login-btn {
+    background: transparent;
+    border: 2px solid #00d9ff;
+    color: #00D9FF;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+.login-btn:hover {
+    background: #00D9FF;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(13, 14, 36, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 80px 30px 30px 30px;
+    transition: left 0.4s ease;
+    z-index: 99;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 28px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.menu-items li a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+    z-index: 98;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    position: relative;
+    z-index: 1;
+}
+
+.theory-sidebar {
+    position: fixed;
+    right: 0;
+    top: 80px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    background: rgba(13, 14, 36, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px;
+    overflow-y: auto;
+    border-left: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.theory-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theory-sidebar::-webkit-scrollbar-track {
+    background: rgba(13, 14, 36, 0.5);
+}
+
+.theory-sidebar::-webkit-scrollbar-thumb {
+    background: #00D9FF;
+    border-radius: 4px;
+}
+
+.sidebar-title {
+    color: #00D9FF;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.theory-nav {
+    list-style: none;
+}
+
+.theory-nav > li {
+    margin-bottom: 12px;
+}
+
+.theory-topic {
+    position: relative;
+}
+
+.topic-toggle {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.topic-toggle:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.topic-arrow {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.theory-topic.active .topic-arrow {
+    transform: rotate(180deg);
+}
+
+.subtopic-list {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 10px;
+}
+
+.theory-topic.active .subtopic-list {
+    max-height: 600px;
+}
+
+.subtopic-list li {
+    margin-top: 8px;
+}
+
+.subtopic-list a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+}
+
+.subtopic-list a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.subtopic-list a.active {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 60px;
+    margin-right: 280px;
+    max-width: calc(100% - 280px);
+}
+
+.theory-section {
+    background: rgba(13, 14, 36, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    scroll-margin-top: 100px;
+}
+
+.theory-section h2 {
+    color: #00D9FF;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.theory-section h3 {
+    color: #00D9FF;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.theory-section p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.theory-section ul {
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 25px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.theory-section li {
+    margin-bottom: 8px;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    color: #00FF88;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+th {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    font-weight: 600;
+}
+
+td {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.test-btn {
+    background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+    color: #0D0E24;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 30px;
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+}
+
+.test-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+}
+
+@media(max-width: 1200px) {
+    .theory-sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-right: 240px;
+        max-width: calc(100% - 240px);
+    }
+}
+
+@media(max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+    
+    .logo-nav {
+        font-size: 24px;
+    }
+    
+    .theory-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-right: 0;
+        max-width: 100%;
+        padding: 30px 20px;
+    }
+    
+    .theory-section {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-title">CodeCraft</div>
+    <ul class="menu-items">
+        <li>
+            <a href="home.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Головна
+            </a>
+        </li>
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="CSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<nav>
+    <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+    <div class="logo-nav">CodeCraft</div>
+    <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Вхід
+        </button>
+    </div>
+</nav>
+
+<div class="content-wrapper">
+    <div class="theory-sidebar">
+        <div class="sidebar-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Зміст курсу
+        </div>
+         <ul class="theory-nav">
+            <li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 1: Основи HTML
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#html-1-1">1.1 Вступ до HTML</a></li>
+        <li><a href="#html-1-2">1.2 Редактори HTML</a></li>
+        <li><a href="#html-1-3">1.3 HTML Basic</a></li>
+        <li><a href="#html-1-4">1.4 Елементи HTML</a></li>
+        <li><a href="#html-1-5">1.5 Атрибути HTML</a></li>
+        <li><a href="#html-1-6">1.6 Заголовки HTML</a></li>
+        <li><a href="#html-1-7">1.7 Абзаци HTML</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 2: Стилізація HTML
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#html-2-1">2.1 Стилі HTML</a></li>
+        <li><a href="#html-2-2">2.2 Форматування HTML</a></li>
+        <li><a href="#html-2-3">2.3 Цитати HTML</a></li>
+        <li><a href="#html-2-4">2.4 Коментарі HTML</a></li>
+        <li><a href="#html-2-5">2.5 Кольори HTML</a></li>
+        <li><a href="#html-2-6">2.6 HTML CSS</a></li>
+        <li><a href="#html-2-7">2.7 Посилання HTML</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 3: Зображення та медіа
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#html-3-1">3.1 Зображення HTML</a></li>
+        <li><a href="#html-3-2">3.2 Фавікон</a></li>
+        <li><a href="#html-3-3">3.3 Заголовок сторінки</a></li>
+        <li><a href="#html-3-4">3.4 Таблиці HTML</a></li>
+        <li><a href="#html-3-5">3.5 Списки HTML</a></li>
+        
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 4: Атрибути та ідентифікатори
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#html-4-1">4.1 Класи та ID</a></li>
+        <li><a href="#html-4-2">4.2 Кнопки HTML</a></li>
+        <li><a href="#html-4-3">4.3 Iframes</a></li>
+        <li><a href="#html-4-4">4.4 JavaScript</a></li>
+        <li><a href="#html-4-5">4.5 Шляхи до файлів</a></li>
+        <li><a href="#html-4-6">4.6 Голова сторінки</a></li>
+        <li><a href="#html-4-7">4.7 Макет сторінки</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 5: Адаптивність та семантика
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#html-5-1">5.1 Responsive</a></li>
+        <li><a href="#html-5-2">5.2 Семантика</a></li>
+        <li><a href="#html-5-3">5.3 Код HTML</a></li>
+        <li><a href="#html-5-4">5.4 Сутності, символи та емодзі</a></li>
+        <li><a href="#html-5-5">5.5 Набори символів</a></li>
+        <li><a href="#html-5-6">5.6 URL-кодування</a></li>
+        <li><a href="#html-5-7">5.7 HTML vs XHTML</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 6: Форми та графіка
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#html-6-1">6.1 Форми HTML</a></li>
+        <li><a href="#html-6-2">6.2 Атрибути форми</a></li>
+        <li><a href="#html-6-3">6.3 Елементи форми</a></li>
+        <li><a href="#html-6-4">6.4 Типи введення</a></li>
+        <li><a href="#html-6-5">6.5 Атрибути введення</a></li>
+        <li><a href="#html-6-6">6.6 Полотно</a></li>
+        <li><a href="#html-6-7">6.7 SVG</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 7: Медіа та API
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#html-7-1">7.1 Медіа</a></li>
+        <li><a href="#html-7-2">7.2 Відео</a></li>
+        <li><a href="#html-7-3">7.3 Аудіо</a></li>
+        <li><a href="#html-7-4">7.4 Плагіни</a></li>
+        <li><a href="#html-7-5">7.5 YouTube</a></li>
+        <li><a href="#html-7-6">7.6 Веб-API</a></li>
+        <li><a href="#html-7-7">7.7 Геолокація, Drag&Drop, Web Workers</a></li>
+    </ul>
+</li>
+</ul>
+    </div>
+<main class="main-content">
+
+<section class="theory-section" id="html-topic1">
+    <h2 style="text-align:center;">ТЕМА 1: Основи HTML</h2>
+
+    <!-- 1.1 Вступ до HTML -->
+    <h3 id="html-1-1" style="text-decoration: underline;">1.1 Вступ до HTML</h3>
+    <p>HTML (HyperText Markup Language) — мова розмітки, яка використовується для створення веб-сторінок. За допомогою HTML ми визначаємо структуру документу, додаємо заголовки, абзаци, зображення, посилання та інші елементи.</p>
+
+    <!-- 1.2 Редактори HTML -->
+    <h3 id="html-1-2" style="text-decoration: underline;">1.2 Редактори HTML</h3>
+    <p>Для створення HTML-коду можна використовувати текстові редактори та IDE:</p>
+    <ul>
+        <li><strong>VS Code</strong> — популярний редактор з підсвічуванням синтаксису та плагінами для HTML/CSS/JS.</li>
+        <li><strong>Brackets</strong> — редактор з live preview для веб-сторінок.</li>
+        <li><strong>Notepad++</strong> — простий текстовий редактор з підсвічуванням синтаксису.</li>
+        <li><strong>Онлайн-редактори:</strong> CodePen, JSFiddle — зручні для швидких тестів HTML та CSS.</li>
+    </ul>
+
+    <!-- 1.3 HTML Basic -->
+    <h3 id="html-1-3" style="text-decoration: underline;">1.3 HTML Basic</h3>
+    <p>Стандартна структура HTML-документа:</p>
+    <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="uk"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Моя перша сторінка&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Привіт, HTML!&lt;/h1&gt;
+    &lt;p&gt;Це перший абзац на моїй сторінці.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+    <p><strong>Пояснення:</strong> <code>&lt;!DOCTYPE html&gt;</code> — визначає HTML5, <code>&lt;html&gt;</code> — кореневий елемент, <code>&lt;head&gt;</code> — метадані, <code>&lt;body&gt;</code> — видимий контент.</p>
+
+    <!-- 1.4 Елементи HTML -->
+    <h3 id="html-1-4" style="text-decoration: underline;">1.4 Елементи HTML</h3>
+    <p>Елемент складається з відкриваючого тегу, закриваючого тегу та вмісту між ними.</p>
+    <div class="code-block"><code>&lt;p&gt;Це абзац тексту&lt;/p&gt;
+&lt;a href="https://example.com"&gt;Посилання&lt;/a&gt;</code></div>
+
+    <!-- 1.5 Атрибути HTML -->
+    <h3 id="html-1-5" style="text-decoration: underline;">1.5 Атрибути HTML</h3>
+    <p>Атрибути надають додаткову інформацію тегам. Найчастіше використовуються:</p>
+    <ul>
+        <li><code>href</code> — URL посилання</li>
+        <li><code>src</code> — шлях до зображення</li>
+        <li><code>alt</code> — альтернативний текст для зображень</li>
+        <li><code>id</code> — унікальний ідентифікатор елемента</li>
+        <li><code>class</code> — групування елементів для CSS/JS</li>
+    </ul>
+    <div class="code-block"><code>&lt;img src="image.jpg" alt="Моя картинка"&gt;
+&lt;a href="https://example.com"&gt;Перейти&lt;/a&gt;</code></div>
+
+    <!-- 1.6 Заголовки HTML -->
+    <h3 id="html-1-6" style="text-decoration: underline;">1.6 Заголовки HTML</h3>
+    <p>Заголовки від <code>&lt;h1&gt;</code> до <code>&lt;h6&gt;</code> визначають ієрархію тексту:</p>
+    <div class="code-block"><code>&lt;h1&gt;Заголовок 1&lt;/h1&gt;
+&lt;h2&gt;Заголовок 2&lt;/h2&gt;</code></div>
+
+    <!-- 1.7 Абзаци HTML -->
+    <h3 id="html-1-7" style="text-decoration: underline;">1.7 Абзаци HTML</h3>
+    <p>Тег <code>&lt;p&gt;</code> використовується для текстових блоків:</p>
+    <div class="code-block"><code>&lt;p&gt;Це абзац тексту.&lt;/p&gt;</code></div>
+
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 1</button>
+</section>
+
+<section class="theory-section" id="html-topic2">
+    <h2 style="text-align:center;">ТЕМА 2: Стилізація та форматування HTML</h2>
+
+    <!-- 2.1 Стилі HTML -->
+    <h3 id="html-2-1" style="text-decoration: underline;">2.1 Стилі HTML</h3>
+    <p>CSS дозволяє змінювати вигляд елементів HTML. Стилі можна додавати:</p>
+    <ul>
+        <li>inline — безпосередньо в тег: <code>&lt;p style="color:red;"&gt;Текст&lt;/p&gt;</code></li>
+        <li>internal — у <code>&lt;style&gt;</code> в <code>&lt;head&gt;</code></li>
+        <li>external — окремий файл CSS, підключений через <code>&lt;link&gt;</code></li>
+    </ul>
+
+    <!-- 2.2 Форматування -->
+    <h3 id="html-2-2" style="text-decoration: underline;">2.2 Форматування</h3>
+    <p>Теги для виділення тексту:</p>
+    <ul>
+        <li><code>&lt;strong&gt;</code> — жирний текст</li>
+        <li><code>&lt;em&gt;</code> — курсив</li>
+        <li><code>&lt;mark&gt;</code> — виділений текст</li>
+    </ul>
+    <div class="code-block"><code>&lt;strong&gt;Важливо!&lt;/strong&gt;
+&lt;em&gt;Підкреслено&lt;/em&gt;</code></div>
+
+    <!-- 2.3 Цитати -->
+    <h3 id="html-2-3" style="text-decoration: underline;">2.3 Цитати</h3>
+    <p>Цитати можуть бути короткими (<code>&lt;q&gt;</code>) або довгими (<code>&lt;blockquote&gt;</code>):</p>
+    <div class="code-block"><code>&lt;q&gt;Це коротка цитата&lt;/q&gt;
+&lt;blockquote&gt;Це довга цитата&lt;/blockquote&gt;</code></div>
+
+    <!-- 2.4 Коментарі -->
+    <h3 id="html-2-4" style="text-decoration: underline;">2.4 Коментарі</h3>
+    <p>Коментарі не відображаються у браузері:</p>
+    <div class="code-block"><code>&lt;!-- Це коментар --&gt;</code></div>
+
+    <!-- 2.5 Кольори -->
+    <h3 id="html-2-5" style="text-decoration: underline;">2.5 Кольори</h3>
+    <p>Колір можна задавати іменами, HEX або RGB:</p>
+    <div class="code-block"><code>&lt;p style="color: blue;"&gt;Синій текст&lt;/p&gt;
+&lt;p style="color: #ff0000;"&gt;Червоний текст&lt;/p&gt;</code></div>
+
+    <!-- 2.6 CSS -->
+    <h3 id="html-2-6" style="text-decoration: underline;">2.6 CSS</h3>
+    <p>CSS можна підключати різними способами. Приклад internal CSS:</p>
+    <div class="code-block"><code>&lt;style&gt;
+p { color: green; font-size: 18px; }
+&lt;/style&gt;</code></div>
+
+    <!-- 2.7 Посилання -->
+    <h3 id="html-2-7" style="text-decoration: underline;">2.7 Посилання</h3>
+    <p>Посилання створюються тегом <code>&lt;a&gt;</code>:</p>
+    <div class="code-block"><code>&lt;a href="https://example.com"&gt;Перейти на сайт&lt;/a&gt;</code></div>
+
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 2</button>
+</section>
+
+<section class="theory-section" id="html-topic3">
+    <h2 style="text-align:center;">ТЕМА 3: Зображення та медіа в HTML</h2>
+
+    <!-- 3.1 Зображення -->
+    <h3 id="html-3-1" style="text-decoration: underline;">3.1 Зображення</h3>
+    <p>Зображення вставляються тегом <code>&lt;img&gt;</code>:</p>
+    <div class="code-block"><code>&lt;img src="image.jpg" alt="Опис зображення" width="300"&gt;</code></div>
+
+    <!-- 3.2 Фавікон -->
+    <h3 id="html-3-2" style="text-decoration: underline;">3.2 Фавікон</h3>
+    <p>Фавікон — маленька іконка сайту у вкладці браузера:</p>
+    <div class="code-block"><code>&lt;link rel="icon" href="favicon.ico" type="image/x-icon"&gt;</code></div>
+
+    <!-- 3.3 Заголовок сторінки -->
+    <h3 id="html-3-3" style="text-decoration: underline;">3.3 Заголовок сторінки</h3>
+    <p>Заголовок відображається у вкладці браузера:</p>
+    <div class="code-block"><code>&lt;title&gt;Моя сторінка&lt;/title&gt;</code></div>
+
+    <!-- 3.4 Таблиці -->
+    <h3 id="html-3-4" style="text-decoration: underline;">3.4 Таблиці</h3>
+    <p>Таблиці використовуються для структурованого відображення даних:</p>
+    <div class="code-block"><code>&lt;table border="1"&gt;
+  &lt;tr&gt;&lt;th&gt;Ім'я&lt;/th&gt;&lt;th&gt;Вік&lt;/th&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Anna&lt;/td&gt;&lt;td&gt;25&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</code></div>
+
+    <!-- 3.5 Списки -->
+    <h3 id="html-3-5" style="text-decoration: underline;">3.5 Списки</h3>
+    <p>Списки бувають нумеровані (<code>&lt;ol&gt;</code>) та марковані (<code>&lt;ul&gt;</code>):</p>
+    <div class="code-block"><code>&lt;ul&gt;
+  &lt;li&gt;Яблуко&lt;/li&gt;
+  &lt;li&gt;Банан&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Перший пункт&lt;/li&gt;
+  &lt;li&gt;Другий пункт&lt;/li&gt;
+&lt;/ol&gt;</code></div>
+
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 3</button>
+</section>
+<section class="theory-section" id="topic-html-4">
+    <h2>ТЕМА 4:  Атрибути та ідентифікатори</h2>
+
+    <!-- 4.1 Класи та ID -->
+    <h3 id="html-4-1">4.1 Класи та ID</h3>
+    <p><strong>ID</strong> — унікальний ідентифікатор елемента на сторінці. <strong>Клас</strong> може застосовуватися до багатьох елементів.</p>
+    <ul>
+        <li>ID використовується для CSS, JS і швидкого пошуку елементів.</li>
+        <li>Клас застосовується для групи елементів з однаковим стилем.</li>
+    </ul>
+    <div class="code-block"><code>&lt;div id="header"&gt;Шапка сайту&lt;/div&gt;
+&lt;div class="card"&gt;Карточка 1&lt;/div&gt;
+&lt;div class="card"&gt;Карточка 2&lt;/div&gt;</code></div>
+
+    <!-- 4.2 Кнопки HTML -->
+    <h3 id="html-4-2">4.2 Кнопки HTML</h3>
+    <p>Кнопки використовуються для взаємодії з користувачем: відправка форм, виклики JS-функцій, навігація.</p>
+    <div class="code-block"><code>&lt;button type="button"&gt;Натисни мене&lt;/button&gt;
+&lt;button type="submit"&gt;Відправити форму&lt;/button&gt;
+&lt;button onclick="alert('Привіт!')"&gt;JS Alert&lt;/button&gt;</code></div>
+
+    <!-- 4.3 Iframes -->
+    <h3 id="html-4-3">4.3 Iframes</h3>
+    <p>IFrame дозволяє вбудувати інший документ на сторінку. Часто використовується для відео або стороннього контенту.</p>
+    <div class="code-block"><code>&lt;iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" width="560" height="315"&gt;&lt;/iframe&gt;</code></div>
+    <p>Атрибути:</p>
+    <ul>
+        <li><strong>width</strong> / <strong>height</strong> — розміри</li>
+        <li><strong>src</strong> — шлях до сторінки</li>
+        <li><strong>frameborder</strong> — рамка (0 або 1)</li>
+    </ul>
+
+    <!-- 4.4 JavaScript -->
+    <h3 id="html-4-4">4.4 JavaScript</h3>
+    <p>JS додає динаміку: події, зміна контенту, анімації, взаємодія з користувачем.</p>
+    <div class="code-block"><code>&lt;button onclick="sayHello()"&gt;Привіт&lt;/button&gt;
+&lt;script&gt;
+function sayHello() {
+    alert("Привіт, JS!");
+}
+&lt;/script&gt;</code></div>
+    <p>JS можна підключати через <code>&lt;script&gt;</code> у body або head, або зовнішнім файлом.</p>
+
+    <!-- 4.5 Шляхи до файлів -->
+    <h3 id="html-4-5">4.5 Шляхи до файлів</h3>
+    <p>В HTML використовуються різні типи шляхів:</p>
+    <ul>
+        <li><strong>Відносний</strong>: <code>css/style.css</code> — від поточного документа</li>
+        <li><strong>Абсолютний</strong>: <code>https://example.com/style.css</code> — повний URL</li>
+        <li><strong>Відносний до кореня</strong>: <code>/images/logo.png</code> — від кореневої папки сайту</li>
+    </ul>
+
+    <!-- 4.6 Голова сторінки -->
+    <h3 id="html-4-6">4.6 Голова сторінки (head)</h3>
+    <p>&lt;head&gt; містить метадані: назву сторінки, підключення стилів і скриптів, мета-теги для SEO.</p>
+    <div class="code-block"><code>&lt;head&gt;
+&lt;title&gt;Моя сторінка&lt;/title&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;link rel="stylesheet" href="style.css"&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/head&gt;</code></div>
+
+    <!-- 4.7 Макет сторінки -->
+    <h3 id="html-4-7">4.7 Макет сторінки</h3>
+    <p>HTML5 пропонує семантичні теги для структури: header, nav, main, section, article, aside, footer.</p>
+    <div class="code-block"><code>&lt;header&gt;Шапка&lt;/header&gt;
+&lt;nav&gt;Меню&lt;/nav&gt;
+&lt;main&gt;
+    &lt;section&gt;Основний контент&lt;/section&gt;
+&lt;/main&gt;
+&lt;aside&gt;Бічна панель&lt;/aside&gt;
+&lt;footer&gt;Футер&lt;/footer&gt;</code></div>
+    <p>Такі теги допомагають SEO та доступності (screen readers).</p>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 4</button>
+</section>
+<section class="theory-section" id="topic-html-5">
+    <h2>ТЕМА 5: Адаптивність та семантика в HTML</h2>
+
+    <!-- 5.1 Responsive -->
+    <h3 id="html-5-1">5.1 Responsive</h3>
+    <p>Адаптивний дизайн дозволяє сторінкам коректно відображатися на різних пристроях: ПК, планшетах, мобільних телефонах.</p>
+    <ul>
+        <li>Використовує <strong>відсотки</strong> або <strong>flex/grid</strong> замість фіксованих px.</li>
+        <li>Медіа-запити <code>@media</code> в CSS змінюють стилі під ширину екрану.</li>
+        <li>Viewport мета-тег важливий для мобільних пристроїв.</li>
+    </ul>
+    <div class="code-block"><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+
+&lt;style&gt;
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.item {
+    flex: 1 1 200px; /* автоматичне масштабування */
+}
+@media (max-width: 600px) {
+    .item {
+        flex-basis: 100%; /* на маленьких екранах по одному блоку */
+    }
+}
+&lt;/style&gt;</code></div>
+
+    <!-- 5.2 Семантика -->
+    <h3 id="html-5-2">5.2 Семантика</h3>
+    <p>Семантичні теги дають значення контенту: покращують SEO і доступність для користувачів з технологіями допомоги.</p>
+    <ul>
+        <li>&lt;header&gt; — шапка сайту</li>
+        <li>&lt;footer&gt; — футер</li>
+        <li>&lt;main&gt; — головний контент</li>
+        <li>&lt;article&gt; — самостійний матеріал (новина, пост)</li>
+        <li>&lt;section&gt; — розділ</li>
+        <li>&lt;aside&gt; — бічна панель, додатковий контент</li>
+        <li>&lt;nav&gt; — навігація</li>
+    </ul>
+    <div class="code-block"><code>&lt;header&gt;Моя шапка&lt;/header&gt;
+&lt;nav&gt;Меню&lt;/nav&gt;
+&lt;main&gt;
+    &lt;section&gt;Стаття&lt;/section&gt;
+&lt;/main&gt;
+&lt;aside&gt;Бічна панель&lt;/aside&gt;
+&lt;footer&gt;Футер&lt;/footer&gt;</code></div>
+
+    <!-- 5.3 Код HTML -->
+    <h3 id="html-5-3">5.3 Код HTML</h3>
+    <p>Правильний та чистий код полегшує підтримку, SEO та читаність. Дотримуйся:</p>
+    <ul>
+        <li>Відступів та структури (2–4 пробіли)</li>
+        <li>Закривання всіх тегів</li>
+        <li>Коментарів для складних блоків</li>
+        <li>Використання семантичних тегів замість div/span де можливо</li>
+    </ul>
+    <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="uk"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Приклад&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;Шапка&lt;/header&gt;
+    &lt;main&gt;Контент&lt;/main&gt;
+    &lt;footer&gt;Футер&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+
+    <!-- 5.4 Сутності, символи та емодзі -->
+    <h3 id="html-5-4">5.4 Сутності, символи та емодзі</h3>
+    <p>HTML-сутності дозволяють вставляти спеціальні символи, які не можна написати просто з клавіатури.</p>
+    <ul>
+        <li>&amp;lt; &lt; — менше</li>
+        <li>&amp;gt; &gt; — більше</li>
+        <li>&amp;amp; &amp; — амперсанд</li>
+        <li>&amp;hearts; ♥ — серце</li>
+        <li>Емодзі: &#128512; 😀</li>
+    </ul>
+
+    <!-- 5.5 Набори символів -->
+    <h3 id="html-5-5">5.5 Набори символів</h3>
+    <p>UTF-8 — стандартний набір символів, який підтримує всі мови та емодзі.</p>
+    <div class="code-block"><code>&lt;meta charset="UTF-8"&gt;</code></div>
+
+    <!-- 5.6 URL-кодування -->
+    <h3 id="html-5-6">5.6 URL-кодування</h3>
+    <p>Деякі символи у URL потрібно кодувати:</p>
+    <ul>
+        <li>Пробіл → %20</li>
+        <li># → %23</li>
+        <li>? → %3F</li>
+        <li>&lt; &gt; → %3C %3E</li>
+    </ul>
+    <p>Наприклад: <code>https://example.com/search?q=hello%20world</code></p>
+
+    <!-- 5.7 HTML vs XHTML -->
+    <h3 id="html-5-7">5.7 HTML vs XHTML</h3>
+    <p>HTML — гнучкий, дозволяє пропускати закриваючі теги. XHTML — строгий, вимагає правильного закриття тегів та валідності.</p>
+    <ul>
+        <li>XHTML повинен бути <code>well-formed</code></li>
+        <li>HTML дозволяє не закривати <code>&lt;br&gt;, &lt;img&gt;</code></li>
+        <li>Синтаксис XHTML нагадує XML</li>
+    </ul>
+    <div class="code-block"><code>&lt;img src="logo.png" alt="Логотип" /&gt;  &lt;!-- XHTML --&gt;
+&lt;img src="logo.png" alt="Логотип"&gt;  &lt;!-- HTML5 --&gt;</code></div>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 5</button>
+</section>
+<section class="theory-section" id="topic-html-6">
+    <h2>ТЕМА 6: Форми та графіка в HTML</h2>
+
+    <!-- 6.1 Форми HTML -->
+    <h3 id="html-6-1">6.1 Форми HTML</h3>
+    <p>Форми дозволяють користувачам вводити дані та відправляти їх на сервер.</p>
+    <ul>
+        <li>Тег <code>&lt;form&gt;</code> обгортає елементи форми</li>
+        <li>Дані можна відправляти методом <code>GET</code> або <code>POST</code></li>
+        <li>Форма може містити поля тексту, паролі, кнопки, прапорці та радіокнопки</li>
+    </ul>
+    <div class="code-block"><code>&lt;form action="/submit" method="post"&gt;
+    &lt;input type="text" name="username" placeholder="Ім'я"&gt;
+    &lt;input type="submit" value="Відправити"&gt;
+&lt;/form&gt;</code></div>
+
+    <!-- 6.2 Атрибути форми -->
+    <h3 id="html-6-2">6.2 Атрибути форми</h3>
+    <ul>
+        <li><code>action</code> — URL для обробки форми</li>
+        <li><code>method</code> — метод передачі даних: GET або POST</li>
+        <li><code>enctype</code> — кодування для файлів: multipart/form-data</li>
+        <li><code>autocomplete</code> — включення автозаповнення</li>
+    </ul>
+
+    <!-- 6.3 Елементи форми -->
+    <h3 id="html-6-3">6.3 Елементи форми</h3>
+    <ul>
+        <li><code>&lt;input&gt;</code> — текст, пароль, email, число</li>
+        <li><code>&lt;textarea&gt;</code> — багаторядковий текст</li>
+        <li><code>&lt;select&gt;</code> — випадаючий список</li>
+        <li><code>&lt;button&gt;</code> — кнопка</li>
+        <li><code>&lt;label&gt;</code> — підпис до елемента</li>
+    </ul>
+    <div class="code-block"><code>&lt;form&gt;
+    &lt;label&gt;Ім'я:&lt;/label&gt;
+    &lt;input type="text" name="name"&gt;
+    &lt;label&gt;Повідомлення:&lt;/label&gt;
+    &lt;textarea name="message"&gt;&lt;/textarea&gt;
+    &lt;button type="submit"&gt;Відправити&lt;/button&gt;
+&lt;/form&gt;</code></div>
+
+    <!-- 6.4 Типи введення -->
+    <h3 id="html-6-4">6.4 Типи введення</h3>
+    <ul>
+        <li><code>text</code> — однорядковий текст</li>
+        <li><code>password</code> — прихований текст</li>
+        <li><code>email</code> — email з валідацією</li>
+        <li><code>number</code> — числа з мін/макс</li>
+        <li><code>checkbox</code> — прапорці</li>
+        <li><code>radio</code> — вибір одного з декількох</li>
+        <li><code>submit</code> — кнопка відправки</li>
+    </ul>
+    <div class="code-block"><code>&lt;input type="email" name="user_email" placeholder="Email"&gt;
+&lt;input type="checkbox" name="subscribe"&gt; Підписатися</code></div>
+
+    <!-- 6.5 Атрибути введення -->
+    <h3 id="html-6-5">6.5 Атрибути введення</h3>
+    <ul>
+        <li><code>placeholder</code> — підказка всередині поля</li>
+        <li><code>value</code> — початкове значення</li>
+        <li><code>required</code> — обов'язкове поле</li>
+        <li><code>min, max</code> — мінімум/максимум для чисел</li>
+        <li><code>pattern</code> — регулярний вираз для валідації</li>
+    </ul>
+    <div class="code-block"><code>&lt;input type="number" name="age" min="18" max="99" required&gt;</code></div>
+
+    <!-- 6.6 Полотно -->
+    <h3 id="html-6-6">6.6 Полотно (Canvas)</h3>
+    <p>Canvas дозволяє малювати графіку через JavaScript: лінії, фігури, анімації.</p>
+    <div class="code-block"><code>&lt;canvas id="myCanvas" width="200" height="100" style="border:1px solid #000;"&gt;&lt;/canvas&gt;
+
+&lt;script&gt;
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "red";
+ctx.fillRect(20, 20, 150, 50);
+&lt;/script&gt;</code></div>
+
+    <!-- 6.7 SVG -->
+    <h3 id="html-6-7">6.7 SVG (Scalable Vector Graphics)</h3>
+    <p>SVG використовується для векторної графіки. Підходить для логотипів, іконок, схем. Не втрачає якість при масштабуванні.</p>
+    <div class="code-block"><code>&lt;svg width="100" height="100"&gt;
+  &lt;circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" /&gt;
+&lt;/svg&gt;</code></div>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 6</button>
+</section>
+<section class="theory-section" id="topic-html-7">
+    <h2>ТЕМА 7: Медіа та API в HTML</h2>
+
+    <!-- 7.1 Медіа -->
+    <h3 id="html-7-1">7.1 Медіа</h3>
+    <p>HTML дозволяє додавати мультимедійні елементи на сторінку — відео, аудіо, зображення, інтерактивні об’єкти. Основні теги:</p>
+    <ul>
+        <li><code>&lt;img&gt;</code> — вставка зображень</li>
+        <li><code>&lt;audio&gt;</code> — відтворення звуку</li>
+        <li><code>&lt;video&gt;</code> — відтворення відео</li>
+        <li><code>&lt;canvas&gt;</code> — графіка через JS</li>
+        <li><code>&lt;svg&gt;</code> — векторна графіка</li>
+    </ul>
+    <div class="code-block"><code>&lt;img src="logo.png" alt="Логотип" width="150"&gt;</code></div>
+
+    <!-- 7.2 Відео -->
+    <h3 id="html-7-2">7.2 Відео</h3>
+    <p>Тег <code>&lt;video&gt;</code> використовується для відтворення відео прямо на сторінці. Підтримує атрибути:</p>
+    <ul>
+        <li><code>controls</code> — показує панель управління</li>
+        <li><code>autoplay</code> — автоматичний запуск</li>
+        <li><code>loop</code> — зациклення відео</li>
+        <li><code>muted</code> — без звуку</li>
+    </ul>
+    <div class="code-block"><code>&lt;video width="320" height="240" controls&gt;
+  &lt;source src="movie.mp4" type="video/mp4"&gt;
+  Ваш браузер не підтримує відео.
+&lt;/video&gt;</code></div>
+
+    <!-- 7.3 Аудіо -->
+    <h3 id="html-7-3">7.3 Аудіо</h3>
+    <p>Тег <code>&lt;audio&gt;</code> дозволяє відтворювати звук. Атрибути схожі на відео:</p>
+    <ul>
+        <li><code>controls</code> — панель керування</li>
+        <li><code>autoplay</code> — автоматичний запуск</li>
+        <li><code>loop</code> — зациклення</li>
+        <li><code>muted</code> — без звуку</li>
+    </ul>
+    <div class="code-block"><code>&lt;audio controls&gt;
+  &lt;source src="music.mp3" type="audio/mpeg"&gt;
+  Ваш браузер не підтримує аудіо.
+&lt;/audio&gt;</code></div>
+
+    <!-- 7.4 Плагіни -->
+    <h3 id="html-7-4">7.4 Плагіни</h3>
+    <p>Раніше для мультимедіа використовували Flash або Java, але зараз HTML5 замінив плагіни на стандартні теги. Використання плагінів зараз небажане через сумісність і безпеку.</p>
+
+    <!-- 7.5 YouTube -->
+    <h3 id="html-7-5">7.5 Вбудоване відео з YouTube</h3>
+    <p>Можна вставляти відео з YouTube через <code>&lt;iframe&gt;</code>:</p>
+    <div class="code-block"><code>&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" 
+title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;</code></div>
+
+    <!-- 7.6 Веб-API -->
+    <h3 id="html-7-6">7.6 Веб-API</h3>
+    <p>Web API — це набір інтерфейсів, який дозволяє веб-сторінкам взаємодіяти з браузером або сервісами:</p>
+    <ul>
+        <li>DOM API — доступ до елементів сторінки</li>
+        <li>Fetch API — робота з HTTP-запитами</li>
+        <li>LocalStorage / SessionStorage — зберігання даних</li>
+        <li>Geolocation API — визначення місця користувача</li>
+        <li>Canvas API — малювання на полотні</li>
+    </ul>
+    <div class="code-block"><code>// Збереження даних у LocalStorage
+localStorage.setItem("name", "Alice");
+let user = localStorage.getItem("name");</code></div>
+
+    <!-- 7.7 Геолокація, Drag&Drop, Web Workers -->
+    <h3 id="html-7-7">7.7 Геолокація, Drag&Drop, Web Workers</h3>
+    <p><strong>Геолокація:</strong> визначення координат користувача</p>
+    <div class="code-block"><code>navigator.geolocation.getCurrentPosition(function(position) {
+  console.log(position.coords.latitude, position.coords.longitude);
+});</code></div>
+
+    <p><strong>Drag & Drop:</strong> перетягування елементів</p>
+    <div class="code-block"><code>let item = document.getElementById("drag");
+item.draggable = true;
+item.addEventListener("dragstart", function(e) {
+  e.dataTransfer.setData("text", e.target.id);
+});</code></div>
+
+    <p><strong>Web Workers:</strong> виконання фонових задач без блокування UI</p>
+    <div class="code-block"><code>let worker = new Worker("worker.js");
+worker.postMessage("start");
+worker.onmessage = function(e) {
+  console.log(e.data);
+};</code></div>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 7</button>
+</section>
+<script>
+
+
+// Генерація 100 анімованих зірок на фоні
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(star);
+}
+
+// Відкриття/закриття бічного меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+    sideMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+    sideMenu.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+// Підменю "Курси" у боковому меню
+const menuToggles = document.querySelectorAll('.menu-toggle');
+menuToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentItem = toggle.parentElement;
+        parentItem.classList.toggle('active');
+    });
+});
+
+// Відкриття/закриття підтеми у правому меню
+const topicToggles = document.querySelectorAll('.topic-toggle');
+
+topicToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentTopic = toggle.parentElement;
+
+        // Закриваємо інші відкриті теми
+        topicToggles.forEach(t => {
+            if (t !== toggle) {
+                t.parentElement.classList.remove('active');
+            }
+        });
+
+        // Відкриваємо або закриваємо поточну тему
+        parentTopic.classList.toggle('active');
+    });
+});
+
+// Кнопка входу
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', () => {
+    window.location.href = 'login.html';
+});
+
+</script>
+</body>
+</html>
