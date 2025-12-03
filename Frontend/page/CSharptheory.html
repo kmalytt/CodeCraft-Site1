@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C# - Теорія | CodeCraft</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1c40 0%, #2f3485 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 25fr;
+    align-items: center;
+    padding: 15px 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 14, 36, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.menu-btn {
+    background: transparent;
+    border: 2px solid #00D9FF;
+    color: #00D9FF;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    width: 50px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: #00d9ff;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Кнопка входу */
+.login-btn {
+    background: transparent;
+    border: 2px solid #00d9ff;
+    color: #00D9FF;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+.login-btn:hover {
+    background: #00D9FF;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(13, 14, 36, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 80px 30px 30px 30px;
+    transition: left 0.4s ease;
+    z-index: 99;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 28px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.menu-items li a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+    z-index: 98;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    position: relative;
+    z-index: 1;
+}
+
+.theory-sidebar {
+    position: fixed;
+    right: 0;
+    top: 80px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    background: rgba(13, 14, 36, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px;
+    overflow-y: auto;
+    border-left: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.theory-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theory-sidebar::-webkit-scrollbar-track {
+    background: rgba(13, 14, 36, 0.5);
+}
+
+.theory-sidebar::-webkit-scrollbar-thumb {
+    background: #00D9FF;
+    border-radius: 4px;
+}
+
+.sidebar-title {
+    color: #00D9FF;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.theory-nav {
+    list-style: none;
+}
+
+.theory-nav > li {
+    margin-bottom: 12px;
+}
+
+.theory-topic {
+    position: relative;
+}
+
+.topic-toggle {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.topic-toggle:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.topic-arrow {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.theory-topic.active .topic-arrow {
+    transform: rotate(180deg);
+}
+
+.subtopic-list {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 10px;
+}
+
+.theory-topic.active .subtopic-list {
+    max-height: 600px;
+}
+
+.subtopic-list li {
+    margin-top: 8px;
+}
+
+.subtopic-list a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+}
+
+.subtopic-list a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.subtopic-list a.active {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 60px;
+    margin-right: 280px;
+    max-width: calc(100% - 280px);
+}
+
+.theory-section {
+    background: rgba(13, 14, 36, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    scroll-margin-top: 100px;
+}
+
+.theory-section h2 {
+    color: #00D9FF;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.theory-section h3 {
+    color: #00D9FF;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.theory-section p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.theory-section ul {
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 25px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.theory-section li {
+    margin-bottom: 8px;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    color: #00FF88;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+th {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    font-weight: 600;
+}
+
+td {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.test-btn {
+    background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+    color: #0D0E24;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 30px;
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+}
+
+.test-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+}
+
+@media(max-width: 1200px) {
+    .theory-sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-right: 240px;
+        max-width: calc(100% - 240px);
+    }
+}
+
+@media(max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+    
+    .logo-nav {
+        font-size: 24px;
+    }
+    
+    .theory-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-right: 0;
+        max-width: 100%;
+        padding: 30px 20px;
+    }
+    
+    .theory-section {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-title">CodeCraft</div>
+    <ul class="menu-items">
+        <li>
+            <a href="home.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Головна
+            </a>
+        </li>
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="CSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<nav>
+    <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+    <div class="logo-nav">CodeCraft</div>
+    <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Вхід
+        </button>
+    </div>
+</nav>
+
+<div class="content-wrapper">
+    <div class="theory-sidebar">
+        <div class="sidebar-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Зміст курсу
+        </div>
+         <ul class="theory-nav">
+            
+<ul class="theory-nav">
+    <li class="theory-topic">
+        <a href="#" class="topic-toggle">
+            ТЕМА 1: Вступ до C#
+            <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </a>
+        <ul class="subtopic-list">
+            <li><a href="#t1-1">1.1. Що таке C#</a></li>
+            <li><a href="#t1-2">1.2. Що таке .NET</a></li>
+            <li><a href="#t1-3">1.3. Як працює компіляція</a></li>
+            <li><a href="#t1-4">1.4. Установка середовища</a></li>
+            <li><a href="#t1-5">1.5. Перша програма Hello World</a></li>
+        </ul>
+    </li>
+
+    <li class="theory-topic">
+        <a href="#" class="topic-toggle">
+            ТЕМА 2: Основи синтаксису
+            <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </a>
+        <ul class="subtopic-list">
+            <li><a href="#t2-1">2.1. Структура програми</a></li>
+            <li><a href="#t2-2">2.2. Коментарі</a></li>
+            <li><a href="#t2-3">2.3. Імена змінних</a></li>
+            <li><a href="#t2-4">2.4. Області видимості</a></li>
+            <li><a href="#t2-5">2.5. Типи помилок</a></li>
+        </ul>
+    </li>
+
+    <li class="theory-topic">
+        <a href="#" class="topic-toggle">
+            ТЕМА 3: Типи даних
+            <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </a>
+        <ul class="subtopic-list">
+            <li><a href="#t3-1">3.1. Числові типи</a></li>
+            <li><a href="#t3-2">3.2. Символи (char)</a></li>
+            <li><a href="#t3-3">3.3. Логічний тип (bool)</a></li>
+            <li><a href="#t3-4">3.4. Рядки (string)</a></li>
+            <li><a href="#t3-5">3.5. Приведення типів</a></li>
+            <li><a href="#t3-6">3.6. const та readonly</a></li>
+        </ul>
+    </li>
+
+    <li class="theory-topic">
+        <a href="#" class="topic-toggle">
+            ТЕМА 4: Оператори
+            <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </a>
+        <ul class="subtopic-list">
+            <li><a href="#t4-1">4.1. Арифметичні</a></li>
+            <li><a href="#t4-2">4.2. Порівняння</a></li>
+            <li><a href="#t4-3">4.3. Логічні</a></li>
+            <li><a href="#t4-4">4.4. Присвоєння</a></li>
+            <li><a href="#t4-5">4.5. Тернарний оператор</a></li>
+        </ul>
+    </li>
+
+    <li class="theory-topic">
+        <a href="#" class="topic-toggle">
+            ТЕМА 5: Умови і гілки
+            <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </a>
+        <ul class="subtopic-list">
+            <li><a href="#t5-1">5.1. if / else if / else</a></li>
+            <li><a href="#t5-2">5.2. switch</a></li>
+            <li><a href="#t5-3">5.3. Pattern Matching</a></li>
+            <li><a href="#t5-4">5.4. switch expression</a></li>
+        </ul>
+    </li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 6: Цикли
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t6-1">6.1. for</a></li>
+        <li><a href="#t6-2">6.2. while</a></li>
+        <li><a href="#t6-3">6.3. do while</a></li>
+        <li><a href="#t6-4">6.4. foreach</a></li>
+        <li><a href="#t6-5">6.5.break / continue</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 7: Методи та функції
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t7-1">7.1. Створення методу</a></li>
+        <li><a href="#t7-2">7.2. Параметри</a></li>
+        <li><a href="#t7-3">7.3. Значення за замовчуванням</a></li>
+        <li><a href="#t7-4">7.4. ref / out</a></li>
+        <li><a href="#t7-5">7.5. Перевантаження методів</a></li>
+        <li><a href="#t7-6">7.6. Рекурсія</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 8: Масиви та колекції
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t8-1">8.1. Одновимірні масиви</a></li>
+        <li><a href="#t8-2">8.2. Багатовимірні масиви</a></li>
+        <li><a href="#t8-3">8.3. List</a></li>
+        <li><a href="#t8-4">8.4. Dictionary</a></li>
+        <li><a href="#t8-5">8.5. Queue, Stack</a></li>
+        <li><a href="#t8-6">8.6. Основи LINQ</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 9: ООП — Об’єктно-орієнтоване програмування
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t9-1">9.1. Класи і об’єкти</a></li>
+        <li><a href="#t9-2">9.2. Поля та властивості</a></li>
+        <li><a href="#t9-3">9.3. Конструктори</a></li>
+        <li><a href="#t9-4">9.4. Інкапсуляція</a></li>
+        <li><a href="#t9-5">9.5. Наслідування</a></li>
+        <li><a href="#t9-6">9.6. Поліморфізм</a></li>
+        <li><a href="#t9-7">9.7. Абстрактні класи</a></li>
+        <li><a href="#t9-8">9.8. Інтерфейси</a></li>
+        <li><a href="#t9-9">9.9. Enum</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 10: Робота з файлами
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t10-1">10.1. File / Directory</a></li>
+        <li><a href="#t10-2">10.2. Читання файлів</a></li>
+        <li><a href="#t10-3">10.3. Запис файлів</a></li>
+        <li><a href="#t10-4">10.4. JSON</a></li>
+        <li><a href="#t10-5">10.5. Серіалізація</a></li>
+    </ul>
+</li>
+
+</ul>
+    </div>
+    <main class="main-content">
+    <section class="theory-section" id="t1-1">
+        <h2 style="text-align:center;">ТЕМА 1: Основи C#</h2>
+
+        <!-- 1.1 Вступ до C# -->
+        <h3 id="t1-1" style="text-decoration: underline;">1.1 Вступ до C#</h3>
+        <p>C# (Сі-шарп) — сучасна, об'єктно-орієнтована мова програмування, створена Microsoft у рамках платформи .NET.</p>
+        <p>C# поєднує в собі потужність C++ та зручність Java, забезпечує кероване виконання коду, безпеку пам'яті та високий рівень надійності.</p>
+
+        <p>Де використовується C#:</p>
+        <ul>
+            <li>настільні додатки (Windows Forms, WPF)</li>
+            <li>веб-додатки та API (ASP.NET Core)</li>
+            <li>мобільні додатки (MAUI, Xamarin)</li>
+            <li>ігри (Unity)</li>
+            <li>хмари (Microsoft Azure)</li>
+        </ul>
+
+        <p>C# — типізована мова, що допомагає уникати помилок ще на етапі компіляції, роблячи код надійним та зручним.</p>
+
+        <p>Приклад простого виводу:</p>
+        <div class="code-block"><code>Console.WriteLine("Привіт, C#!");</code></div>
+
+
+        <!-- 1.2 Що таке .NET -->
+        <h3 id="t1-2" style="text-decoration: underline;">1.2 Що таке .NET</h3>
+        <p>.NET — кросплатформна, безкоштовна, відкрита платформа для створення додатків будь-якого типу. Вона включає:</p>
+        <ul>
+            <li><strong>CLR</strong> — середовище виконання, яке керує пам’яттю, безпекою та виконанням C#-коду</li>
+            <li><strong>BCL</strong> — базова бібліотека класів</li>
+            <li>компілятори, інструменти, SDK</li>
+        </ul>
+        <p>Програми на .NET працюють на Windows, Linux і macOS без змін у коді.</p>
+
+
+        <!-- 1.3 Як працює компіляція -->
+        <h3 id="t1-3" style="text-decoration: underline;">1.3 Як працює компіляція в C#</h3>
+        <p>Процес компіляції складається з двох етапів:</p>
+
+        <ul>
+            <li><strong>1. C# → IL</strong><br>Компілятор перетворює код на проміжну мову IL (Intermediate Language).</li>
+
+            <li><strong>2. IL → Машинний код</strong><br>Під час запуску CLR використовує JIT-компілятор, який перетворює IL у машинний код процесора.</li>
+        </ul>
+
+        <p>Це забезпечує швидкість, безпеку і кросплатформеність.</p>
+
+
+        <!-- 1.4 Установка середовища -->
+        <h3 id="t1-4" style="text-decoration: underline;">1.4 Установка середовища (Visual Studio / Rider / VS Code)</h3>
+        <p>Для початку роботи з C# потрібно встановити .NET SDK та IDE.</p>
+
+        <p><strong>Visual Studio</strong> — найкраще IDE для Windows. Має потужний debugger, IntelliSense та багато інструментів.</p>
+
+        <p><strong>Rider</strong> — швидка, кросплатформна IDE від JetBrains.</p>
+
+        <p><strong>VS Code</strong> — легкий редактор, який потребує розширення C# Dev Kit.</p>
+
+        <p>Загальні кроки:</p>
+        <ul>
+            <li>встановити .NET SDK</li>
+            <li>встановити IDE або редактор</li>
+            <li>створити перший проєкт</li>
+        </ul>
+
+
+        <!-- 1.5 Перша програма -->
+        <h3 id="t1-5" style="text-decoration: underline;">1.5 Перша програма Hello World</h3>
+        <p>Найпростіша консольна програма виглядає так:</p>
+
+        <div class="code-block"><code>Console.WriteLine("Hello World!");</code></div>
+
+        <p>Класичний варіант із повною структурою:</p>
+
+        <div class="code-block"><code>using System;
+
+namespace HelloWorldApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+        }
+    }
+}</code></div>
+
+        <p>Запуск у терміналі:</p>
+        <div class="code-block"><code>dotnet run</code></div>
+
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 1</button>
+
+    </section>
+<section class="theory-section" id="t2-1">
+        <h2 style="text-align:center;">ТЕМА 2: Основи синтаксису C#</h2>
+
+        <!-- 2.1 Структура програми -->
+        <h3 id="t2-1" style="text-decoration: underline;">2.1 Структура програми</h3>
+        <p>Програма на C# будується за ієрархією: Простори імен → Класи → Члени (Поля, Методи). Це дозволяє організувати код логічно та зрозуміло.</p>
+        <p>Основні елементи:</p>
+        <ul>
+            <li><strong>Директиви using</strong> — підключають класи та простори імен.</li>
+            <li><strong>Простір імен (namespace)</strong> — логічна група класів.</li>
+            <li><strong>Класи (class)</strong> — шаблон для об’єктів, що містять дані та методи.</li>
+            <li><strong>Метод Main</strong> — точка входу виконуваної програми.</li>
+        </ul>
+        <p>Приклад базової програми:</p>
+        <div class="code-block"><code>using System;
+
+namespace MyApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int x = 10;
+            Console.WriteLine($"Значення x: {x}");
+        }
+    }
+}</code></div>
+
+        <!-- 2.2 Коментарі -->
+        <h3 id="t2-2" style="text-decoration: underline;">2.2 Коментарі</h3>
+        <p>Коментарі пояснюють код і ігноруються компілятором. Вони покращують читабельність і допомагають документувати програму.</p>
+        <ul>
+            <li>Однорядкові: <code>//</code></li>
+            <li>Багаторядкові: <code>/* ... */</code></li>
+            <li>XML-документаційні: <code>///</code> — для автоматичної генерації документації.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>// Однорядковий коментар
+/* Багаторядковий коментар */
+/// <summary>
+/// Обчислює суму двох чисел
+/// </summary>
+public int Add(int a, int b) { return a + b; }</code></div>
+
+        <!-- 2.3 Імена змінних -->
+        <h3 id="t2-3" style="text-decoration: underline;">2.3 Імена змінних</h3>
+        <p>Правильне іменування змінних робить код зрозумілим. Основні правила:</p>
+        <ul>
+            <li>Починаються з літери або <code>_</code>, не з цифри.</li>
+            <li>Можна використовувати літери, цифри та <code>_</code>.</li>
+            <li>Не використовувати ключові слова C#.</li>
+            <li>Регістр має значення (myVar ≠ MyVar).</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>// Добре
+int totalSum = firstNumber + secondNumber;
+string userName = "Alice";
+
+// Погано
+int s = a + b;</code></div>
+
+        <!-- 2.4 Області видимості -->
+        <h3 id="t2-4" style="text-decoration: underline;">2.4 Області видимості</h3>
+        <p>Область видимості визначає, де змінна або метод доступні. Це допомагає уникнути конфліктів і покращує структуру програми.</p>
+        <ul>
+            <li>Block Scope — видимість всередині { }.</li>
+            <li>Class Scope — видимість всередині класу.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>public void MyMethod()
+{
+    int methodVar = 10;
+    if (methodVar > 5)
+    {
+        int blockVar = 20;
+        Console.WriteLine(blockVar); // OK
+    }
+    // Console.WriteLine(blockVar); // ❌ Не доступно
+}</code></div>
+
+        <p>Блоки допомагають локалізувати змінні та зменшують ризик помилок.</p>
+
+        <!-- 2.5 Практичні поради -->
+        <h3 id="t2-5" style="text-decoration: underline;">2.5 Практичні поради</h3>
+        <ul>
+            <li>Завжди оголошуйте змінні близько до місця використання.</li>
+            <li>Коментарі використовувати для пояснення логіки, а не очевидних речей.</li>
+            <li>Старайтесь дотримуватись єдиного стилю іменування змінних у проєкті.</li>
+            <li>Розділяйте код на логічні блоки, щоб полегшити читання та налагодження.</li>
+        </ul>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 2</button>
+    </section>
+    <section class="theory-section" id="t3-1">
+        <h2 style="text-align:center;">ТЕМА 3: Типи даних та змінні в C#</h2>
+
+        <!-- 3.1 Примітивні типи даних -->
+        <h3 id="t3-1" style="text-decoration: underline;">3.1 Примітивні типи даних</h3>
+        <p>C# має кілька основних типів даних, які дозволяють зберігати числа, символи, логічні значення та текст.</p>
+        <ul>
+            <li><strong>int</strong> — ціле число (32-біт), наприклад: -2147483648 до 2147483647</li>
+            <li><strong>long</strong> — велике ціле число (64-біт)</li>
+            <li><strong>float</strong> — число з плаваючою точкою (32-біт)</li>
+            <li><strong>double</strong> — число з плаваючою точкою (64-біт), найбільш часто використовуваний тип для дробових чисел</li>
+            <li><strong>decimal</strong> — точне дробове число, підходить для фінансових обчислень</li>
+            <li><strong>bool</strong> — логічне значення true або false</li>
+            <li><strong>char</strong> — одиночний символ</li>
+            <li><strong>string</strong> — рядок тексту</li>
+        </ul>
+        <p>Приклади:</p>
+        <div class="code-block"><code>int age = 25;
+double price = 19.99;
+bool isActive = true;
+char grade = 'A';
+string name = "Alice";</code></div>
+
+        <!-- 3.2 Неявна і явна конверсія -->
+        <h3 id="t3-2" style="text-decoration: underline;">3.2 Неявна і явна конверсія</h3>
+        <p>Типи даних можна перетворювати один в один:</p>
+        <ul>
+            <li><strong>Неявна конверсія (implicit)</strong> — без втрати даних, наприклад int → double</li>
+            <li><strong>Явна конверсія (explicit)</strong> — може бути втрата даних, тому потрібно використовувати приведення типу (cast)</li>
+        </ul>
+        <p>Приклади:</p>
+        <div class="code-block"><code>int x = 10;
+double y = x; // Неявна конверсія
+
+double d = 9.78;
+int i = (int)d; // Явна конверсія, дробова частина відкидається</code></div>
+
+        <!-- 3.3 Константи та readonly -->
+        <h3 id="t3-3" style="text-decoration: underline;">3.3 Константи та readonly</h3>
+        <p>Іноді значення не повинні змінюватися після оголошення:</p>
+        <ul>
+            <li><strong>const</strong> — значення фіксоване на час компіляції</li>
+            <li><strong>readonly</strong> — значення можна задати під час ініціалізації або в конструкторі, але не змінювати пізніше</li>
+        </ul>
+        <p>Приклади:</p>
+        <div class="code-block"><code>const double Pi = 3.14159;
+readonly int maxItems;
+
+public MyClass()
+{
+    maxItems = 100; // Можна задати лише тут
+}</code></div>
+
+        <!-- 3.4 Nullable типи -->
+        <h3 id="t3-4" style="text-decoration: underline;">3.4 Nullable типи</h3>
+        <p>За замовчуванням примітивні типи не можуть бути null. Для цього використовуються nullable типи:</p>
+        <div class="code-block"><code>int? optionalNumber = null;
+optionalNumber = 10; // Тепер змінна містить значення</code></div>
+        <p>Nullable типи зручні для баз даних, де значення може бути відсутнім.</p>
+
+        <!-- 3.5 Варіант var і dynamic -->
+        <h3 id="t3-5" style="text-decoration: underline;">3.5 Варіант var і dynamic</h3>
+        <p><strong>var</strong> — компілятор визначає тип змінної автоматично, але тип залишається статичним.</p>
+        <p><strong>dynamic</strong> — тип визначається під час виконання, дає гнучкість, але менш безпечний.</p>
+        <p>Приклади:</p>
+        <div class="code-block"><code>var number = 42;      // int
+var text = "Hello";     // string
+
+dynamic value = 10;
+value = "Тепер рядок"; // Допустимо для dynamic</code></div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 3</button>
+    </section>
+    <section class="theory-section" id="t4-1">
+        <h2 style="text-align:center;">ТЕМА 4: Оператори</h2>
+
+        <!-- 4.1 Арифметичні оператори -->
+        <h3 id="t4-1" style="text-decoration: underline;">4.1 Арифметичні оператори</h3>
+        <p>Арифметичні оператори дозволяють виконувати основні математичні обчислення над числовими значеннями. Вони є базою будь-якої програми, яка працює з числами. Розуміння їх поведінки допомагає уникнути помилок при обчисленнях.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Ділення цілих чисел відкидає дробову частину (truncation), а ділення чисел з плаваючою точкою повертає точне дробове значення.</li>
+            <li>Оператори інкременту (<code>++</code>) та декременту (<code>--</code>) можуть змінювати значення до або після використання в виразі (префіксна та постфіксна форма).</li>
+            <li>Пріоритет операторів важливий: спочатку множення/ділення, потім додавання/віднімання, але дужки змінюють порядок виконання.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int a = 10, b = 3;
+int result = a / b; // 3, оскільки обидва числа цілі
+double precise = (double)a / b; // 3.333..., точне ділення</code></div>
+
+        <!-- 4.2 Оператори порівняння -->
+        <h3 id="t4-2" style="text-decoration: underline;">4.2 Оператори порівняння</h3>
+        <p>Оператори порівняння дозволяють визначати відношення між двома значеннями. Результатом завжди є логічне значення <code>bool</code>. Вони є основою умовних конструкцій та керування логікою програми.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>При порівнянні примітивних типів оператор <code>==</code> перевіряє значення, а для об’єктів — за замовчуванням перевіряє посилання.</li>
+            <li>Для рядків <code>==</code> порівнює вміст, що дуже зручно.</li>
+            <li>Важливо не плутати <code>==</code> і <code>=</code>. Перше порівнює, друге присвоює.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int age = 20;
+if (age >= 18) 
+{
+    Console.WriteLine("Дорослий"); // виконається
+}</code></div>
+
+        <!-- 4.3 Логічні оператори -->
+        <h3 id="t4-3" style="text-decoration: underline;">4.3 Логічні оператори</h3>
+        <p>Логічні оператори дозволяють об'єднувати або інвертувати булеві вирази. Вони широко використовуються для створення складних умов та контролю потоку програми.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li><code>&&</code> (AND) — повертає <code>true</code>, якщо обидва операнди істинні.</li>
+            <li><code>||</code> (OR) — повертає <code>true</code>, якщо хоча б один операнд істинний.</li>
+            <li><code>!</code> (NOT) — інвертує значення операнда.</li>
+            <li>Оператори <code>&&</code> та <code>||</code> використовують коротке замикання: другий операнд обчислюється тільки при необхідності.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>bool isSunny = true;
+bool isWarm = false;
+if (isSunny && isWarm)
+{
+    Console.WriteLine("Йдемо гуляти"); // не виконається
+}</code></div>
+
+        <!-- 4.4 Оператори присвоєння -->
+        <h3 id="t4-4" style="text-decoration: underline;">4.4 Оператори присвоєння</h3>
+        <p>Оператори присвоєння дозволяють зручно змінювати значення змінних. Найпростіший — <code>=</code>, але є також складені оператори, які комбінують арифметику та присвоєння (<code>+=, -=, *=, /=, %=</code>).</p>
+        <p>Сучасний оператор <code>??=</code> дозволяє присвоїти значення тільки якщо змінна зараз <code>null</code>. Це зручно для ініціалізації дефолтних значень.</p>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int x = 10;
+x += 5; // x = 15
+string username = null;
+username ??= "Guest"; // username = "Guest"</code></div>
+
+        <!-- 4.5 Тернарний оператор -->
+        <h3 id="t4-5" style="text-decoration: underline;">4.5 Тернарний оператор</h3>
+        <p>Тернарний оператор — це компактний спосіб записати просту умовну конструкцію <code>if-else</code> в одному рядку. Він має три операнди: умова, значення при <code>true</code> і значення при <code>false</code>.</p>
+        <p>Використання тернарного оператора робить код коротким та зрозумілим, але не слід зловживати ним для складних умов.</p>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int age = 20;
+string status = age >= 18 ? "Дорослий" : "Дитина";
+Console.WriteLine(status); // Дорослий</code></div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 4</button>
+    </section>
+   <section class="theory-section" id="t5-1">
+        <h2 style="text-align:center;">ТЕМА 5: Умови і гілки</h2>
+
+        <!-- 5.1 if / else if / else -->
+        <h3 id="t5-1" style="text-decoration: underline;">5.1 if / else if / else</h3>
+        <p>Умовні конструкції дозволяють програмі приймати рішення та виконувати різні блоки коду залежно від умов. <code>if-else</code> є базовим способом реалізації розгалуження в C#.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Умова завжди булева (true/false).</li>
+            <li>Порядок перевірки важливий у <code>else if</code>.</li>
+            <li>Блок <code>else</code> необов'язковий, використовується для обробки випадків, які не підпадають під жодну умову.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int score = 75;
+
+if (score >= 90)
+{
+    Console.WriteLine("Відмінно!");
+}
+else if (score >= 70)
+{
+    Console.WriteLine("Задовільно."); // Виконається цей блок
+}
+else
+{
+    Console.WriteLine("Потрібно доопрацювати.");
+}</code></div>
+
+        <p>Якщо поміняти порядок умов, логіка може змінитися. Тому <code>else if</code> завжди треба розміщувати від найвищої до найнижчої або за логічним пріоритетом.</p>
+
+        <!-- 5.2 switch -->
+        <h3 id="t5-2" style="text-decoration: underline;">5.2 switch</h3>
+        <p>Конструкція <code>switch</code> забезпечує чистий спосіб багатокритеріального розгалуження. Вона ідеальна, коли потрібно порівняти одну змінну з кількома константними значеннями.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Кожен блок <code>case</code> повинен закінчуватися <code>break</code>, щоб уникнути переходу до наступного <code>case</code>.</li>
+            <li>Блок <code>default</code> виконується, якщо жоден <code>case</code> не спрацював.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int day = 3;
+
+switch (day)
+{
+    case 1:
+        Console.WriteLine("Понеділок");
+        break;
+    case 5:
+        Console.WriteLine("П'ятниця");
+        break;
+    case 6:
+    case 7:
+        Console.WriteLine("Вихідні");
+        break;
+    default:
+        Console.WriteLine("Будній день");
+        break;
+}</code></div>
+
+        <p>Switch краще використовувати для порівняння однієї змінної з константами. Для складних умов з діапазонами та логічними комбінаціями краще <code>if-else</code>.</p>
+
+        <!-- 5.3 Pattern Matching -->
+        <h3 id="t5-3" style="text-decoration: underline;">5.3 Pattern Matching</h3>
+        <p>Pattern Matching дозволяє приймати рішення не тільки за значенням, а й за типом або формою даних. Це робить код чистішим та безпечнішим.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Оператор <code>is</code> тепер може одночасно перевіряти тип і оголошувати змінну.</li>
+            <li>Switch можна комбінувати з шаблонами типу, властивостей та умов <code>when</code>.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>object item = 123;
+
+if (item is int intValue)
+{
+    Console.WriteLine($"Це ціле число: {intValue}");
+}
+else if (item is string str)
+{
+    Console.WriteLine($"Рядок довжиною: {str.Length}");
+}</code></div>
+
+        <p>Цей підхід зменшує дублювання коду та необхідність явного приведення типів.</p>
+
+        <!-- 5.4 switch expression -->
+        <h3 id="t5-4" style="text-decoration: underline;">5.4 switch expression</h3>
+        <p>Switch expression – еволюція класичного <code>switch</code>. Це вираз, який повертає значення, а не просто виконує блоки коду. Вона компактніша і підвищує читабельність.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Використовує лямбда-оператор <code>=></code> замість двокрапки.</li>
+            <li>Ключове слово <code>_</code> замінює <code>default</code>.</li>
+            <li>Може комбінуватися з Pattern Matching.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int month = 4;
+
+string season = month switch
+{
+    12 or 1 or 2 => "Зима",
+    3 or 4 or 5 => "Весна",
+    6 or 7 or 8 => "Літо",
+    9 or 10 or 11 => "Осінь",
+    _ => "Невідомий місяць"
+};
+
+Console.WriteLine($"Місяць {month} - це {season}");</code></div>
+
+        <p>Switch expression особливо зручний для обчислення значень на основі одного параметра, зменшуючи кількість коду та покращуючи його читабельність.</p>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 5</button>
+    </section>
+     <section class="theory-section" id="t6-1">
+        <h2 style="text-align:center;">ТЕМА 6: Цикли та повторення</h2>
+
+        <!-- 6.1 Цикл while -->
+        <h3 id="t6-1" style="text-decoration: underline;">6.1 Цикл while</h3>
+        <p>Цикл <code>while</code> дозволяє повторювати блок коду, поки умова є істинною. Він використовується, коли кількість повторів заздалегідь невідома і залежить від динамічної умови.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Умова перевіряється перед кожною ітерацією (pre-check).</li>
+            <li>Якщо умова спочатку хибна, тіло циклу може не виконатися жодного разу.</li>
+            <li>Потрібно контролювати змінні, що впливають на умову, щоб уникнути нескінченного циклу.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int i = 0;
+while (i < 5)
+{
+    Console.WriteLine($"Крок {i}");
+    i++;
+}</code></div>
+
+        <!-- 6.2 Цикл do-while -->
+        <h3 id="t6-2" style="text-decoration: underline;">6.2 Цикл do-while</h3>
+        <p>Цикл <code>do-while</code> відрізняється від <code>while</code> тим, що умова перевіряється **після виконання тіла циклу**. Це гарантує хоча б один запуск циклу незалежно від умови.</p>
+        <p>Використовується, коли потрібно виконати код хоча б один раз, а потім перевірити, чи продовжувати повторення.</p>
+        <p>Приклад:</p>
+        <div class="code-block"><code>int j = 10;
+do
+{
+    Console.WriteLine($"Значення j = {j}");
+    j--;
+} while (j > 0);</code></div>
+
+        <!-- 6.3 Цикл for -->
+        <h3 id="t6-3" style="text-decoration: underline;">6.3 Цикл for</h3>
+        <p>Цикл <code>for</code> використовується, коли кількість ітерацій відома заздалегідь. Він дозволяє компактно оголосити змінну лічильник, умову та крок ітерації в одній конструкції.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Може містити декілька змінних-лічильників.</li>
+            <li>Умова перевіряється перед кожною ітерацією.</li>
+            <li>Можна використовувати будь-який вираз для кроку (наприклад, <code>i+=2</code>).</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>for (int i = 0; i < 5; i++)
+{
+    Console.WriteLine($"Ітерація {i}");
+}</code></div>
+
+        <!-- 6.4 Цикл foreach -->
+        <h3 id="t6-4" style="text-decoration: underline;">6.4 Цикл foreach</h3>
+        <p>Цикл <code>foreach</code> використовується для ітерації по всіх елементах колекції (масив, список, словник тощо). Він автоматично проходить по кожному елементу без необхідності контролювати індекс.</p>
+        <p>Особливості:</p>
+        <ul>
+            <li>Змінна циклу тимчасово отримує значення елемента на кожній ітерації.</li>
+            <li>Не можна змінювати колекцію під час ітерації, інакше виникне помилка.</li>
+        </ul>
+        <p>Приклад:</p>
+        <div class="code-block"><code>string[] fruits = { "Яблуко", "Банан", "Вишня" };
+foreach (string fruit in fruits)
+{
+    Console.WriteLine(fruit);
+}</code></div>
+
+        <!-- 6.5 Оператори break та continue -->
+        <h3 id="t6-5" style="text-decoration: underline;">6.5 Оператори break та continue</h3>
+        <p>Ці оператори дозволяють контролювати виконання циклів:</p>
+        <ul>
+            <li><code>break</code> — миттєво припиняє виконання циклу, вихід з нього.</li>
+            <li><code>continue</code> — пропускає залишок поточної ітерації та переходить до наступної.</li>
+        </ul>
+        <p>Приклади:</p>
+        <div class="code-block"><code>for (int i = 0; i < 10; i++)
+{
+    if (i == 5) break; // цикл зупиниться на 5
+    if (i % 2 == 0) continue; // пропускаємо парні числа
+    Console.WriteLine(i);
+}</code></div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 6</button>
+    </section>
+
+    <section class="theory-section" id="t7-1">
+        <h2 style="text-align:center;">ТЕМА 7: Методи та функції</h2>
+
+        <!-- 7.1 Створення методу -->
+        <h3 id="t7-1" style="text-decoration: underline;">7.1 Створення методу</h3>
+        <p>Метод (або функція) – це іменований блок коду, який виконує певне завдання. Методи допомагають організувати код, підвищують його читабельність та реалізують принцип DRY (Don't Repeat Yourself).</p>
+        <p>Синтаксис оголошення методу:</p>
+        <div class="code-block"><code>[МодифікаторДоступу] [Модифікатор] ТипПовернення НазваМетоду([Параметри])
+{
+    // Тіло методу
+    // [return значення;] - якщо тип повернення не void
+}</code></div>
+        <p>Основні компоненти:</p>
+        <ul>
+            <li><strong>Модифікатор доступу</strong> (public, private) – визначає звідки можна викликати метод.</li>
+            <li><strong>Модифікатор</strong> (static, virtual) – додаткові характеристики методу.</li>
+            <li><strong>Тип повернення</strong> – тип даних, який метод повертає, або <em>void</em>.</li>
+            <li><strong>Назва методу</strong> – описова назва у стилі PascalCase.</li>
+            <li><strong>Параметри</strong> – змінні, які передаються в метод.</li>
+        </ul>
+        <p>Приклад методу без повернення значення (void):</p>
+        <div class="code-block"><code>public void DisplayGreeting(string name) 
+{
+    Console.WriteLine($"Привіт, {name}!");
+}</code></div>
+
+        <!-- 7.2 Параметри -->
+        <h3 id="t7-2" style="text-decoration: underline;">7.2 Параметри</h3>
+        <p>Параметри дозволяють передавати дані в метод для обробки.</p>
+        <p>Типи параметрів:</p>
+        <ul>
+            <li><strong>За значенням (Value Types)</strong> – метод отримує копію змінної. Зміни не впливають на оригінал.</li>
+            <li><strong>За посиланням (Reference Types)</strong> – метод отримує копію посилання на об’єкт. Зміни властивостей об’єкта видно зовні.</li>
+        </ul>
+        <p>Модифікатор <strong>params</strong> дозволяє передавати змінну кількість аргументів одного типу.</p>
+        <div class="code-block"><code>public int SumAll(params int[] numbers)
+{
+    int total = 0;
+    foreach (int num in numbers)
+    {
+        total += num;
+    }
+    return total;
+}</code></div>
+
+        <!-- 7.3 Значення за замовчуванням -->
+        <h3 id="t7-3" style="text-decoration: underline;">7.3 Значення за замовчуванням</h3>
+        <p>Значення за замовчуванням дозволяють не передавати деякі аргументи під час виклику методу.</p>
+        <div class="code-block"><code>public void SendNotification(string message, string recipient = "all", int priority = 1)
+{
+    Console.WriteLine($"Одержувач: {recipient}, Пріоритет: {priority}");
+}</code></div>
+
+        <!-- 7.4 ref / out -->
+        <h3 id="t7-4" style="text-decoration: underline;">7.4 ref / out</h3>
+        <p><strong>ref</strong> – змінна повинна бути ініціалізована до виклику; метод може змінювати значення.</p>
+        <p><strong>out</strong> – змінна не обов’язково ініціалізована; метод обов’язково присвоює значення.</p>
+        <div class="code-block"><code>public void IncrementByRef(ref int number) => number += 5;
+
+public bool TryConvert(string text, out int result)
+{
+    return int.TryParse(text, out result);
+}</code></div>
+
+        <!-- 7.5 Перевантаження методів -->
+        <h3 id="t7-5" style="text-decoration: underline;">7.5 Перевантаження методів</h3>
+        <p>Перевантаження дозволяє створювати методи з однаковою назвою, але різними параметрами.</p>
+        <div class="code-block"><code>public int Add(int a, int b) => a + b;
+public int Add(int a, int b, int c) => a + b + c;
+public double Add(double a, double b) => a + b;</code></div>
+
+        <!-- 7.6 Рекурсія -->
+        <h3 id="t7-6" style="text-decoration: underline;">7.6 Рекурсія</h3>
+        <p>Рекурсія – коли метод викликає сам себе для вирішення підзадач.</p>
+        <p>Ключові складові:</p>
+        <ul>
+            <li><strong>Базовий випадок</strong> – умова завершення рекурсії.</li>
+            <li><strong>Рекурсивний випадок</strong> – метод викликає сам себе з простішою задачею.</li>
+        </ul>
+        <p>Приклад рекурсії для обчислення факторіалу:</p>
+        <div class="code-block"><code>public static long CalculateFactorial(int n)
+{
+    if (n <= 1) return 1;
+    return n * CalculateFactorial(n - 1);
+}</code></div>
+
+        <p>Приклад рекурсії для чисел Фібоначчі:</p>
+        <div class="code-block"><code>public static int Fibonacci(int n)
+{
+    if (n == 0) return 0;
+    if (n == 1) return 1;
+    return Fibonacci(n - 1) + Fibonacci(n - 2);
+}</code></div>
+
+        <p>Рекурсія елегантна та читабельна, але може витрачати багато пам’яті через стек викликів. Для великих обчислень іноді краще використовувати цикли.</p>
+    </section>
+
+<section class="theory-section" id="t8">
+        <h2 style="text-align:center;">ТЕМА 8: Масиви та колекції</h2>
+
+        <!-- 8.1 Одновимірні масиви -->
+        <h3 id="t8-1" style="text-decoration: underline;">8.1 Одновимірні масиви</h3>
+        <p>Масив – це структура даних, яка зберігає фіксовану кількість елементів одного типу у суміжних ділянках пам’яті. Основні характеристики:</p>
+        <ul>
+            <li>Фіксований розмір – кількість елементів встановлюється при створенні.</li>
+            <li>Індексація з нуля – перший елемент має індекс 0, останній N-1.</li>
+            <li>Швидкий доступ за індексом – O(1).</li>
+        </ul>
+        <div class="code-block"><code>int[] numbers = {1, 2, 3};
+Console.WriteLine(numbers[0]); // 1
+for(int i = 0; i &lt; numbers.Length; i++) Console.Write(numbers[i] + " ");</code></div>
+
+        <!-- 8.2 Багатовимірні масиви -->
+        <h3 id="t8-2" style="text-decoration: underline;">8.2 Багатовимірні масиви</h3>
+        <p>Багатовимірні масиви дозволяють зберігати дані у вигляді таблиці або сітки.</p>
+        <ul>
+            <li><strong>Прямокутний масив</strong> – всі рядки мають однакову довжину.</li>
+            <li><strong>Зубчастий масив</strong> – масив масивів, довжина рядків може відрізнятися.</li>
+        </ul>
+        <div class="code-block"><code>// Прямокутний 2x2
+int[,] matrix = { {1,2}, {3,4} };
+Console.WriteLine(matrix[1,1]); // 4
+
+// Зубчастий
+int[][] jagged = { new int[]{1,2}, new int[]{3} };
+Console.WriteLine(jagged[0][1]); // 2</code></div>
+
+        <!-- 8.3 List<T> -->
+        <h3 id="t8-3" style="text-decoration: underline;">8.3 List&lt;T&gt;</h3>
+        <p>List&lt;T&gt; – динамічна колекція, яка дозволяє змінювати розмір під час виконання. Основні переваги:</p>
+        <ul>
+            <li>Додає та видаляє елементи динамічно.</li>
+            <li>Індексація як у масиві.</li>
+            <li>Типізована – зберігає елементи одного типу.</li>
+        </ul>
+        <div class="code-block"><code>List&lt;string&gt; names = new List&lt;string&gt; { "Іван" };
+names.Add("Оля");
+Console.WriteLine(names[1]); // Оля</code></div>
+
+        <!-- 8.4 Dictionary<TKey, TValue> -->
+        <h3 id="t8-4" style="text-decoration: underline;">8.4 Dictionary&lt;TKey, TValue&gt;</h3>
+        <p>Dictionary зберігає дані у вигляді пар ключ-значення. Основні моменти:</p>
+        <ul>
+            <li>Ключі унікальні.</li>
+            <li>Доступ до значення дуже швидкий – O(1).</li>
+            <li>Можна перевіряти наявність ключа за допомогою ContainsKey або TryGetValue.</li>
+        </ul>
+        <div class="code-block"><code>Dictionary&lt;int,string&gt; students = new Dictionary&lt;int,string&gt; {{101,"Оля"}};
+Console.WriteLine(students[101]); // Оля
+if(students.TryGetValue(102, out string s)) Console.WriteLine(s);</code></div>
+
+        <!-- 8.5 Queue та Stack -->
+        <h3 id="t8-5" style="text-decoration: underline;">8.5 Queue та Stack</h3>
+        <p>Спеціалізовані колекції для обмеженого порядку доступу до елементів:</p>
+        <ul>
+            <li><strong>Queue&lt;T&gt;</strong> – черга, принцип FIFO (First In, First Out).</li>
+            <li><strong>Stack&lt;T&gt;</strong> – стек, принцип LIFO (Last In, First Out).</li>
+        </ul>
+        <div class="code-block"><code>Queue&lt;int&gt; q = new Queue&lt;int&gt;();
+q.Enqueue(1); Console.WriteLine(q.Dequeue()); // 1
+
+Stack&lt;int&gt; s = new Stack&lt;int&gt;();
+s.Push(2); Console.WriteLine(s.Pop()); // 2</code></div>
+
+        <!-- 8.6 LINQ -->
+        <h3 id="t8-6" style="text-decoration: underline;">8.6 LINQ базово</h3>
+        <p>LINQ (Language Integrated Query) – інструмент для роботи з колекціями без написання складних циклів. Дозволяє фільтрувати, сортувати та перетворювати дані декларативно.</p>
+        <ul>
+            <li>Метод синтаксису: ланцюжкові виклики методів (Where, Select, OrderBy).</li>
+            <li>Синтаксис запиту: схожий на SQL.</li>
+        </ul>
+        <div class="code-block"><code>List&lt;int&gt; nums = new List&lt;int&gt; {1,5,3};
+var big = nums.Where(n =&gt; n &gt; 2).ToList();
+foreach(var n in big) Console.Write(n + " "); // 5 3</code></div>
+
+        <p>LINQ робить код компактним та легким для читання, особливо при роботі з великими колекціями.</p>
+         <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 8</button>
+    </section>
+    
+    
+    <section class="theory-section" id="t9">
+        <h2 style="text-align:center;">ТЕМА 9: ООП (Об’єктно-орієнтоване програмування)</h2>
+
+        <!-- 9.1 Класи і об’єкти -->
+        <h3 id="t9-1" style="text-decoration: underline;">9.1 Класи і об’єкти</h3>
+        <p>ООП – парадигма програмування, яка організовує код навколо об'єктів, а не лише функцій. Основна ідея – моделювання реального світу в програмі.</p>
+        <ul>
+            <li><strong>Клас</strong> – шаблон для створення об'єктів. Описує дані (поля/властивості) та поведінку (методи) об'єкта.</li>
+            <li><strong>Об'єкт</strong> – конкретний екземпляр класу, який має власний стан і може виконувати методи.</li>
+        </ul>
+        <div class="code-block"><code>public class Car
+{
+    public string Model;
+    public int Speed;
+
+    public void Accelerate(int delta)
+    {
+        Speed += delta;
+        Console.WriteLine($"Поточна швидкість: {Speed}");
+    }
+}
+
+Car myCar = new Car();
+myCar.Model = "Tesla Model 3";
+myCar.Speed = 0;
+myCar.Accelerate(20);</code></div>
+
+        <!-- 9.2 Поля та властивості -->
+        <h3 id="t9-2" style="text-decoration: underline;">9.2 Поля та властивості</h3>
+        <p>Поля зберігають стан об'єкта. Властивості контролюють доступ до полів (get/set), реалізуючи принцип інкапсуляції.</p>
+        <ul>
+            <li><strong>Поля:</strong> зазвичай приватні, використовуються всередині класу.</li>
+            <li><strong>Властивості:</strong> публічний доступ до полів з контролем і логікою.</li>
+        </ul>
+        <div class="code-block"><code>public class User
+{
+    private int _age;
+    public int Age
+    {
+        get { return _age; }
+        set { if(value &gt;= 0) _age = value; }
+    }
+    public string Name { get; set; }
+}
+
+User user = new User();
+user.Name = "Оля";
+user.Age = 25;</code></div>
+
+        <!-- 9.3 Конструктори -->
+        <h3 id="t9-3" style="text-decoration: underline;">9.3 Конструктори</h3>
+        <p>Конструктор – метод класу, який виконується при створенні об'єкта, щоб ініціалізувати його стан.</p>
+        <ul>
+            <li><strong>Конструктор за замовчуванням:</strong> без параметрів, автоматично створюється компілятором, якщо інші конструктори не оголошені.</li>
+            <li><strong>Параметризований конструктор:</strong> приймає аргументи для встановлення початкового стану об'єкта.</li>
+            <li><strong>Ланцюгові конструктори:</strong> виклик одного конструктора з іншого через <code>this(...)</code>.</li>
+        </ul>
+        <div class="code-block"><code>public class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+
+    public Person(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+
+    public Person(string name) : this(name, 0) { }
+}
+
+Person p1 = new Person("Андрій", 30);
+Person p2 = new Person("Оля");</code></div>
+
+        <!-- 9.4 Інкапсуляція -->
+        <h3 id="t9-4" style="text-decoration: underline;">9.4 Інкапсуляція</h3>
+        <p>Інкапсуляція об’єднує дані і методи в одну одиницю та захищає стан об'єкта від зовнішніх некоректних змін.</p>
+        <ul>
+            <li>Приховування даних – <code>private</code> поля.</li>
+            <li>Контрольований доступ – властивості з get/set.</li>
+            <li>Методи для змін стану об'єкта.</li>
+        </ul>
+        <div class="code-block"><code>public class BankAccount
+{
+    private decimal _balance;
+    public decimal Balance { get { return _balance; } }
+
+    public void Deposit(decimal amount)
+    {
+        if(amount &gt; 0) _balance += amount;
+        else throw new ArgumentException("Сума має бути додатною");
+    }
+
+    public void Withdraw(decimal amount)
+    {
+        if(amount &gt; 0 &amp;&amp; amount &lt;= _balance) _balance -= amount;
+        else throw new InvalidOperationException("Недостатньо коштів");
+    }
+}</code></div>
+
+        <!-- 9.5 Наслідування -->
+        <h3 id="t9-5" style="text-decoration: underline;">9.5 Наслідування</h3>
+        <p>Наслідування дозволяє створювати ієрархію класів, де похідний клас успадковує поля та методи базового класу.</p>
+        <ul>
+            <li>В C# лише одне наслідування класів.</li>
+            <li>Ключові слова: <code>base</code>, <code>protected</code>, <code>sealed</code>.</li>
+        </ul>
+        <div class="code-block"><code>public class Animal { public string Name { get; set; } public void Eat() => Console.WriteLine($"{Name} їсть"); }
+public class Dog : Animal { public void Bark() => Console.WriteLine($"{Name} гавкає"); }
+
+Dog dog = new Dog { Name = "Рекс" };
+dog.Eat();
+dog.Bark();</code></div>
+
+        <!-- 9.6 Поліморфізм -->
+        <h3 id="t9-6" style="text-decoration: underline;">9.6 Поліморфізм</h3>
+        <p>Поліморфізм дозволяє об'єктам різних класів реагувати по-різному на один і той самий виклик методу.</p>
+        <ul>
+            <li>Перевизначення методів (override) – поліморфізм часу виконання.</li>
+            <li>Перевантаження методів (overload) – поліморфізм часу компіляції.</li>
+            <li>Приховування методів (new) – не поліморфізм.</li>
+        </ul>
+        <div class="code-block"><code>public class Shape { public virtual string Draw() => "Фігура"; }
+public class Circle : Shape { public override string Draw() => "Коло"; }
+public class Square : Shape { public override string Draw() => "Квадрат"; }
+
+List&lt;Shape&gt; shapes = new List&lt;Shape> { new Circle(), new Square(), new Shape() };
+foreach(var s in shapes) Console.WriteLine(s.Draw());</code></div>
+
+        <!-- 9.7 Абстрактні класи -->
+        <h3 id="t9-7" style="text-decoration: underline;">9.7 Абстрактні класи</h3>
+        <p>Абстрактний клас – базовий шаблон, який не можна інстанціювати, але можна успадкувати.</p>
+        <div class="code-block"><code>public abstract class Employee
+{
+    public string Name { get; set; }
+    public abstract decimal CalculateSalary();
+}
+
+public class FullTimeEmployee : Employee
+{
+    public decimal MonthlySalary { get; set; }
+    public override decimal CalculateSalary() => MonthlySalary;
+}
+
+FullTimeEmployee e = new FullTimeEmployee { MonthlySalary = 50000 };
+Console.WriteLine(e.CalculateSalary());</code></div>
+
+        <!-- 9.8 Інтерфейси -->
+        <h3 id="t9-8" style="text-decoration: underline;">9.8 Інтерфейси</h3>
+        <p>Інтерфейс визначає контракт, який клас зобов’язаний реалізувати.</p>
+        <div class="code-block"><code>public interface ILogger { void Log(string message); bool IsDebugMode { get; set; } }
+public class FileLogger : ILogger
+{
+    public bool IsDebugMode { get; set; }
+    public void Log(string message) => Console.WriteLine($"[LOG] {message}");
+}
+
+ILogger logger = new FileLogger();
+logger.Log("Система запущена");</code></div>
+
+        <!-- 9.9 Переліки (enum) -->
+        <h3 id="t9-9" style="text-decoration: underline;">9.9 Переліки (enum)</h3>
+        <p>Enum – набір іменованих констант, що покращує читабельність коду.</p>
+        <div class="code-block"><code>public enum Status { New, Processing, Completed, Error }
+
+Status current = Status.Processing;
+if(current == Status.Completed) Console.WriteLine("Замовлення завершено");
+int value = (int)current; // 1
+Status st = (Status)3; // Error</code></div>
+ <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 9</button>
+    </section>
+    
+    <section class="theory-section" id="t10">
+        <h2 style="text-align:center;">ТЕМА 10: Робота з файлами</h2>
+
+        <!-- 10.1 File / Directory -->
+        <h3 id="t10-1" style="text-decoration: underline;">10.1 File / Directory</h3>
+        <p>Для роботи з файловою системою (читання, запис, переміщення, створення файлів та папок) у C# використовується простір імен <code>System.IO</code>. Два основні статичні класи – <code>File</code> та <code>Directory</code>.</p>
+
+        <h4>Клас Directory (папки)</h4>
+        <ul>
+            <li><strong>CreateDirectory(path)</strong> – створює папку (включно з проміжними)</li>
+            <li><strong>Exists(path)</strong> – перевіряє існування папки</li>
+            <li><strong>GetFiles(path)</strong> – повертає масив рядків із шляхами до файлів</li>
+            <li><strong>Delete(path, recursive)</strong> – видаляє папку; <code>recursive = true</code> видаляє все всередині</li>
+            <li><strong>Move(source, dest)</strong> – переміщує папку</li>
+        </ul>
+        <div class="code-block"><code>using System.IO;
+
+string folderPath = "C:\\Temp\\MyAppData";
+
+if (!Directory.Exists(folderPath))
+{
+    Directory.CreateDirectory(folderPath);
+    Console.WriteLine($"Папка створена: {folderPath}");
+}
+
+string[] files = Directory.GetFiles(folderPath);
+
+// Directory.Delete(folderPath, true); // обережно!</code></div>
+
+        <h4>Клас File (файли)</h4>
+        <ul>
+            <li><strong>Exists(path)</strong> – перевіряє наявність файлу</li>
+            <li><strong>Create(path)</strong> – створює або перезаписує файл</li>
+            <li><strong>Copy(source, dest)</strong> – копіює файл</li>
+            <li><strong>Delete(path)</strong> – видаляє файл</li>
+            <li><strong>Move(source, dest)</strong> – переміщує або перейменовує файл</li>
+            <li><strong>ReadAllText(path)</strong> – читає весь текст файлу</li>
+            <li><strong>WriteAllText(path, contents)</strong> – записує рядок у файл</li>
+        </ul>
+        <div class="code-block"><code>string filePath = "C:\\Temp\\MyAppData\\log.txt";
+
+if (File.Exists(filePath))
+{
+    File.Copy(filePath, "C:\\Temp\\MyAppData\\log_backup.txt", true);
+    Console.WriteLine("Файл скопійовано.");
+}</code></div>
+
+        <!-- 10.2 Читання файлів -->
+        <h3 id="t10-2" style="text-decoration: underline;">10.2 Читання файлів</h3>
+        <p>Читання файлів – отримання даних у пам'ять програми.</p>
+
+        <h4>1. File.ReadAllLines (невеликі файли)</h4>
+        <div class="code-block"><code>string[] lines = File.ReadAllLines("data.txt");
+foreach (string line in lines)
+{
+    Console.WriteLine($"Рядок: {line}");
+}</code></div>
+
+        <h4>2. StreamReader (для великих файлів)</h4>
+        <div class="code-block"><code>using (StreamReader reader = new StreamReader("big_data.log"))
+{
+    string line;
+    while ((line = reader.ReadLine()) != null)
+    {
+        if(line.Contains("ERROR"))
+            Console.WriteLine($"Знайдено помилку: {line}");
+    }
+}</code></div>
+
+        <h4>3. File.ReadLines (ліниве читання)</h4>
+        <p>Повертає <code>IEnumerable&lt;string&gt;</code>, читає по рядку лише при переборі.</p>
+
+        <!-- 10.3 Запис файлів -->
+        <h3 id="t10-3" style="text-decoration: underline;">10.3 Запис файлів</h3>
+        <h4>File.WriteAllLines / File.AppendAllText</h4>
+        <div class="code-block"><code>string[] userList = { "ID,Name,Email", "1,Anna,a@mail.com", "2,Bob,b@mail.com" };
+File.WriteAllLines("users.csv", userList);
+File.AppendAllText("users.csv", "\n3,Chris,c@mail.com");</code></div>
+
+        <h4>StreamWriter (для потокового запису)</h4>
+        <div class="code-block"><code>using (StreamWriter writer = new StreamWriter("application.log", true))
+{
+    writer.WriteLine($"[{DateTime.Now}] - Початок операції.");
+    for(int i=0; i<5; i++)
+        writer.WriteLine($"Data point {i}: Success.");
+}</code></div>
+
+        <!-- 10.4 JSON -->
+        <h3 id="t10-4" style="text-decoration: underline;">10.4 JSON</h3>
+        <p>JSON – текстовий формат обміну даними. В C# використовують <code>System.Text.Json</code> або <code>Newtonsoft.Json</code>.</p>
+
+        <pre>{
+  "name": "Андрій",
+  "age": 30,
+  "isEmployed": true,
+  "roles": ["Developer", "Admin"],
+  "address": {"city": "Kyiv", "zipCode": "01001"}
+}</pre>
+
+        <h4>Серіалізація / десеріалізація</h4>
+        <div class="code-block"><code>using System.Text.Json;
+using System.IO;
+
+public class UserProfile
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+    public bool IsActive { get; set; }
+}
+
+// Серіалізація
+UserProfile user = new UserProfile { Name = "Олена", Age = 25, IsActive = true };
+string jsonString = JsonSerializer.Serialize(user);
+File.WriteAllText("user.json", jsonString);
+
+// Десеріалізація
+string jsonFromDisk = File.ReadAllText("user.json");
+UserProfile loadedUser = JsonSerializer.Deserialize&lt;UserProfile&gt;(jsonFromDisk);
+Console.WriteLine($"Завантажено: {loadedUser.Name}, {loadedUser.Age}");</code></div>
+
+        <!-- 10.5 Серіалізація -->
+        <h3 id="t10-5" style="text-decoration: underline;">10.5 Серіалізація</h3>
+        <p>Серіалізація – перетворення об'єкта у формат для збереження або передачі. Десеріалізація – зворотний процес.</p>
+        <ul>
+            <li>JSON – сучасний, міжплатформний</li>
+            <li>XML – менш популярний</li>
+            <li>Бінарна – застаріла та небезпечна</li>
+        </ul>
+
+        <div class="code-block"><code>using System.Text.Json;
+
+public class Configuration
+{
+    public string ServerUrl { get; set; }
+    [JsonIgnore]
+    public bool IsInternal { get; set; }
+}
+
+Configuration config = new Configuration { ServerUrl = "http://api.com", IsInternal = true };
+string jsonString = JsonSerializer.Serialize(config);
+Configuration loadedConfig = JsonSerializer.Deserialize&lt;Configuration&gt;(jsonString);</code></div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 10</button>
+    </section>
+   <script>
+
+
+// Генерація 100 анімованих зірок на фоні
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(star);
+}
+
+// Відкриття/закриття бічного меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+    sideMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+    sideMenu.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+// Підменю "Курси" у боковому меню
+const menuToggles = document.querySelectorAll('.menu-toggle');
+menuToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentItem = toggle.parentElement;
+        parentItem.classList.toggle('active');
+    });
+});
+
+// Відкриття/закриття підтеми у правому меню
+const topicToggles = document.querySelectorAll('.topic-toggle');
+
+topicToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentTopic = toggle.parentElement;
+
+        // Закриваємо інші відкриті теми
+        topicToggles.forEach(t => {
+            if (t !== toggle) {
+                t.parentElement.classList.remove('active');
+            }
+        });
+
+        // Відкриваємо або закриваємо поточну тему
+        parentTopic.classList.toggle('active');
+    });
+});
+
+// Кнопка входу
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', () => {
+    window.location.href = 'login.html';
+});
+
+</script>
+</body>
+</html>

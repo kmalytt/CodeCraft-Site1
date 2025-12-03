@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ - Теорія | CodeCraft</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1c40 0%, #2f3485 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 25fr;
+    align-items: center;
+    padding: 15px 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 14, 36, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.menu-btn {
+    background: transparent;
+    border: 2px solid #00D9FF;
+    color: #00D9FF;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    width: 50px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: #00d9ff;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Кнопка входу */
+.login-btn {
+    background: transparent;
+    border: 2px solid #00d9ff;
+    color: #00D9FF;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+.login-btn:hover {
+    background: #00D9FF;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(13, 14, 36, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 80px 30px 30px 30px;
+    transition: left 0.4s ease;
+    z-index: 99;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 28px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.menu-items li a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+    z-index: 98;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    position: relative;
+    z-index: 1;
+}
+
+.theory-sidebar {
+    position: fixed;
+    right: 0;
+    top: 80px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    background: rgba(13, 14, 36, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px;
+    overflow-y: auto;
+    border-left: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.theory-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theory-sidebar::-webkit-scrollbar-track {
+    background: rgba(13, 14, 36, 0.5);
+}
+
+.theory-sidebar::-webkit-scrollbar-thumb {
+    background: #00D9FF;
+    border-radius: 4px;
+}
+
+.sidebar-title {
+    color: #00D9FF;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.theory-nav {
+    list-style: none;
+}
+
+.theory-nav > li {
+    margin-bottom: 12px;
+}
+
+.theory-topic {
+    position: relative;
+}
+
+.topic-toggle {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.topic-toggle:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.topic-arrow {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.theory-topic.active .topic-arrow {
+    transform: rotate(180deg);
+}
+
+.subtopic-list {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 10px;
+}
+
+.theory-topic.active .subtopic-list {
+    max-height: 600px;
+}
+
+.subtopic-list li {
+    margin-top: 8px;
+}
+
+.subtopic-list a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+}
+
+.subtopic-list a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.subtopic-list a.active {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 60px;
+    margin-right: 280px;
+    max-width: calc(100% - 280px);
+}
+
+.theory-section {
+    background: rgba(13, 14, 36, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    scroll-margin-top: 100px;
+}
+
+.theory-section h2 {
+    color: #00D9FF;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.theory-section h3 {
+    color: #00D9FF;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.theory-section p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.theory-section ul {
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 25px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.theory-section li {
+    margin-bottom: 8px;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    color: #00FF88;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+th {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    font-weight: 600;
+}
+
+td {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.test-btn {
+    background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+    color: #0D0E24;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 30px;
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+}
+
+.test-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+}
+
+@media(max-width: 1200px) {
+    .theory-sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-right: 240px;
+        max-width: calc(100% - 240px);
+    }
+}
+
+@media(max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+    
+    .logo-nav {
+        font-size: 24px;
+    }
+    
+    .theory-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-right: 0;
+        max-width: 100%;
+        padding: 30px 20px;
+    }
+    
+    .theory-section {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-title">CodeCraft</div>
+    <ul class="menu-items">
+        <li>
+            <a href="home.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Головна
+            </a>
+        </li>
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="CSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<nav>
+    <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+    <div class="logo-nav">CodeCraft</div>
+    <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Вхід
+        </button>
+    </div>
+</nav>
+
+<div class="content-wrapper">
+    <div class="theory-sidebar">
+        <div class="sidebar-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Зміст курсу
+        </div>
+         <ul class="theory-nav">
+            <li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 1: Вступ до C++
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t1-1">1.1. C++ Інтро</a></li>
+        <li><a href="#t1-2">1.2. Чому C++</a></li>
+        <li><a href="#t1-3">1.3. Початок роботи</a></li>
+        <li><a href="#t1-4">1.4. Компілятор та IDE</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 2: Основи синтаксису
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t2-1">2.1. Синтаксис C++</a></li>
+        <li><a href="#t2-2">2.2. Коментарі</a></li>
+        <li><a href="#t2-3">2.3. Змінні та константи</a></li>
+        <li><a href="#t2-4">2.4. Типи даних</a></li>
+        <li><a href="#t2-5">2.5. Перетворення типів</a></li>
+        <li><a href="#t2-6">2.6. Введення та виведення</a></li>
+        <li><a href="#t2-7-1">2.7.1. Математичні оператори</a></li>
+        <li><a href="#t2-7-2">2.7.2. Логічні оператори</a></li>
+        <li><a href="#t2-7-3">2.7.3. Робота з рядками</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 3: Умовні конструкції
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t3-1">3.1. if...else</a></li>
+        <li><a href="#t3-2">3.2. switch</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 4: Цикли
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t4-1">4.1. while</a></li>
+        <li><a href="#t4-2">4.2. for</a></li>
+        <li><a href="#t4-3">4.3. do...while</a></li>
+        <li><a href="#t4-4">4.4. break та continue</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 5: Масиви та контейнери
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t5-1">5.1. Масиви</a></li>
+        <li><a href="#t5-2">5.2. std::vector</a></li>
+        <li><a href="#t5-3">5.3. Структури та об'єднання</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 6: Функції
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t6-1">6.1. Функції</a></li>
+        <li><a href="#t6-2">6.2. Параметри та аргументи</a></li>
+        <li><a href="#t6-3">6.3. Перевантаження функцій</a></li>
+        <li><a href="#t6-4">6.4. Рекурсія</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 7: ООП у C++
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t7-1">7.1. Класи та об’єкти</a></li>
+        <li><a href="#t7-2">7.2. Конструктори та деструктори</a></li>
+        <li><a href="#t7-3">7.3. Модифікатори доступу</a></li>
+        <li><a href="#t7-4">7.4. Спадкування</a></li>
+        <li><a href="#t7-5">7.5. Поліморфізм</a></li>
+        <li><a href="#t7-6">7.6. Абстрактні класи</a></li>
+        <li><a href="#t7-7">7.7. Чисті віртуальні методи</a></li>
+        <li><a href="#t7-8">7.8. enum</a></li>
+        <li><a href="#t7-9">7.9. Дружні функції та оператори</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 8: Файли та винятки
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t8-1">8.1. Робота з файлами</a></li>
+        <li><a href="#t8-2">8.2. try/catch</a></li>
+    </ul>
+</li>
+
+
+</ul>
+    </div>
+<main class="main-content">
+    <section class="theory-section" id="t1-1">
+        <h2 style="text-align:center;">ТЕМА 1: Основи C++</h2>
+
+        <!-- 1.1 Вступ до C++ -->
+        <h3 id="t1-1" style="text-decoration: underline;">1.1 Вступ до C++</h3>
+        <p>C++ — це високопродуктивна, компільована мова програмування, створена Б'ярном Страуструпом. Вона поєднує ефективність C та можливості об’єктно-орієнтованого програмування.</p>
+        <ul>
+            <li>системне програмування</li>
+            <li>ігрова індустрія</li>
+            <li>високопродуктивні обчислення</li>
+            <li>вбудовані системи</li>
+            <li>наукове моделювання</li>
+        </ul>
+        <p>Приклад простого коду:</p>
+        <div class="code-block"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Привіт, C++!" &lt;&lt; endl;
+    return 0;
+}</code></div>
+
+        <!-- 1.2 Встановлення та запуск -->
+        <h3 id="t1-2" style="text-decoration: underline;">1.2 Встановлення та запуск C++</h3>
+        <p>Щоб почати писати код на C++:</p>
+        <ul>
+            <li>Встановити компілятор: GCC, Clang або MSVC</li>
+            <li>Використати редактор або IDE: Visual Studio, VS Code, CLion, Code::Blocks</li>
+            <li>Створити файл з розширенням .cpp (наприклад hello.cpp)</li>
+            <li>Скомпілювати код через термінал або IDE</li>
+        </ul>
+        <div class="code-block"><code>g++ hello.cpp -o hello
+./hello</code></div>
+
+        <p>Приклад файлу:</p>
+        <div class="code-block"><code>// hello.cpp
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Привіт, C++!" &lt;&lt; endl;
+    return 0;
+}</code></div>
+
+        <!-- 1.3 Синтаксис -->
+        <h3 id="t1-3" style="text-decoration: underline;">1.3 Синтаксис C++</h3>
+        <p>Основні риси синтаксису C++:</p>
+        <ul>
+            <li>Використовує фігурні дужки {} для блоків коду</li>
+            <li>Кінець інструкції позначається символом ;</li>
+            <li>Типи даних потрібно вказувати явно (статична типізація)</li>
+        </ul>
+
+        <div class="code-block"><code>int age = 18;
+if (age >= 18) {
+    cout &lt;&lt; "Ви повнолітній";
+}</code></div>
+
+        <p><strong>Неправильно:</strong></p>
+        <div class="code-block"><code>if (age >= 18)
+cout &lt;&lt; "Ви повнолітній"; // може викликати логічні помилки</code></div>
+
+        <!-- 1.4 Змінні -->
+        <h3 id="t1-4" style="text-decoration: underline;">1.4 Змінні</h3>
+        <p>Змінні в C++ повинні мати тип:</p>
+        <ul>
+            <li>починаються з літери або _</li>
+            <li>можуть містити літери, цифри та _</li>
+            <li>не можна використовувати ключові слова (int, class, if тощо)</li>
+        </ul>
+        <div class="code-block"><code>string name = "Alice";
+int age = 25;
+bool isStudent = true;</code></div>
+
+        <!-- 1.5 Типи даних -->
+        <h3 id="t1-5" style="text-decoration: underline;">1.5 Типи даних</h3>
+        <p>C++ підтримує такі базові типи даних:</p>
+        <ul>
+            <li><strong>int</strong> — цілі числа</li>
+            <li><strong>double</strong> — дробові числа</li>
+            <li><strong>char</strong> — символи</li>
+            <li><strong>bool</strong> — булевий тип</li>
+            <li><strong>string</strong> — рядки (з бібліотеки &lt;string&gt;)</li>
+            <li><strong>array, vector</strong> — масиви та динамічні списки</li>
+            <li><strong>struct/class</strong> — складні типи даних</li>
+        </ul>
+
+        <!-- 1.6 Числа та арифметичні операції -->
+        <h3 id="t1-6" style="text-decoration: underline;">1.6 Числа та арифметичні операції</h3>
+        <p>У C++ доступні такі операції:</p>
+        <ul>
+            <li>+ — додавання</li>
+            <li>- — віднімання</li>
+            <li>* — множення</li>
+            <li>/ — ділення</li>
+            <li>% — остача від ділення</li>
+            <li>++ — інкремент</li>
+            <li>-- — декремент</li>
+        </ul>
+
+        <!-- 1.7 Рядки -->
+        <h3 id="t1-7" style="text-decoration: underline;">1.7 Рядки</h3>
+        <p>Рядки створюються за допомогою типу string.</p>
+        <div class="code-block"><code>#include &lt;string&gt;
+string text = "C++";
+cout &lt;&lt; text[0];     // C
+cout &lt;&lt; text.size(); // довжина</code></div>
+
+        <!-- 1.8 Булеві значення -->
+        <h3 id="t1-8" style="text-decoration: underline;">1.8 Булеві значення</h3>
+        <p>Булевий тип зберігає значення true або false.</p>
+        <div class="code-block"><code>bool isAdult = (17 >= 18);
+cout &lt;&lt; isAdult;  // 0 (false)</code></div>
+
+        <!-- 1.9 Вивід та введення -->
+        <h3 id="t1-9" style="text-decoration: underline;">1.9 Вивід (cout) та введення (cin)</h3>
+        <div class="code-block"><code>#include &lt;iostream&gt;
+string name;
+cout &lt;&lt; "Введи ім'я: ";
+cin >> name;
+cout &lt;&lt; "Привіт, " &lt;&lt; name;</code></div>
+
+        <!-- 1.10 Коментарі -->
+        <h3 id="t1-10" style="text-decoration: underline;">1.10 Коментарі</h3>
+        <p>Коментарі — пояснення коду:</p>
+        <ul>
+            <li>Однорядкові — <code>//</code></li>
+            <li>Багаторядкові — <code>/* ... */</code></li>
+        </ul>
+        <div class="code-block"><code>// Однорядковий коментар
+
+/*
+Багаторядковий
+коментар
+*/</code></div>
+
+        <!-- Кнопка тестування -->
+        <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 1</button>
+    </section>
+<section class="theory-section" id="t2-1">
+    <h2 style="text-align:center;">ТЕМА 2: Основи синтаксису C++</h2>
+
+    <!-- 2.1 Синтаксис C++ -->
+    <h3 id="t2-1" style="text-decoration: underline;">2.1 Синтаксис C++</h3>
+    <p>Синтаксис C++ задає правила написання коректного коду, який може бути зрозумілий компілятору.</p>
+
+    <p><strong>Основні правила синтаксису:</strong></p>
+    <ul>
+        <li><strong>Крапка з комою</strong> завершує кожну інструкцію: <code>int x = 10;</code></li>
+        <li><strong>Блоки коду</strong> огортаються у фігурні дужки: <code>{ }</code></li>
+        <li><strong>Регістрозалежність:</strong> <code>Age</code> і <code>age</code> — різні змінні.</li>
+        <li><strong>Пробіли та переноси</strong> не впливають на виконання коду, але покращують читабельність.</li>
+        <li>Для використання функцій потрібні <strong>заголовкові файли</strong> через <code>#include</code>.</li>
+    </ul>
+
+    <p>Приклад базової структури програми:</p>
+    <div class="code-block"><code>
+#include &lt;iostream&gt;
+
+int main() 
+{
+    int age = 25;
+    if (age > 18)
+    {
+        std::cout &lt;&lt; "Дорослий." &lt;&lt; std::endl;
+    }
+    return 0;
+}
+    </code></div>
+
+    <!-- 2.2 Коментарі -->
+    <h3 id="t2-2" style="text-decoration: underline;">2.2 Коментарі</h3>
+    <p>Коментарі допомагають пояснювати код і не виконуються компілятором.</p>
+
+    <p><strong>Типи коментарів:</strong></p>
+    <ul>
+        <li><strong>Однорядкові:</strong> <code>// текст коментаря</code></li>
+        <li><strong>Багаторядкові:</strong>
+            <code>
+/*
+   Коментар
+   у кілька рядків
+*/
+            </code>
+        </li>
+        <li><strong>Doxygen-коментарі</strong> для генерації документації:</li>
+    </ul>
+
+    <div class="code-block"><code>
+/**
+ * @brief Ініціалізує користувача
+ * @param name ім'я користувача
+ */
+void initUser(const std::string&amp; name);
+    </code></div>
+
+    <!-- 2.3 Змінні та константи -->
+    <h3 id="t2-3" style="text-decoration: underline;">2.3 Змінні та константи</h3>
+    <p><strong>Змінна</strong> — це область пам’яті, що має назву та зберігає значення.</p>
+
+    <p>Оголошення та ініціалізація:</p>
+    <div class="code-block"><code>
+// Оголошення
+int age;
+
+// Ініціалізація
+age = 30;
+
+// Оголошення та ініціалізація
+double price = 99.99;
+    </code></div>
+
+    <p><strong>Константи</strong> — значення, які не можна змінювати.</p>
+
+    <div class="code-block"><code>
+// Сучасний спосіб
+const double PI = 3.14159;
+
+// Старий спосіб
+#define MAX_SIZE 100
+
+// Обчислюється на етапі компіляції
+constexpr int SIZE = 10 * 5;
+    </code></div>
+
+    <!-- 2.4 Типи даних -->
+    <h3 id="t2-4" style="text-decoration: underline;">2.4 Типи даних</h3>
+    <p>C++ має примітивні, модифіковані та складні типи даних.</p>
+
+    <p><strong>Примітивні типи:</strong></p>
+    <ul>
+        <li><strong>bool</strong> — логічний тип</li>
+        <li><strong>char</strong> — символ</li>
+        <li><strong>int</strong> — ціле число</li>
+        <li><strong>float</strong> — число з плаваючою комою</li>
+        <li><strong>double</strong> — число подвійної точності</li>
+        <li><strong>void</strong> — відсутність значення</li>
+    </ul>
+
+    <p><strong>Рядки:</strong></p>
+    <div class="code-block"><code>
+#include &lt;string&gt;
+
+std::string msg = "Привіт, C++!";
+    </code></div>
+
+    <!-- 2.5 Перетворення типів -->
+    <h3 id="t2-5" style="text-decoration: underline;">2.5 Перетворення типів</h3>
+    <p><strong>Неявне перетворення</strong> виконується автоматично:</p>
+
+    <div class="code-block"><code>
+int a = 10;
+double b = 5.5;
+double result = a + b; // a → 10.0
+    </code></div>
+
+    <p><strong>Явне перетворення:</strong></p>
+
+    <div class="code-block"><code>
+double d = 10.99;
+int x = static_cast&lt;int&gt;(d); // 10
+    </code></div>
+
+    <!-- 2.6 Введення та виведення -->
+    <h3 id="t2-6" style="text-decoration: underline;">2.6 Введення та виведення</h3>
+    <p>C++ використовує потоки <code>std::cout</code> та <code>std::cin</code>.</p>
+
+    <p><strong>Виведення:</strong></p>
+    <div class="code-block"><code>
+int number = 42;
+std::cout &lt;&lt; "Число: " &lt;&lt; number &lt;&lt; std::endl;
+    </code></div>
+
+    <p><strong>Введення:</strong></p>
+    <div class="code-block"><code>
+int age;
+std::string name;
+
+std::cin >> name;
+std::cin >> age;
+    </code></div>
+
+    <p><strong>Зчитування рядка з пробілами:</strong></p>
+    <div class="code-block"><code>
+std::string line;
+std::getline(std::cin, line);
+    </code></div>
+
+    <!-- 2.7 Оператори -->
+    <h3 id="t2-7" style="text-decoration: underline;">2.7 Оператори</h3>
+
+    <p><strong>Арифметичні оператори:</strong> +, -, *, /, %, ++, --</p>
+
+    <div class="code-block"><code>
+int x = 5;
+x += 3; // 8
+x *= 2; // 16
+    </code></div>
+
+    <p><strong>Логічні оператори:</strong> &&, ||, !</p>
+
+    <p><strong>Порівняння:</strong> ==, !=, &gt;, &lt;, &gt;=, &lt;=</p>
+
+    <p><strong>Робота з рядками:</strong></p>
+    <div class="code-block"><code>
+std::string s1 = "Hello";
+std::string s2 = "World";
+std::string full = s1 + " " + s2;
+    </code></div>
+
+    <!-- Кнопка переходу -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 2</button>
+</section>
+
+<section class="theory-section" id="t3-1">
+    <h2 style="text-align:center;">ТЕМА 3: Умовні конструкції в C++</h2>
+
+    <!-- 3.1 If...Else -->
+    <h3 id="t3-1" style="text-decoration: underline;">3.1 If...Else</h3>
+    <p>Конструкція <strong>if...else</strong> є основою для реалізації логіки розгалуження в програмі.</p>
+
+    <h4>➡️ 1. Оператор <code>if</code></h4>
+    <p>Оператор <code>if</code> виконує блок коду лише тоді, коли умова є істинною (ненульовою).</p>
+
+    <div class="code-block"><code>
+int number = 10;
+
+if (number > 0) // Умова: чи число більше за 0?
+{
+    std::cout &lt;&lt; "Число позитивне." &lt;&lt; std::endl;
+}
+    </code></div>
+
+    <p>Фігурні дужки можна опустити, якщо виконується один оператор, але це вважається поганою практикою.</p>
+
+    <h4>➡️ 2. Оператор <code>else</code></h4>
+    <p>Виконується, якщо умова в <code>if</code> є хибною (false або 0).</p>
+
+    <div class="code-block"><code>
+int age = 16;
+
+if (age >= 18)
+{
+    std::cout &lt;&lt; "Повнолітній." &lt;&lt; std::endl;
+}
+else
+{
+    std::cout &lt;&lt; "Неповнолітній." &lt;&lt; std::endl;
+}
+    </code></div>
+
+    <h4>➡️ 3. Оператор <code>else if</code></h4>
+    <p>Дозволяє перевіряти кілька умов послідовно. Як тільки одна умова істинна — перевірки припиняються.</p>
+
+    <div class="code-block"><code>
+int score = 85;
+
+if (score >= 90)
+{
+    std::cout &lt;&lt; "Оцінка A" &lt;&lt; std::endl;
+}
+else if (score >= 80)
+{
+    std::cout &lt;&lt; "Оцінка B" &lt;&lt; std::endl;
+}
+else if (score >= 70)
+{
+    std::cout &lt;&lt; "Оцінка C" &lt;&lt; std::endl;
+}
+else
+{
+    std::cout &lt;&lt; "Потрібно більше працювати" &lt;&lt; std::endl;
+}
+    </code></div>
+
+    <h4>💡 Тернарний оператор</h4>
+    <p>Скорочена форма <code>if...else</code>, часто використовується для присвоєння значень.</p>
+
+    <p><strong>Синтаксис:</strong></p>
+    <div class="code-block"><code>
+змінна = (умова) ? значення_якщо_true : значення_якщо_false;
+    </code></div>
+
+    <div class="code-block"><code>
+int hours = 14;
+
+std::string greeting = (hours < 12) ? "Ранок" : "День";
+
+// greeting == "День"
+    </code></div>
+
+    <!-- 3.2 Switch -->
+    <h3 id="t3-2" style="text-decoration: underline;">3.2 Switch</h3>
+    <p>Оператор <strong>switch</strong> використовується як зручна альтернатива довгим ланцюжкам <code>if...else if</code>. Підтримує <code>int</code>, <code>char</code>, <code>enum</code>, <code>long</code>.</p>
+
+    <h4>⚙️ Основна структура <code>switch</code>:</h4>
+    <ul>
+        <li><strong>switch</strong> — отримує вираз для перевірки.</li>
+        <li><strong>case</strong> — перевіряє відповідність значенню.</li>
+        <li><strong>break</strong> — обов’язковий для завершення виконання.</li>
+        <li><strong>default</strong> — виконується, якщо немає збігів.</li>
+    </ul>
+
+    <div class="code-block"><code>
+int choice = 2;
+std::string action;
+
+switch (choice)
+{
+    case 1:
+        action = "Створити новий файл.";
+        break;
+
+    case 2:
+        action = "Відкрити наявний файл.";
+        break;
+
+    case 3:
+        action = "Зберегти файл.";
+        break;
+
+    default:
+        action = "Невідома команда.";
+        break;
+}
+
+std::cout &lt;&lt; "Вибрана дія: " &lt;&lt; action &lt;&lt; std::endl;
+    </code></div>
+
+    <p><strong>Про break:</strong> якщо його пропустити, виконання продовжується у наступний блок (fall-through).</p>
+
+    <h4>Приклад fall-through:</h4>
+
+    <div class="code-block"><code>
+char grade = 'A';
+
+switch (grade)
+{
+    case 'A':
+    case 'B': // Провал з 'A' на 'B'
+        std::cout &lt;&lt; "Дуже добре!" &lt;&lt; std::endl;
+        break;
+
+    // інші випадки...
+}
+    </code></div>
+
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 3</button>
+</section>
+<section class="theory-section" id="t4">
+    <h2 style="text-align:center;">ТЕМА 4: Цикли</h2>
+
+    <!-- 4. Цикли -->
+    <h3 id="t4-1" style="text-decoration: underline;">4. Цикли</h3>
+    <p>
+        Цикл — це конструкція керування, яка дозволяє багаторазово виконувати блок коду,
+        доки не буде виконано певну умову або доки не буде пройдено всі елементи колекції.
+    </p>
+
+    <!-- 4.1 While -->
+    <h3 id="t4-2" style="text-decoration: underline;">4.1 Цикл while</h3>
+    <p>
+        Цикл <strong>while</strong> повторює блок коду, доки умова залишається істинною (True).
+        Використовується, коли кількість повторень наперед невідома.
+    </p>
+
+    <p><strong>Синтаксис:</strong></p>
+    <div class="code-block"><code>i = 0  # 1. Ініціалізація лічильника
+
+while i &lt; 5:  # 2. Умова
+    print("Ітерація:", i)
+    i += 1  # 3. Оновлення</code></div>
+
+    <p><strong>Увага:</strong> якщо не змінювати змінну в умові — цикл стане нескінченним.</p>
+
+    <!-- 4.2 For -->
+    <h3 id="t4-3" style="text-decoration: underline;">4.2 Цикл for</h3>
+    <p>
+        Цикл <strong>for</strong> використовується тоді, коли кількість ітерацій відома або може бути легко обчислена.
+    </p>
+
+    <p><strong>Синтаксис:</strong></p>
+    <div class="code-block"><code>for j in range(1, 5):  # 1..4
+    print("Лічильник:", j)
+# Виведе: 1 2 3 4</code></div>
+
+    <p><strong>Range-based цикл (ітерація по колекції):</strong></p>
+    <div class="code-block"><code>fruits = ["яблуко", "банан", "апельсин"]
+
+for fruit in fruits:
+    print("Фрукт:", fruit)</code></div>
+
+    <!-- 4.3 Do While -->
+    <h3 id="t4-4" style="text-decoration: underline;">4.3 Імітація циклу do...while</h3>
+    <p>
+        У Python немає циклу <strong>do...while</strong>, але його можна імітувати через <code>while True</code>.
+        Тіло циклу виконується хоча б один раз.
+    </p>
+
+    <div class="code-block"><code>while True:
+    number = int(input("Введіть число &gt; 10: "))
+    if number &gt; 10:
+        break
+
+print("Ви ввели:", number)</code></div>
+
+    <!-- 4.4 Break Continue -->
+    <h3 id="t4-5" style="text-decoration: underline;">4.4 Break та Continue</h3>
+    <p><strong>Оператор break</strong> — припиняє виконання циклу.</p>
+
+    <div class="code-block"><code>for k in range(1, 11):
+    if k == 5:
+        break
+    print(k)
+# Виведе: 1 2 3 4</code></div>
+
+    <p><strong>Оператор continue</strong> — пропускає поточну ітерацію та переходить до наступної.</p>
+
+    <div class="code-block"><code>for p in range(1, 6):
+    if p == 3:
+        continue
+    print(p)
+# Виведе: 1 2 4 5</code></div>
+
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 4</button>
+</section>
+<section class="theory-section" id="t5">
+    <h2 style="text-align:center;">ТЕМА 5: Масиви, Вектори, Структури та Об’єднання</h2>
+
+    <!-- 5.1 Масиви -->
+    <h3 id="t5-1" style="text-decoration: underline;">5.1 Масиви</h3>
+    <p>
+        Масив (Array) — це структура даних, яка зберігає фіксовану послідовність елементів одного типу
+        в суміжних областях пам'яті. Це забезпечує швидкий доступ до елементів за індексом.
+    </p>
+
+    <p><strong>Оголошення та ініціалізація:</strong></p>
+    <div class="code-block"><code>numbers = [0] * 5  # Масив з 5 елементів, всі 0
+prices = [10.5, 20.0, 5.99]  # Ініціалізація при оголошенні</code></div>
+
+    <p><strong>Доступ до елементів:</strong></p>
+    <div class="code-block"><code>scores = [10, 20, 30]
+first = scores[0]   # 10
+last = scores[2]    # 30
+scores[1] = 50      # scores тепер: [10, 50, 30]</code></div>
+
+    <p><strong>Увага:</strong> вихід за межі масиву призведе до помилки IndexError.</p>
+
+    <!-- 5.2 Вектори (std::vector) -->
+    <h3 id="t5-2" style="text-decoration: underline;">5.2 Вектори (list у Python)</h3>
+    <p>
+        Сучасний Python використовує <strong>list</strong> як динамічний масив (аналог std::vector у C++).
+        List може змінювати розмір під час виконання та надає багато корисних методів.
+    </p>
+
+    <div class="code-block"><code>names = []  # Порожній список
+
+# Додавання елементів
+names.append("Олег")
+names.append("Анна")
+names.append("Петро")
+
+# Доступ за індексом
+print(names[1])  # Анна
+
+# Ітерація по списку
+for name in names:
+    print(name, end=" ")
+
+# Поточний розмір
+print("\nРозмір:", len(names))  # 3</code></div>
+
+    <!-- 5.3 Структури та об’єднання -->
+    <h3 id="t5-3" style="text-decoration: underline;">5.3 Структури та об’єднання</h3>
+
+    <h4>1. Структури (struct)</h4>
+    <p>
+        Структура дозволяє об'єднати пов'язані дані різних типів в одне логічне ціле.
+        У Python аналогом є <code>class</code> з відкритими атрибутами.
+    </p>
+
+    <div class="code-block"><code>class Point:
+    def __init__(self, x, y, label):
+        self.x = x
+        self.y = y
+        self.label = label
+
+p1 = Point(10, 20, "Start")
+print(f"{p1.label}: ({p1.x}, {p1.y})")</code></div>
+
+    <h4>2. Об’єднання (union)</h4>
+    <p>
+        Об’єднання — це спеціальний тип структури, де всі члени використовують одну й ту ж область пам'яті.
+        У Python немає прямого аналога, але можна використовувати словники або <code>ctypes.Union</code>.
+    </p>
+
+    <div class="code-block"><code>from ctypes import Union, c_int, c_float, c_char * 20
+
+class Data(Union):
+    _fields_ = [("i", c_int), ("f", c_float), ("s", c_char * 20)]
+
+d = Data()
+d.i = 10
+print("Int:", d.i)
+
+d.f = 5.5
+print("Float:", d.f)
+# Значення int тепер некоректне, пам'ять перезаписана</code></div>
+
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 5</button>
+</section>
+
+<section class="theory-section" id="t6">
+    <h2 style="text-align:center;">ТЕМА 6: Функції</h2>
+
+    <!-- 6.1 Функції -->
+    <h3 id="t6-1" style="text-decoration: underline;">6.1 Функції</h3>
+    <p>Функція (Function) — це блок коду, який виконує певне завдання. Використання функцій дозволяє розділити велику програму на менші, керовані та багаторазово використовувані частини (модулі).</p>
+
+    <p><strong>Структура функції:</strong></p>
+    <ul>
+        <li>Тип повернення (ReturnType): визначає тип даних, які функція поверне після завершення роботи. Якщо функція не повертає значення, використовується <code>void</code>.</li>
+        <li>Ім'я функції: унікальне ім'я для виклику.</li>
+        <li>Параметри: змінні, які функція приймає як вхідні дані.</li>
+        <li>Тіло функції: код, що виконується при виклику.</li>
+        <li>Оператор <code>return</code>: повертає значення (якщо тип не <code>void</code>).</li>
+    </ul>
+
+    <div class="code-block"><code>// Функція, яка повертає тип int
+int AddNumbers(int num1, int num2) 
+{
+    int sum = num1 + num2;
+    return sum; // Повертає ціле число
+}
+
+// Функція, яка не повертає значення
+void Greet(const std::string& name)
+{
+    std::cout &lt;&lt; "Привіт, " &lt;&lt; name &lt;&lt; "!" &lt;&lt; std::endl;
+    // return не потрібен
+}</code></div>
+
+    <p><strong>Прототип (Декларація):</strong> Функція повинна бути оголошена до використання, якщо визначення розташоване після <code>main()</code>.</p>
+    <div class="code-block"><code>// Прототип
+int AddNumbers(int num1, int num2);
+
+int main() 
+{
+    int result = AddNumbers(10, 20);
+    return 0;
+}
+
+// Повне визначення
+int AddNumbers(int num1, int num2) 
+{
+    return num1 + num2;
+}</code></div>
+
+    <!-- 6.2 Параметри та аргументи -->
+    <h3 id="t6-2" style="text-decoration: underline;">6.2 Параметри та аргументи</h3>
+    <p>Параметри — змінні у визначенні функції. Аргументи — фактичні значення, передані під час виклику.</p>
+
+    <h4>1. Передача за значенням</h4>
+    <div class="code-block"><code>void ChangeValue(int x) 
+{
+    x = 100; // Змінюється лише копія x
+}
+
+int original = 5;
+ChangeValue(original); 
+// original все ще 5</code></div>
+
+    <h4>2. Передача за посиланням</h4>
+    <div class="code-block"><code>void ChangeReference(int &y)
+{
+    y = 200; // Змінюється оригінал
+}
+
+int original = 5;
+ChangeReference(original); 
+// original тепер 200</code></div>
+
+    <h4>3. Передача константного посилання</h4>
+    <div class="code-block"><code>void DisplayText(const std::string &text)
+{
+    std::cout &lt;&lt; text &lt;&lt; std::endl;
+    // text += "!!!"; // ❌ Помилка
+}</code></div>
+
+    <h4>4. Значення параметрів за замовчуванням</h4>
+    <div class="code-block"><code>void PrintMessage(std::string msg, int count = 1)
+{
+    for (int i = 0; i &lt; count; i++)
+        std::cout &lt;&lt; msg &lt;&lt; std::endl;
+}
+
+PrintMessage("Привіт");   // count = 1
+PrintMessage("Ура!", 3);  // count = 3</code></div>
+
+    <!-- 6.3 Перевантаження функцій -->
+    <h3 id="t6-3" style="text-decoration: underline;">6.3 Перевантаження функцій</h3>
+    <p>Можливість визначити кілька функцій з однаковим іменем у межах однієї області видимості.</p>
+    <ul>
+        <li>Функції мають однакову назву.</li>
+        <li>Різна сигнатура (кількість, тип або порядок параметрів).</li>
+        <li>Тип повернення не може бути єдиною відмінністю.</li>
+    </ul>
+    <div class="code-block"><code>int Add(int a, int b) { return a + b; }
+int Add(int a, int b, int c) { return a + b + c; }
+double Add(double a, double b) { return a + b; }
+
+// Виклики
+int result1 = Add(5, 10);
+int result2 = Add(5, 10, 15);
+double result3 = Add(1.5, 2.5);</code></div>
+
+    <!-- 6.4 Рекурсія -->
+    <h3 id="t6-4" style="text-decoration: underline;">6.4 Рекурсія</h3>
+    <p>Процес, коли функція викликає сама себе. Використовується для розбиття проблем на менші підзадачі.</p>
+    <ul>
+        <li>Базовий випадок: умова зупинки.</li>
+        <li>Рекурсивний випадок: виклик функції самої себе з новими даними.</li>
+    </ul>
+    <p>Приклад: обчислення факторіалу</p>
+    <div class="code-block"><code>long factorial(int n)
+{
+    if (n &lt;= 1) return 1;  // Базовий випадок
+    else return n * factorial(n - 1); // Рекурсивний виклик
+}
+
+long result = factorial(4); // 4 * 3 * 2 * 1 = 24</code></div>
+</section>
+<section class="theory-section" id="t7">
+    <h2 style="text-align:center;">ТЕМА 7: Об’єктно-орієнтоване програмування (ООП)</h2>
+
+    <p>Об'єктно-орієнтоване програмування (ООП) — це парадигма, заснована на концепції об'єктів, які об'єднують дані (властивості) та методи (поведінку). ООП моделює реальний світ у коді, підвищуючи гнучкість, масштабованість та повторне використання коду.</p>
+
+    <!-- 7.1 Класи та об’єкти -->
+    <h3 id="t7-1" style="text-decoration: underline;">7.1 Класи та об’єкти</h3>
+
+    <h4>🧱 Клас (class)</h4>
+    <p>Клас — це шаблон для створення об'єктів, описує властивості (поля) та поведінку (методи).</p>
+    <div class="code-block"><code>// Визначення класу "Автомобіль"
+class Car 
+{
+public:
+    std::string model; // Властивість
+    int year;
+    
+    void Drive() 
+    {
+        std::cout &lt;&lt; model &lt;&lt; " їде." &lt;&lt; std::endl;
+    }
+};</code></div>
+
+    <h4>🚗 Об’єкт (Object)</h4>
+    <div class="code-block"><code>// Створення об'єкта на стеку
+Car myCar; 
+myCar.model = "Toyota";
+myCar.year = 2020;
+myCar.Drive();
+
+// Створення об'єкта на купі
+Car* newCar = new Car();
+newCar-&gt;model = "Audi";
+newCar-&gt;Drive();
+delete newCar;</code></div>
+
+    <!-- 7.2 Конструктори та деструктори -->
+    <h3 id="t7-2" style="text-decoration: underline;">7.2 Конструктори та деструктори</h3>
+
+    <h4>🔨 Конструктор (Constructor)</h4>
+    <div class="code-block"><code>class Item
+{
+public:
+    std::string name;
+    double price;
+
+    Item() { name = "Невідомо"; price = 0.0; } // Конструктор за замовчуванням
+    Item(std::string name, double price) { this-&gt;name = name; this-&gt;price = price; } // Параметризований
+};</code></div>
+
+    <h4>🗑️ Деструктор (Destructor)</h4>
+    <div class="code-block"><code>class Resource
+{
+public:
+    ~Resource() 
+    {
+        std::cout &lt;&lt; "Деструктор викликано. Ресурси звільнено." &lt;&lt; std::endl;
+    }
+};</code></div>
+
+    <!-- 7.3 Модифікатори доступу -->
+    <h3 id="t7-3" style="text-decoration: underline;">7.3 Модифікатори доступу</h3>
+    <p>Визначають, які члени класу доступні ззовні.</p>
+    <ul>
+        <li><strong>public</strong> — доступно звідусіль.</li>
+        <li><strong>private</strong> — доступно лише всередині класу.</li>
+        <li><strong>protected</strong> — доступно всередині класу та його нащадків.</li>
+    </ul>
+    <div class="code-block"><code>class BankAccount
+{
+private:
+    double _balance = 0; // Приватне поле
+
+public:
+    double getBalance() const { return _balance; }
+    void deposit(double amount) { if(amount &gt; 0) _balance += amount; }
+};</code></div>
+
+    <!-- 7.4 Спадкування -->
+    <h3 id="t7-4" style="text-decoration: underline;">7.4 Спадкування (Inheritance)</h3>
+    <div class="code-block"><code>class Animal 
+{
+protected:
+    std::string species;
+public:
+    Animal(std::string s) : species(s) {}
+    void Eat() { std::cout &lt;&lt; "Тварина їсть." &lt;&lt; std::endl; }
+};
+
+class Dog : public Animal 
+{
+public:
+    Dog() : Animal("Canine") {}
+    void Bark() { std::cout &lt;&lt; species &lt;&lt; " гавкає!" &lt;&lt; std::endl; }
+};
+
+Dog myDog;
+myDog.Eat();
+myDog.Bark();</code></div>
+
+    <!-- 7.5 Поліморфізм -->
+    <h3 id="t7-5" style="text-decoration: underline;">7.5 Поліморфізм</h3>
+    <div class="code-block"><code>class Shape
+{
+public:
+    virtual void Draw() const { std::cout &lt;&lt; "Малюю загальну фігуру." &lt;&lt; std::endl; }
+    virtual ~Shape() {}
+};
+
+class Circle : public Shape
+{
+public:
+    void Draw() const override { std::cout &lt;&lt; "Малюю коло." &lt;&lt; std::endl; }
+};
+
+void DrawAnyShape(Shape* s) { s-&gt;Draw(); }
+
+Circle c;
+DrawAnyShape(&c); // Виведе: Малюю коло.</code></div>
+
+    <!-- 7.6 Абстрактні класи -->
+    <h3 id="t7-6" style="text-decoration: underline;">7.6 Абстрактні класи</h3>
+    <div class="code-block"><code>class AbstractDevice
+{
+public:
+    virtual void TurnOn() = 0;
+    void Status() { std::cout &lt;&lt; "Пристрій готовий." &lt;&lt; std::endl; }
+};
+
+class Heater : public AbstractDevice
+{
+public:
+    void TurnOn() override { std::cout &lt;&lt; "Нагрівач ввімкнено." &lt;&lt; std::endl; }
+};
+
+Heater h;
+h.TurnOn();</code></div>
+
+    <!-- 7.7 Інтерфейси через чисті віртуальні -->
+    <h3 id="t7-7" style="text-decoration: underline;">7.7 Інтерфейси через чисті віртуальні</h3>
+    <div class="code-block"><code>class IPrintable
+{
+public:
+    virtual void Print() = 0;
+    virtual ~IPrintable() {}
+};
+
+class Document : public IPrintable
+{
+public:
+    void Print() override { std::cout &lt;&lt; "Друкую документ." &lt;&lt; std::endl; }
+};</code></div>
+
+    <!-- 7.8 Переліки -->
+    <h3 id="t7-8" style="text-decoration: underline;">7.8 Переліки (enum)</h3>
+    <div class="code-block"><code>enum Color { RED, GREEN, BLUE };
+Color myColor = GREEN;
+
+enum class Status { SUCCESS, ERROR, PENDING };
+Status current = Status::SUCCESS;
+if(current == Status::SUCCESS) { std::cout &lt;&lt; "Успіх!" &lt;&lt; std::endl; }</code></div>
+
+    <!-- 7.9 Дружні функції та оператори -->
+    <h3 id="t7-9" style="text-decoration: underline;">7.9 Дружні функції та оператори</h3>
+    <div class="code-block"><code>class MyClass
+{
+private:
+    int value;
+public:
+    MyClass(int v) : value(v) {}
+    friend void DisplayValue(const MyClass& obj);
+};
+
+void DisplayValue(const MyClass& obj)
+{
+    std::cout &lt;&lt; "Приватне значення: " &lt;&lt; obj.value &lt;&lt; std::endl;
+}
+
+class Vector2D 
+{
+private:
+    int x, y;
+public:
+    Vector2D(int x, int y) : x(x), y(y) {}
+    friend std::ostream& operator<<(std::ostream& os, const Vector2D& vec);
+};
+
+std::ostream& operator<<(std::ostream& os, const Vector2D& vec)
+{
+    os &lt;&lt; "(" &lt;&lt; vec.x &lt;&lt; ", " &lt;&lt; vec.y &lt;&lt; ")";
+    return os;
+}</code></div>
+</section>
+
+<section class="theory-section" id="t8">
+    <h2 style="text-align:center;">ТЕМА 8: Файли та винятки</h2>
+
+    <!-- 8.1 Робота з файлами -->
+    <h3 id="t8-1" style="text-decoration: underline;">8.1 Робота з файлами</h3>
+    <p>У C++ для роботи з файлами використовується простір імен <code>std::fstream</code> (File Stream), заголовковий файл: <code>&lt;fstream&gt;</code>. Файлові операції базуються на потоках (streams), як <code>std::cin</code> та <code>std::cout</code>.</p>
+
+    <h4>🔑 Основні класи потоків</h4>
+    <ul>
+        <li><code>std::ofstream</code> — для запису в файл.</li>
+        <li><code>std::ifstream</code> — для читання з файлу.</li>
+        <li><code>std::fstream</code> — для читання та запису.</li>
+    </ul>
+
+    <h4>✍️ Запис у файл (<code>std::ofstream</code>)</h4>
+    <div class="code-block"><code>#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+
+void WriteToFile()
+{
+    std::ofstream outFile("example.txt"); 
+    if(outFile.is_open()) 
+    {
+        outFile &lt;&lt; "Привіт, C++! " &lt;&lt; 2025 &lt;&lt; std::endl;
+        outFile &lt;&lt; "Це другий рядок." &lt;&lt; std::endl;
+        outFile.close();
+        std::cout &lt;&lt; "Дані успішно записані." &lt;&lt; std::endl;
+    }
+    else
+    {
+        std::cout &lt;&lt; "Помилка: Не вдалося відкрити файл для запису." &lt;&lt; std::endl;
+    }
+}
+
+// Режим додавання
+std::ofstream appendFile("log.txt", std::ios::app);</code></div>
+
+    <h4>📖 Читання з файлу (<code>std::ifstream</code>)</h4>
+    <div class="code-block"><code>#include &lt;fstream&gt;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+
+void ReadFromFile()
+{
+    std::ifstream inFile("example.txt");
+    std::string line;
+
+    if(inFile.is_open())
+    {
+        while(std::getline(inFile, line)) 
+        {
+            std::cout &lt;&lt; "Прочитано: " &lt;&lt; line &lt;&lt; std::endl;
+        }
+        inFile.close();
+    }
+    else
+    {
+        std::cout &lt;&lt; "Помилка: Файл не знайдено або не відкрито." &lt;&lt; std::endl;
+    }
+}</code></div>
+
+    <h4>🛡️ Автоматичне керування ресурсами (RAII)</h4>
+    <p>Файлові потоки автоматично закриваються при виході об’єкта з області видимості. Виклик <code>close()</code> є гарним стилем, але не обов’язковий.</p>
+
+    <!-- 8.2 Обробка винятків -->
+    <h3 id="t8-2" style="text-decoration: underline;">8.2 Обробка винятків (try/catch)</h3>
+    <p>Виняток — це об'єкт, який сигналізує про помилку під час виконання програми. Використовуються <code>throw</code> та <code>catch</code> для безпечного оброблення.</p>
+
+    <h4>⚙️ Синтаксис try-catch</h4>
+    <div class="code-block"><code>#include &lt;iostream&gt;
+#include &lt;stdexcept&gt;
+
+double Divide(double a, double b)
+{
+    if(b == 0)
+        throw std::runtime_error("Спроба ділення на нуль!");
+    return a / b;
+}
+
+void ProcessCalculation()
+{
+    try
+    {
+        std::cout &lt;&lt; "Початок обчислення..." &lt;&lt; std::endl;
+        double result = Divide(10.0, 0.0);
+        std::cout &lt;&lt; "Результат: " &lt;&lt; result &lt;&lt; std::endl;
+    }
+    catch(const std::runtime_error& e)
+    {
+        std::cout &lt;&lt; "❌ Спійманий виняток: " &lt;&lt; e.what() &lt;&lt; std::endl;
+    }
+    catch(...)
+    {
+        std::cout &lt;&lt; "⚠️ Спійманий невідомий виняток." &lt;&lt; std::endl;
+    }
+
+    std::cout &lt;&lt; "Програма продовжує роботу після обробки помилки." &lt;&lt; std::endl;
+}</code></div>
+
+    <h4>💡 Ключові моменти C++ винятків</h4>
+    <ul>
+        <li><code>e.what()</code> повертає повідомлення про помилку.</li>
+        <li>Винятки слід перехоплювати за константним посиланням <code>const T&amp;</code>.</li>
+        <li>RAII та розкручування стека (stack unwinding) гарантують звільнення ресурсів при винятках.</li>
+    </ul>
+</section>
+<script>
+
+
+// Генерація 100 анімованих зірок на фоні
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(star);
+}
+
+// Відкриття/закриття бічного меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+    sideMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+    sideMenu.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+// Підменю "Курси" у боковому меню
+const menuToggles = document.querySelectorAll('.menu-toggle');
+menuToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentItem = toggle.parentElement;
+        parentItem.classList.toggle('active');
+    });
+});
+
+// Відкриття/закриття підтеми у правому меню
+const topicToggles = document.querySelectorAll('.topic-toggle');
+
+topicToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentTopic = toggle.parentElement;
+
+        // Закриваємо інші відкриті теми
+        topicToggles.forEach(t => {
+            if (t !== toggle) {
+                t.parentElement.classList.remove('active');
+            }
+        });
+
+        // Відкриваємо або закриваємо поточну тему
+        parentTopic.classList.toggle('active');
+    });
+});
+
+// Кнопка входу
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', () => {
+    window.location.href = 'login.html';
+});
+
+</script>
+</body>
+</html>
