@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python - Теорія | CodeCraft</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1c40 0%, #2f3485 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 25fr;
+    align-items: center;
+    padding: 15px 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 14, 36, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.menu-btn {
+    background: transparent;
+    border: 2px solid #00D9FF;
+    color: #00D9FF;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    width: 50px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: #00d9ff;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Кнопка входу */
+.login-btn {
+    background: transparent;
+    border: 2px solid #00d9ff;
+    color: #00D9FF;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+.login-btn:hover {
+    background: #00D9FF;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(13, 14, 36, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 80px 30px 30px 30px;
+    transition: left 0.4s ease;
+    z-index: 99;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 28px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.menu-items li a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+    z-index: 98;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    position: relative;
+    z-index: 1;
+}
+
+.theory-sidebar {
+    position: fixed;
+    right: 0;
+    top: 80px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    background: rgba(13, 14, 36, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px;
+    overflow-y: auto;
+    border-left: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.theory-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theory-sidebar::-webkit-scrollbar-track {
+    background: rgba(13, 14, 36, 0.5);
+}
+
+.theory-sidebar::-webkit-scrollbar-thumb {
+    background: #00D9FF;
+    border-radius: 4px;
+}
+
+.sidebar-title {
+    color: #00D9FF;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.theory-nav {
+    list-style: none;
+}
+
+.theory-nav > li {
+    margin-bottom: 12px;
+}
+
+.theory-topic {
+    position: relative;
+}
+
+.topic-toggle {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.topic-toggle:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.topic-arrow {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.theory-topic.active .topic-arrow {
+    transform: rotate(180deg);
+}
+
+.subtopic-list {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 10px;
+}
+
+.theory-topic.active .subtopic-list {
+    max-height: 600px;
+}
+
+.subtopic-list li {
+    margin-top: 8px;
+}
+
+.subtopic-list a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+}
+
+.subtopic-list a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.subtopic-list a.active {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 60px;
+    margin-right: 280px;
+    max-width: calc(100% - 280px);
+}
+
+.theory-section {
+    background: rgba(13, 14, 36, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    scroll-margin-top: 100px;
+}
+
+.theory-section h2 {
+    color: #00D9FF;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.theory-section h3 {
+    color: #00D9FF;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.theory-section p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.theory-section ul {
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 25px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.theory-section li {
+    margin-bottom: 8px;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    color: #00FF88;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+th {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    font-weight: 600;
+}
+
+td {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.test-btn {
+    background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+    color: #0D0E24;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 30px;
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+}
+
+.test-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+}
+
+@media(max-width: 1200px) {
+    .theory-sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-right: 240px;
+        max-width: calc(100% - 240px);
+    }
+}
+
+@media(max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+    
+    .logo-nav {
+        font-size: 24px;
+    }
+    
+    .theory-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-right: 0;
+        max-width: 100%;
+        padding: 30px 20px;
+    }
+    
+    .theory-section {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-title">CodeCraft</div>
+    <ul class="menu-items">
+        <li>
+            <a href="home.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Головна
+            </a>
+        </li>
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="CSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<nav>
+    <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+    <div class="logo-nav">CodeCraft</div>
+    <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Вхід
+        </button>
+    </div>
+</nav>
+
+<div class="content-wrapper">
+    <div class="theory-sidebar">
+        <div class="sidebar-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Зміст курсу
+        </div>
+         <ul class="theory-nav">
+            <li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 1: Основи CSS
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t1-1">1.1. Вступ до CSS</a></li>
+        <li><a href="#t1-2">1.2. Синтаксис CSS</a></li>
+        <li><a href="#t1-3">1.3. Коментарі та правила CSS</a></li>
+        <li><a href="#t1-4">1.4. Використання селекторів</a></li>
+        <li><a href="#t1-5">1.5. Класи та ID</a></li>
+        <li><a href="#t1-6">1.6. Атрибути та псевдокласи</a></li>
+        <li><a href="#t1-7">1.7. Псевдоелементи</a></li>
+        <li><a href="#t1-8">1.8. Спадкування властивостей</a></li>
+        <li><a href="#t1-9">1.9. Специфічність селекторів</a></li>
+        <li><a href="#t1-10">1.10. !important та пріоритети стилів</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 2: Основні властивості CSS
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t2-1">2.1. Колір та фон</a></li>
+        <li><a href="#t2-2">2.2. Шрифти та текст</a></li>
+        <li><a href="#t2-3">2.3. Відступи (margin, padding)</a></li>
+        <li><a href="#t2-4">2.4. Розміри (width, height)</a></li>
+        <li><a href="#t2-5">2.5. Модель коробки (Box Model)</a></li>
+        <li><a href="#t2-6">2.6. Дисплей (display)</a></li>
+        <li><a href="#t2-7">2.7. Позиціювання (position)</a></li>
+        <li><a href="#t2-8">2.8. Flexbox — основи</a></li>
+        <li><a href="#t2-9">2.9. Grid — основи</a></li>
+        <li><a href="#t2-10">2.10. Перехідні ефекти (transitions)</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 3: Розширені CSS
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t3-1">3.1. Градієнти та тіні</a></li>
+        <li><a href="#t3-2">3.2. Анімації та переходи</a></li>
+        <li><a href="#t3-3">3.3. Медіазапити (responsive)</a></li>
+        <li><a href="#t3-4">3.4. Псевдоелементи та псевдокласи</a></li>
+        <li><a href="#t3-5">3.5. Робота із зображеннями (object-fit, маскування)</a></li>
+        <li><a href="#t3-6">3.6. CSS-фільтри</a></li>
+        <li><a href="#t3-7">3.7. Стилізація форм та кнопок</a></li>
+        <li><a href="#t3-8">3.8. Спрайти та галереї</a></li>
+        <li><a href="#t3-9">3.9. Змінні CSS та функції</a></li>
+        <li><a href="#t3-10">3.10. Оптимізація та доступність</a></li>
+    </ul>
+</li>
+
+<li class="theory-topic">
+    <a href="#" class="topic-toggle">
+        ТЕМА 4: Flexbox та Grid
+        <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
+    <ul class="subtopic-list">
+        <li><a href="#t4-1">4.1. Вступ до Flexbox</a></li>
+        <li><a href="#t4-2">4.2. Гнучкий контейнер</a></li>
+        <li><a href="#t4-3">4.3. Гнучкі елементи</a></li>
+        <li><a href="#t4-4">4.4. Flex Responsive</a></li>
+        <li><a href="#t4-5">4.5. Вступ до Grid</a></li>
+        <li><a href="#t4-6">4.6. Grid-контейнер</a></li>
+        <li><a href="#t4-7">4.7. Елементи сітки</a></li>
+        <li><a href="#t4-8">4.8. Планування сітки з 12 колонками</a></li>
+        <li><a href="#t4-9">4.9. @supports та адаптивність</a></li>
+        <li><a href="#t4-10">4.10. Приклади комбінацій Flexbox + Grid</a></li>
+    </ul>
+</li>
+</ul>
+    </div>
+<main class="main-content">
+    <section class="theory-section" id="t1-1">
+        <h2 style="text-align:center;">ТЕМА 1: Основи CSS</h2>
+
+        <!-- 1.1 Вступ до CSS -->
+        <h3 id="t1-1" style="text-decoration: underline;">1.1 Вступ до CSS</h3>
+        <p>CSS (Cascading Style Sheets) — це мова стилів для опису вигляду веб-сторінок. Використовується для:</p>
+        <ul>
+            <li>оформлення кольорів, шрифтів та фонів</li>
+            <li>визначення розмірів елементів та відступів</li>
+            <li>створення адаптивного дизайну</li>
+            <li>анімованих ефектів та переходів</li>
+        </ul>
+        <p>Приклад простого CSS-коду:</p>
+        <div class="code-block"><code>p {
+    color: blue;
+    font-size: 16px;
+}</code></div>
+
+        <!-- 1.2 Синтаксис CSS -->
+        <h3 id="t1-2" style="text-decoration: underline;">1.2 Синтаксис CSS</h3>
+        <p>CSS складається з правил (rules), що містять селектори та властивості:</p>
+        <ul>
+            <li><strong>Селектор</strong> — елемент HTML, до якого застосовується стиль</li>
+            <li><strong>Властивості</strong> — характеристики стилю (color, font-size)</li>
+            <li><strong>Значення</strong> — конкретне значення властивості</li>
+        </ul>
+        <div class="code-block"><code>h1 {
+    color: red;
+    text-align: center;
+}</code></div>
+
+        <!-- 1.3 Коментарі -->
+        <h3 id="t1-3" style="text-decoration: underline;">1.3 Коментарі CSS</h3>
+        <p>Коментарі використовуються для пояснення коду та не виконуються браузером:</p>
+        <div class="code-block"><code>/* Це коментар */</code></div>
+
+        <!-- 1.4 Селектори -->
+        <h3 id="t1-4" style="text-decoration: underline;">1.4 Селектори</h3>
+        <p>Селектори визначають, які елементи HTML будуть стилізовані:</p>
+        <ul>
+            <li>Типові селектори: <code>p, h1, div</code></li>
+            <li>Класи: <code>.class-name</code></li>
+            <li>ID: <code>#id-name</code></li>
+            <li>Універсальний селектор: <code>*</code></li>
+        </ul>
+        <div class="code-block"><code>.highlight {
+    background-color: yellow;
+}</code></div>
+
+        <!-- 1.5 Атрибути та псевдокласи -->
+        <h3 id="t1-5" style="text-decoration: underline;">1.5 Атрибути та псевдокласи</h3>
+        <p>CSS дозволяє стилізувати елементи за атрибутами та станами:</p>
+        <ul>
+            <li>Псевдокласи: <code>a:hover</code> — при наведенні</li>
+            <li>Атрибутні селектори: <code>input[type="text"]</code></li>
+        </ul>
+        <div class="code-block"><code>a:hover {
+    color: red;
+}</code></div>
+
+        <!-- 1.6 Псевдоелементи -->
+        <h3 id="t1-6" style="text-decoration: underline;">1.6 Псевдоелементи</h3>
+        <p>Псевдоелементи дозволяють стилізувати частини елементів:</p>
+        <ul>
+            <li><code>::before</code> — вставляє вміст перед елементом</li>
+            <li><code>::after</code> — вставляє вміст після елементу</li>
+        </ul>
+        <div class="code-block"><code>p::before {
+    content: ">> ";
+}</code></div>
+
+        <!-- 1.7 Спадкування -->
+        <h3 id="t1-7" style="text-decoration: underline;">1.7 Спадкування властивостей</h3>
+        <p>Деякі властивості передаються від батьків до дочірніх елементів:</p>
+        <div class="code-block"><code>body {
+    font-family: Arial;
+}
+p {
+    color: black; /* наслідує font-family з body */
+}</code></div>
+
+        <!-- 1.8 Специфічність селекторів -->
+        <h3 id="t1-8" style="text-decoration: underline;">1.8 Специфічність селекторів</h3>
+        <p>Якщо один елемент стилізований кількома правилами, застосовується правило з вищою специфічністю:</p>
+        <div class="code-block"><code>#id-name { color: red; }
+.class-name { color: blue; }
+p { color: black; } /* Пріоритет: ID > клас > тег */</code></div>
+
+        <!-- 1.9 !important -->
+        <h3 id="t1-9" style="text-decoration: underline;">1.9 !important</h3>
+        <p>Додає максимальний пріоритет стилю:</p>
+        <div class="code-block"><code>p {
+    color: green !important;
+}</code></div>
+
+        <!-- 1.10 Приклад повної стилізації -->
+        <h3 id="t1-10" style="text-decoration: underline;">1.10 Приклад CSS</h3>
+        <p>Об'єднання всіх знань для стилізації сторінки:</p>
+        <div class="code-block"><code>body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+}
+h1 {
+    color: #333;
+    text-align: center;
+}
+p {
+    color: #555;
+    line-height: 1.5;
+}</code></div>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 1</button>
+    </section>
+<section class="theory-section" id="t2-1">
+    <h2 style="text-align:center;">ТЕМА 2: Основні властивості та структури CSS</h2>
+
+    <!-- 2.1 Кольори CSS -->
+    <h3 id="t2-1" style="text-decoration: underline;">2.1 Кольори CSS</h3>
+    <p>CSS дозволяє задавати кольори для тексту, фону та меж елементів. Можна використовувати:</p>
+    <ul>
+        <li>Назви кольорів: <code>red, blue, green</code></li>
+        <li>HEX-коди: <code>#ff0000, #00ff00</code></li>
+        <li>RGB/RGBA: <code>rgb(255,0,0), rgba(0,0,255,0.5)</code></li>
+        <li>HSL: <code>hsl(120, 100%, 50%)</code></li>
+    </ul>
+    <div class="code-block"><code>p {
+    color: #ff0000;
+    background-color: rgb(200,200,200);
+}</code></div>
+
+    <!-- 2.2 Шрифти CSS -->
+    <h3 id="t2-2" style="text-decoration: underline;">2.2 Шрифти CSS</h3>
+    <p>Можна задавати сімейство шрифтів, розмір, стиль та товщину:</p>
+    <div class="code-block"><code>h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    font-style: italic;
+}</code></div>
+
+    <!-- 2.3 Відступи та полотно -->
+    <h3 id="t2-3" style="text-decoration: underline;">2.3 Відступи та padding/margin</h3>
+    <p>CSS дозволяє відступи всередині елементу (padding) та зовні (margin):</p>
+    <div class="code-block"><code>div {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #000;
+}</code></div>
+
+    <!-- 2.4 Розмір елементів -->
+    <h3 id="t2-4" style="text-decoration: underline;">2.4 Висота та ширина</h3>
+    <p>Встановлюємо розміри блоків:</p>
+    <div class="code-block"><code>div {
+    width: 200px;
+    height: 100px;
+}</code></div>
+
+    <!-- 2.5 Модель Box -->
+    <h3 id="t2-5" style="text-decoration: underline;">2.5 Модель Box</h3>
+    <p>Кожен елемент має модель box: content → padding → border → margin.</p>
+    <div class="code-block"><code>div {
+    width: 100px;
+    padding: 10px;
+    border: 5px solid black;
+    margin: 15px;
+}</code></div>
+
+    <!-- 2.6 Властивості display -->
+    <h3 id="t2-6" style="text-decoration: underline;">2.6 Властивості display</h3>
+    <p>Визначає, як елемент відображається:</p>
+    <ul>
+        <li><code>block</code> — блочний</li>
+        <li><code>inline</code> — в рядок</li>
+        <li><code>inline-block</code> — inline + можливість задати розмір</li>
+        <li><code>none</code> — приховує елемент</li>
+    </ul>
+    <div class="code-block"><code>span {
+    display: inline-block;
+    width: 100px;
+}</code></div>
+
+    <!-- 2.7 Позиціювання -->
+    <h3 id="t2-7" style="text-decoration: underline;">2.7 Позиціювання</h3>
+    <p>CSS дозволяє керувати позицією елементів:</p>
+    <ul>
+        <li><code>static</code> — за замовчуванням</li>
+        <li><code>relative</code> — відносно свого звичайного місця</li>
+        <li><code>absolute</code> — відносно батьківського блоку з позицією</li>
+        <li><code>fixed</code> — фіксовано на екрані</li>
+    </ul>
+    <div class="code-block"><code>div {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+}</code></div>
+
+    <!-- 2.8 Overflow -->
+    <h3 id="t2-8" style="text-decoration: underline;">2.8 Overflow</h3>
+    <p>Керування вмістом, який виходить за межі блоку:</p>
+    <div class="code-block"><code>div {
+    width: 150px;
+    height: 100px;
+    overflow: auto;
+}</code></div>
+
+    <!-- 2.9 Float та Clear -->
+    <h3 id="t2-9" style="text-decoration: underline;">2.9 Float та Clear</h3>
+    <p>Позиціювання елементів ліворуч або праворуч:</p>
+    <div class="code-block"><code>img {
+    float: left;
+    margin-right: 10px;
+}
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}</code></div>
+
+    <!-- 2.10 Прозорість -->
+    <h3 id="t2-10" style="text-decoration: underline;">2.10 Непрозорість</h3>
+    <p>Контролює прозорість елемента:</p>
+    <div class="code-block"><code>div {
+    opacity: 0.5;
+}</code></div>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 2</button>
+</section>
+<section class="theory-section" id="t3-1">
+    <h2 style="text-align:center;">ТЕМА 3: Умови та розгалуження в CSS</h2>
+
+    <!-- 3.1 @media — основа умов -->
+    <h3 id="t3-1" style="text-decoration: underline;">3.1 @media — основа умов</h3>
+    <p>У CSS умовні правила застосовуються за допомогою медіа-запитів. Вони дозволяють змінювати стиль залежно від розміру екрана, типу пристрою тощо.</p>
+    <div class="code-block"><code>@media (max-width: 768px) {
+    body {
+        background-color: lightblue;
+    }
+}</code></div>
+
+    <!-- 3.2 @media для конкретної умови -->
+    <h3 id="t3-2" style="text-decoration: underline;">3.2 @media для конкретної умови</h3>
+    <p>Можна застосовувати стилі лише за певних умов:</p>
+    <div class="code-block"><code>@media (min-width: 1024px) {
+    .container {
+        width: 80%;
+    }
+}</code></div>
+
+    <!-- 3.3 Багато умов у медіа-запитах -->
+    <h3 id="t3-3" style="text-decoration: underline;">3.3 Багато умов у медіа-запитах</h3>
+    <p>Об’єднання умов через <code>and</code>:</p>
+    <div class="code-block"><code>@media (min-width: 768px) and (max-width: 1024px) {
+    .menu {
+        display: flex;
+    }
+}</code></div>
+
+    <!-- 3.4 Логічне "або" у медіа -->
+    <h3 id="t3-4" style="text-decoration: underline;">3.4 Логічне "або" у медіа</h3>
+    <p>Застосування стилю, якщо виконана хоча б одна умова:</p>
+    <div class="code-block"><code>@media (max-width: 480px), (orientation: portrait) {
+    .sidebar {
+        display: none;
+    }
+}</code></div>
+
+    <!-- 3.5 Вкладені умови -->
+    <h3 id="t3-5" style="text-decoration: underline;">3.5 Вкладені умови</h3>
+    <p>Можна використовувати вкладені селектори всередині медіа-запитів:</p>
+    <div class="code-block"><code>@media (max-width: 768px) {
+    .container {
+        .menu {
+            display: none;
+        }
+    }
+}</code></div>
+
+    <!-- 3.6 Порівняння властивостей -->
+    <h3 id="t3-6" style="text-decoration: underline;">3.6 Порівняння властивостей</h3>
+    <p>CSS не має операторів порівняння, але можна використовувати різні значення для медіа-запитів та псевдокласів:</p>
+    <div class="code-block"><code>button:hover {
+    background-color: green;
+}</code></div>
+
+    <!-- 3.7 Використання числових умов -->
+    <h3 id="t3-7" style="text-decoration: underline;">3.7 Використання числових умов</h3>
+    <p>Медіа-запити дозволяють перевіряти ширину екрана та інші параметри:</p>
+    <div class="code-block"><code>@media (min-width: 600px) {
+    .box {
+        width: 400px;
+    }
+}</code></div>
+
+    <!-- 3.8 Коротка форма через коми -->
+    <h3 id="t3-8" style="text-decoration: underline;">3.8 Коротка форма через коми</h3>
+    <p>Декілька умов можна об’єднувати через кому:</p>
+    <div class="code-block"><code>@media (max-width: 500px), (orientation: portrait) {
+    .header {
+        display: none;
+    }
+}</code></div>
+
+    <!-- 3.9 Використання prefers-color-scheme -->
+    <h3 id="t3-9" style="text-decoration: underline;">3.9 Використання prefers-color-scheme</h3>
+    <p>CSS дозволяє змінювати теми залежно від налаштувань пристрою:</p>
+    <div class="code-block"><code>@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #222;
+        color: #fff;
+    }
+}</code></div>
+
+    <!-- 3.10 Умови в одній лінії (псевдокласи) -->
+    <h3 id="t3-10" style="text-decoration: underline;">3.10 Умови в одній лінії (псевдокласи)</h3>
+    <p>Псевдокласи дозволяють змінювати стиль елементу за умовами взаємодії:</p>
+    <div class="code-block"><code>a:hover {
+    color: red;
+}
+input:focus {
+    border-color: blue;
+}</code></div>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 3</button>
+</section>
+<section class="theory-section" id="t4-1">
+    <h2 style="text-align:center;">ТЕМА 4: Цикли в CSS</h2>
+
+    <!-- 4.1 @for в препроцесорах -->
+    <h3 id="t4-1" style="text-decoration: underline;">4.1 @for — перебір елементів колекцій</h3>
+    <p>CSS сам по собі не підтримує цикли, але препроцесори (SASS, LESS) дозволяють використовувати <code>@for</code> для генерації стилів:</p>
+    <div class="code-block"><code>@for $i from 1 through 5 {
+  .col-#{$i} {
+    width: 20% * $i;
+  }
+}</code></div>
+
+    <!-- 4.2 @each — повтори певну кількість разів -->
+    <h3 id="t4-2" style="text-decoration: underline;">4.2 @each — перебір списку</h3>
+    <p>Препроцесори дозволяють перебирати списки елементів:</p>
+    <div class="code-block"><code>@each $color in red, green, blue {
+  .text-#{$color} {
+    color: $color;
+  }
+}</code></div>
+
+    <!-- 4.3 Перебір рядків -->
+    <h3 id="t4-3" style="text-decoration: underline;">4.3 Перебір рядків</h3>
+    <p>Можна перебирати набори класів для стилізації схожих елементів:</p>
+    <div class="code-block"><code>@for $i from 1 through 3 {
+  .item-#{$i}::before {
+    content: "Item #{$i}";
+  }
+}</code></div>
+
+    <!-- 4.4 Перебір словника -->
+    <h3 id="t4-4" style="text-decoration: underline;">4.4 Перебір словника</h3>
+    <p>У SASS можна перебирати мапи:</p>
+    <div class="code-block"><code>$themes: (primary: blue, secondary: green);
+@each $name, $color in $themes {
+  .btn-#{$name} {
+    background-color: $color;
+  }
+}</code></div>
+
+    <!-- 4.5 @while — цикл поки умова True -->
+    <h3 id="t4-5" style="text-decoration: underline;">4.5 @while — виконується поки умова True</h3>
+    <p>Препроцесори дозволяють створювати цикли з умовами:</p>
+    <div class="code-block"><code>$i: 1;
+@while $i <= 3 {
+  .item-#{$i} {
+    width: 100px * $i;
+  }
+  $i: $i + 1;
+}</code></div>
+
+    <!-- 4.6 Нескінченний цикл -->
+    <h3 id="t4-6" style="text-decoration: underline;">4.6 Нескінчений цикл (while true)</h3>
+    <p>У CSS/SASS небезпечні нескінченні цикли не рекомендуються, але синтаксис:</p>
+    <div class="code-block"><code>$i: 1;
+@while true {
+  .item-#{$i} {
+    width: 50px * $i;
+  }
+  $i: $i + 1;
+  @if $i > 10 { @break; }
+}</code></div>
+
+    <!-- 4.7 break — зупиняє цикл повністю -->
+    <h3 id="t4-7" style="text-decoration: underline;">4.7 break — зупиняє цикл</h3>
+    <p>Для виходу з циклу використовується <code>@break</code>:</p>
+    <div class="code-block"><code>@for $i from 1 through 10 {
+  @if $i == 5 { @break; }
+  .item-#{$i} { width: 20px * $i; }
+}</code></div>
+
+    <!-- 4.8 continue — пропускає ітерацію -->
+    <h3 id="t4-8" style="text-decoration: underline;">4.8 continue — пропускає ітерацію</h3>
+    <p>Пропуск ітерації виконується через <code>@continue</code>:</p>
+    <div class="code-block"><code>@for $i from 1 through 5 {
+  @if $i == 3 { @continue; }
+  .item-#{$i} { width: 20px * $i; }
+}</code></div>
+
+    <!-- 4.9 else після циклу -->
+    <h3 id="t4-9" style="text-decoration: underline;">4.9 else після циклу</h3>
+    <p>У CSS/SASS немає прямого аналогу else після циклу, але можна використовувати умовні правила всередині циклу.</p>
+
+    <!-- 4.10 Вкладені цикли -->
+    <h3 id="t4-10" style="text-decoration: underline;">4.10 Вкладені цикли</h3>
+    <p>Використання циклів всередині циклів для генерації складних структур:</p>
+    <div class="code-block"><code>@for $i from 1 through 3 {
+  @for $j from 1 through 2 {
+    .item-#{$i}-#{$j} { width: 20px * $j; }
+  }
+}</code></div>
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 4</button>
+</section>
+<script>
+
+
+// Генерація 100 анімованих зірок на фоні
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(star);
+}
+
+// Відкриття/закриття бічного меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+    sideMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+    sideMenu.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+// Підменю "Курси" у боковому меню
+const menuToggles = document.querySelectorAll('.menu-toggle');
+menuToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentItem = toggle.parentElement;
+        parentItem.classList.toggle('active');
+    });
+});
+
+// Відкриття/закриття підтеми у правому меню
+const topicToggles = document.querySelectorAll('.topic-toggle');
+
+topicToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentTopic = toggle.parentElement;
+
+        // Закриваємо інші відкриті теми
+        topicToggles.forEach(t => {
+            if (t !== toggle) {
+                t.parentElement.classList.remove('active');
+            }
+        });
+
+        // Відкриваємо або закриваємо поточну тему
+        parentTopic.classList.toggle('active');
+    });
+});
+
+// Кнопка входу
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', () => {
+    window.location.href = 'login.html';
+});
+
+</script>
+</body>
+</html>
