@@ -382,11 +382,11 @@
       card.addEventListener('click', () => {
         const target = card.dataset.target;
         if (target === 'theory') {
-          window.location.href = 'C++theory.html';
+          window.location.href = 'Pythontheory.html';
         } else if (target === 'practice') {
-          window.location.href = 'C++practice.html';
+          window.location.href = 'Pythonpractice.html';
         } else if (target === 'tests') {
-          window.location.href = 'C++tests.html';
+          window.location.href = 'Pythontests.html';
         }
       });
     });
@@ -395,6 +395,11 @@
     const loginBtn = document.getElementById('loginBtn');
     loginBtn.addEventListener('click', () => {
       window.location.href = 'login.html';
+    });
+    // Кнопка "Почати" для переходу на theoryPython.html
+    const startButton = document.querySelector('.card-btn');
+    startButton.addEventListener('click', () => {
+      window.location.href = 'theoryPython.html';
     });
   </script>
 </body>

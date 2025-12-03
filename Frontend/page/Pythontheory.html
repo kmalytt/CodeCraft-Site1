@@ -1,0 +1,2318 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python - Теорія | CodeCraft</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1c40 0%, #2f3485 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 25fr;
+    align-items: center;
+    padding: 15px 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 14, 36, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.menu-btn {
+    background: transparent;
+    border: 2px solid #00D9FF;
+    color: #00D9FF;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    width: 50px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: #00d9ff;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+/* Кнопка входу */
+.login-btn {
+    border: 2px solid #00d9ff;
+    color: #00D9FF;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+.login-btn:hover {
+    background: #00D9FF;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(13, 14, 36, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 80px 30px 30px 30px;
+    transition: left 0.4s ease;
+    z-index: 99;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 28px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.menu-items li a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+    z-index: 98;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-wrapper {
+    display: flex;
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    position: relative;
+    z-index: 1;
+}
+
+.theory-sidebar {
+    position: fixed;
+    right: 0;
+    top: 80px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    background: rgba(13, 14, 36, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px 20px;
+    overflow-y: auto;
+    border-left: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.theory-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theory-sidebar::-webkit-scrollbar-track {
+    background: rgba(13, 14, 36, 0.5);
+}
+
+.theory-sidebar::-webkit-scrollbar-thumb {
+    background: #00D9FF;
+    border-radius: 4px;
+}
+
+.sidebar-title {
+    color: #00D9FF;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.theory-nav {
+    list-style: none;
+}
+
+.theory-nav > li {
+    margin-bottom: 12px;
+}
+
+.theory-topic {
+    position: relative;
+}
+
+.topic-toggle {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.topic-toggle:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.topic-arrow {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.theory-topic.active .topic-arrow {
+    transform: rotate(180deg);
+}
+
+.subtopic-list {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 10px;
+}
+
+.theory-topic.active .subtopic-list {
+    max-height: 600px;
+}
+
+.subtopic-list li {
+    margin-top: 8px;
+}
+
+.subtopic-list a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+}
+
+.subtopic-list a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.subtopic-list a.active {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    border-left-color: #00D9FF;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 60px;
+    margin-right: 280px;
+    max-width: calc(100% - 280px);
+}
+
+.theory-section {
+    background: rgba(13, 14, 36, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 40px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    scroll-margin-top: 100px;
+}
+
+.theory-section h2 {
+    color: #00D9FF;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.theory-section h3 {
+    color: #00D9FF;
+    font-size: 24px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.theory-section p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.theory-section ul {
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 25px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.theory-section li {
+    margin-bottom: 8px;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    color: #00FF88;
+}
+
+.code-block code {
+    display: block;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+th {
+    background: rgba(0, 217, 255, 0.2);
+    color: #00D9FF;
+    font-weight: 600;
+}
+
+td {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.test-btn {
+    background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+    color: #0D0E24;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 30px;
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+}
+
+.test-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+}
+
+@media(max-width: 1200px) {
+    .theory-sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-right: 240px;
+        max-width: calc(100% - 240px);
+    }
+}
+
+@media(max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+    
+    .logo-nav {
+        font-size: 24px;
+    }
+    
+    .theory-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-right: 0;
+        max-width: 100%;
+        padding: 30px 20px;
+    }
+    
+    .theory-section {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-title">CodeCraft</div>
+    <ul class="menu-items">
+        <li>
+            <a href="home.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Головна
+            </a>
+        </li>
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="CSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<nav>
+    <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+    <div class="logo-nav">CodeCraft</div>
+    <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Вхід
+        </button>
+    </div>
+</nav>
+
+<div class="content-wrapper">
+    <div class="theory-sidebar">
+        <div class="sidebar-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            Зміст курсу
+        </div>
+         <ul class="theory-nav">
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 1: Основи Python
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t1-1">1.1. Вступ до Python</a></li>
+                    <li><a href="#t1-2">1.2. Встановлення та запуск</a></li>
+                    <li><a href="#t1-3">1.3. Синтаксис Python</a></li>
+                    <li><a href="#t1-4">1.4. Змінні</a></li>
+                    <li><a href="#t1-5">1.5. Типи даних</a></li>
+                    <li><a href="#t1-6">1.6. Числа</a></li>
+                    <li><a href="#t1-7">1.7. Рядки</a></li>
+                    <li><a href="#t1-8">1.8. Булеві значення</a></li>
+                    <li><a href="#t1-9">1.9. Вивід та введення</a></li>
+                    <li><a href="#t1-10">1.10. Коментарі</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 2: Операції та структури даних
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t2-1">2.1. Арифметичні оператори</a></li>
+                    <li><a href="#t2-2">2.2. Логічні оператори</a></li>
+                    <li><a href="#t2-3">2.3. Оператори порівняння</a></li>
+                    <li><a href="#t2-4">2.4. Списки (list)</a></li>
+                    <li><a href="#t2-5">2.5. Кортежі (tuple)</a></li>
+                    <li><a href="#t2-5">2.6. Набори (set)</a></li>
+                    <li><a href="#t2-5">2.7. Словники (dict)</a></li>
+                    <li><a href="#t2-5">2.8. Ітератори</a></li>
+                    <li><a href="#t2-5">2.9. Вбудовані функції для структур даних</a></li>
+                    <li><a href="#t2-5">2.10. Спискові включення (list comprehension)</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 3: Умови та розгалуження
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t3-1">3.1. Оператор if — основа умов</a></li>
+                    <li><a href="#t3-2">3.2. Оператор else — дія, коли умова False</a></li>
+                    <li><a href="#t3-3">3.3. Оператор elif — перевірка кількох умов</a></li>
+                    <li><a href="#t3-4">3.4. Умови з логічними операторами (and, or, not)</a></li>
+                    <li><a href="#t3-5">3.5. Вкладені умови (if всередині if)</a></li>
+                    <li><a href="#t3-6">3.6. Порівняння рядків в умовах</a></li>
+                    <li><a href="#t3-7">3.7. Умови з числами (>, <, ==, !=, <=, >=)</a></li>
+                    <li><a href="#t3-8">3.8. Тернарний оператор — коротка форма if/else</a></li>
+                    <li><a href="#t3-9">3.9. match-case (аналог switch у Python)</a></li>
+                    <li><a href="#t3-10">3.10. Умови в одній лінії</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 4: Цикли
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t4-1">4.1. Цикл for — перебір елементів колекцій</a></li>
+                    <li><a href="#t4-2">4.2. Цикл for + range() — повтори певну кількість разів</a></li>
+                    <li><a href="#t4-3">4.3. Перебір рядків цикл for</a></li>
+                    <li><a href="#t4-4">4.4. Перебір словника</a></li>
+                    <li><a href="#t4-5">4.5. Цикл while — виконується поки умова True</a></li>
+                    <li><a href="#t4-6">4.6. Нескінчений цикл (while True)</a></li>
+                    <li><a href="#t4-7">4.7. break — зупиняє цикл повністю</a></li>
+                    <li><a href="#t4-8">4.8. continue — пропускає ітерацію</a></li>
+                    <li><a href="#t4-9">4.9. else після циклу</a></li>
+                    <li><a href="#t4-10">4.10. Вкладені цикли</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 5: Функції
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t5-1">5.1. Створення функцій</a></li>
+                    <li><a href="#t5-2">5.2. Функція з параметрами</a></li>
+                    <li><a href="#t5-3">5.3. Функція з поверненням значення</a></li>
+                    <li><a href="#t5-4">5.4. Значення за замовчуванням (default)</a></li>
+                    <li><a href="#t5-5">5.5. Функції з необмеженою кількістю аргументів (args)</a></li>
+                    <li><a href="#t5-6">5.6. Функції з ключовими аргументами (kwargs)</a></li>
+                    <li><a href="#t5-7">5.7. Анонімні функції (lambda)</a></li>
+                    <li><a href="#t5-8">5.8. Вбудовані функції Python</a></li>
+                    <li><a href="#t5-9">5.9. Рекурсія</a></li>
+                    <li><a href="#t5-10">5.10. Документація функцій (docstring)</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 6: Модулі та імпорт
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t6-1">6.1. Що таке модуль</a></li>
+                    <li><a href="#t6-2">6.2. Імпорт модуля</a></li>
+                    <li><a href="#t6-3">6.3. Імпорт окремих функцій</a></li>
+                    <li><a href="#t6-4">6.4. Імпорт з псевдонімом (alias)</a></li>
+                    <li><a href="#t6-5">6.5. Вбудовані модулі</a></li>
+                    <li><a href="#t6-6">6.6. Модуль datetime</a></li>
+                    <li><a href="#t6-7">6.7. Модуль os</a></li>
+                    <li><a href="#t6-8">6.8. Модуль random</a></li>
+                    <li><a href="#t6-9">6.9. Створення власного пакета</a></li>
+                    <li><a href="#t6-10">6.10. Імпорт всіх функцій з модуля</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 7: Файли та введення/виведення (I/O)
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t7-1">7.1. Ввід від користувача</a></li>
+                    <li><a href="#t7-2">7.2. Вивід на екран</a></li>
+                    <li><a href="#t7-3">7.3. Відкриття файлу</a></li>
+                    <li><a href="#t7-4">7.4. Читання файлу</a></li>
+                    <li><a href="#t7-5">7.5. Читання файлу рядок за рядком</a></li>
+                    <li><a href="#t7-6">7.6. Запис у файл</a></li>
+                    <li><a href="#t7-7">7.7. Додаткові параметри відкриття файлу</a></li>
+                    <li><a href="#t7-8">7.8. Робота з бінарними файлами</a></li>
+                    <li><a href="#t7-9">7.9. Перевірка наявності файлу</a></li>
+                    <li><a href="#t7-10">7.10. Видалення та перейменування файлів</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 8: Об’єктно-орієнтоване програмування (ООП)
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t8-1">8.1. Клас та об’єктКлас та об’єкт</a></li>
+                    <li><a href="#t8-2">8.2. Метод init</a></li>
+                    <li><a href="#t8-3">8.3. Атрибути об’єкта</a></li>
+                    <li><a href="#t8-4">8.4. Методи об’єкта</a></li>
+                    <li><a href="#t8-5">8.5. Наслідування</a></li>
+                    <li><a href="#t8-6">8.6. Поліморфізм</a></li>
+                    <li><a href="#t8-7">8.7. Інкапсуляція</a></li>
+                    <li><a href="#t8-8">8.8. Метод str</a></li>
+                    <li><a href="#t8-9">8.9. Статичні та класові методи</a></li>
+                    <li><a href="#t8-10">8.10. Видалення об’єктів та атрибутів</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 9: Модулі, пакети та бібліотеки
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t9-1">9.1. Модуль у Python</a></li>
+                    <li><a href="#t9-2">9.2. Імпорт модулів</a></li>
+                    <li><a href="#t9-3">9.3. Стандартна бібліотека Python</a></li>
+                    <li><a href="#t9-4">9.4. Пакети</a></li>
+                    <li><a href="#t9-5">9.5. Встановлення зовнішніх бібліотек</a></li>
+                    <li><a href="#t9-6">9.6. Використання бібліотеки NumPy</a></li>
+                    <li><a href="#t9-7">9.7. Використання бібліотеки Pandas</a></li>
+                    <li><a href="#t9-8">9.8. Використання бібліотеки Matplotlib</a></li>
+                    <li><a href="#t9-9">9.9. Використання бібліотеки Requests</a></li>
+                    <li><a href="#t9-10">9.10. Створення власного пакета</a></li>
+                </ul>
+            </li>
+            
+            <li class="theory-topic">
+                <a href="#" class="topic-toggle">
+                    ТЕМА 10: Робота з файлами та базами даних
+                    <svg class="topic-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </a>
+                <ul class="subtopic-list">
+                    <li><a href="#t10-1">10.1. Робота з текстовими файлами — відкриття та закриття</a></li>
+                    <li><a href="#t10-2">10.2. Робота з файлами за допомогою with</a></li>
+                    <li><a href="#t10-3">10.3. Читання файлів построчно</a></li>
+                    <li><a href="#t10-4">10.4. Запис у файл построчно</a></li>
+                    <li><a href="#t10-5">10.5. Робота з CSV файлами</a></li>
+                    <li><a href="#t10-6">10.6. Робота з JSON файлами</a></li>
+                    <li><a href="#t10-7">10.7. Робота з файлами Excel</a></li>
+                    <li><a href="#t10-8">10.8. Підключення до SQLite бази даних</a></li>
+                    <li><a href="#t10-9">10.9. Додавання та читання даних у базі</a></li>
+                    <li><a href="#t10-10">10.10. Обробка помилок при роботі з файлами та базами</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <main class="main-content">
+        <section class="theory-section" id="t1-1">
+    <h2 style="text-align:center;">ТЕМА 1: Основи Python</h2>
+
+    <!-- 1.1 Вступ до Python -->
+    <h3 id="t1-1" style="text-decoration: underline;">1.1 Вступ до Python</h3>
+    <p>Python — це високорівнева, проста у вивченні мова програмування. Її використовують у:</p>
+    <ul>
+        <li>веб-розробці</li>
+        <li>штучному інтелекті</li>
+        <li>аналізі даних</li>
+        <li>автоматизації</li>
+        <li>створенні ігор</li>
+        <li>робототехніці</li>
+    </ul>
+    <p>Python популярний через простий синтаксис, схожий на людську мову.</p>
+    <p>Приклад простого коду:</p>
+    <div class="code-block"><code>print("Привіт, Python!")</code></div>
+
+    <!-- 1.2 Встановлення та запуск -->
+    <h3 id="t1-2" style="text-decoration: underline;">1.2 Встановлення та запуск Python</h3>
+    <p>Щоб почати писати код на Python:</p>
+    <ul>
+        <li>Завантажити Python з офіційного сайту: python.org</li>
+        <li>Встановити IDE або редактор коду: VS Code, PyCharm, Jupyter Notebook або IDLE</li>
+        <li>Створити файл з розширенням .py (наприклад hello.py)</li>
+        <li>Запустити код через термінал або IDE</li>
+    </ul>
+    <div class="code-block"><code>python hello.py</code></div>
+    <p>Приклад файлу:</p>
+    <div class="code-block"><code># hello.py
+print("Привіт, Python!")</code></div>
+
+    <!-- 1.3 Синтаксис -->
+    <h3 id="t1-3" style="text-decoration: underline;">1.3 Синтаксис Python</h3>
+    <p>Python має унікальний синтаксис:</p>
+    <ul>
+        <li>Не використовує фігурні дужки {} для блоків коду</li>
+        <li>Блоки визначаються відступами (4 пробіли рекомендується)</li>
+        <li>Відступи обов'язкові, неправильний відступ викликає помилку</li>
+    </ul>
+    <div class="code-block"><code>age = 18
+if age >= 18:
+    print("Ви повнолітній")</code></div>
+    <p><strong>Неправильно:</strong></p>
+    <div class="code-block"><code>if age >= 18:
+print("Ви повнолітній")  # ❌ Помилка IndentationError</code></div>
+
+    <!-- 1.4 Змінні -->
+    <h3 id="t1-4" style="text-decoration: underline;">1.4 Змінні</h3>
+    <p>Змінні зберігають дані і не потребують оголошення типу (динамічна типізація).</p>
+    <p>Правила назви змінних:</p>
+    <ul>
+        <li>Починаються з літери або _</li>
+        <li>Можуть містити літери, цифри та _</li>
+        <li>Не можна використовувати ключові слова Python (if, for, while тощо)</li>
+    </ul>
+    <div class="code-block"><code>name = "Alice"
+age = 25
+is_student = True</code></div>
+
+    <!-- 1.5 Типи даних -->
+    <h3 id="t1-5" style="text-decoration: underline;">1.5 Типи даних</h3>
+    <p>Python підтримує різноманітні базові типи даних:</p>
+    <ul>
+        <li><strong>int</strong> — Цілі числа, приклад: <code>x = 10</code></li>
+        <li><strong>float</strong> — Дробові числа, приклад: <code>y = 3.14</code></li>
+        <li><strong>str</strong> — Рядки, приклад: <code>name = "Python"</code></li>
+        <li><strong>bool</strong> — Булеві значення, приклад: <code>flag = True</code></li>
+        <li><strong>list</strong> — Списки, приклад: <code>fruits = ["apple", "banana"]</code></li>
+        <li><strong>tuple</strong> — Кортежі, приклад: <code>point = (10, 20)</code></li>
+        <li><strong>set</strong> — Множини, приклад: <code>nums = {1,2,3}</code></li>
+        <li><strong>dict</strong> — Словники, приклад: <code>person = {"name":"Alice", "age":25}</code></li>
+    </ul>
+
+    <!-- 1.6 Числа та арифметичні операції -->
+    <h3 id="t1-6" style="text-decoration: underline;">1.6 Числа та арифметичні операції</h3>
+    <p>Python підтримує стандартні математичні операції:</p>
+    <ul>
+        <li>+ — додавання, приклад: <code>5 + 3 = 8</code></li>
+        <li>- — віднімання, приклад: <code>5 - 3 = 2</code></li>
+        <li>* — множення, приклад: <code>5 * 3 = 15</code></li>
+        <li>/ — ділення, приклад: <code>5 / 2 = 2.5</code></li>
+        <li>// — ціле ділення, приклад: <code>5 // 2 = 2</code></li>
+        <li>% — остача від ділення, приклад: <code>5 % 2 = 1</code></li>
+        <li>** — піднесення до степеня, приклад: <code>2 ** 3 = 8</code></li>
+    </ul>
+
+    <!-- 1.7 Рядки -->
+    <h3 id="t1-7" style="text-decoration: underline;">1.7 Рядки</h3>
+    <p>Рядки — текст, укладений у лапки. Можна об’єднувати, вирізати, форматувати.</p>
+    <div class="code-block"><code>text = "Python"
+print(text[0])      # P
+print(text.upper()) # PYTHON</code></div>
+
+    <!-- 1.8 Булеві значення -->
+    <h3 id="t1-8" style="text-decoration: underline;">1.8 Булеві значення</h3>
+    <p>Булевий тип представляє True або False. Часто використовується в умовах.</p>
+    <div class="code-block"><code>is_adult = 17 >= 18
+print(is_adult)  # False</code></div>
+
+    <!-- 1.9 Вивід та введення -->
+    <h3 id="t1-9" style="text-decoration: underline;">1.9 Вивід (print) та введення (input)</h3>
+    <div class="code-block"><code>name = input("Введи ім'я: ")
+print("Привіт,", name)</code></div>
+
+    <!-- 1.10 Коментарі -->
+    <h3 id="t1-10" style="text-decoration: underline;">1.10 Коментарі</h3>
+    <p>Коментарі — це пояснення коду.</p>
+    <ul>
+        <li>Однорядкові — <code>#</code></li>
+        <li>Багаторядкові — <code>""" ... """</code></li>
+    </ul>
+    <div class="code-block"><code># Це однорядковий коментар
+
+"""
+Це
+багаторядковий
+коментар
+"""</code></div>
+
+    <!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 1</button>
+</section>
+
+<section class="theory-section" id="topic2">
+
+    <h2 style="text-align:center;">ТЕМА 2: Операції та структури даних у Python</h2>
+    <p>Python має потужні інструменти для роботи з даними — від простих операторів до складних структур (списки, словники). У цій темі ти навчишся управляти інформацією так, як це роблять професійні програмісти.</p>
+
+    <!-- 2.1 Арифметичні оператори -->
+    <h3 id="t2-1" style="text-decoration: underline;">2.1 Арифметичні оператори</h3>
+    <ul>
+        <li>+ додавання</li>
+        <li>- віднімання</li>
+        <li>* множення</li>
+        <li>/ ділення (float)</li>
+        <li>// цілочисельне ділення</li>
+        <li>% остача від ділення</li>
+        <li>** піднесення до степеня</li>
+    </ul>
+    <div class="code-block"><code>a = 10
+b = 3
+
+print(a + b)    # 13
+print(a / b)    # 3.3333
+print(a // b)   # 3
+print(a ** b)   # 1000</code></div>
+
+    <!-- 2.2 Логічні оператори -->
+    <h3 id="t2-2" style="text-decoration: underline;">2.2 Логічні оператори</h3>
+    <ul>
+        <li>and — І</li>
+        <li>or — Або</li>
+        <li>not — Заперечення</li>
+    </ul>
+    <div class="code-block"><code>x = 5
+print(x > 3 and x < 10)  # True
+print(x < 3 or x == 5)   # True
+print(not (x == 5))      # False</code></div>
+
+    <!-- 2.3 Оператори порівняння -->
+    <h3 id="t2-3" style="text-decoration: underline;">2.3 Оператори порівняння</h3>
+    <ul>
+        <li>== дорівнює</li>
+        <li>!= не дорівнює</li>
+        <li>> більше</li>
+        <li>< менше</li>
+        <li>>= більше або дорівнює</li>
+        <li>< = менше або дорівнює</li>
+    </ul>
+    <div class="code-block"><code>print(5 == 5)  # True
+print(5 != 3)  # True
+print(5 >= 10) # False</code></div>
+
+    <!-- 2.4 Списки -->
+    <h3 id="t2-4" style="text-decoration: underline;">2.4 Списки (list)</h3>
+    <p>Список — змінна колекція даних. Можна додавати, видаляти, змінювати та сортувати елементи.</p>
+    <div class="code-block"><code>numbers = [1, 2, 3, 4]
+numbers.append(5)   # додати
+numbers.remove(2)   # видалити 2
+numbers[0] = 10     # змінити елемент
+print(numbers)</code></div>
+
+    <!-- 2.5 Кортежі -->
+    <h3 id="t2-5" style="text-decoration: underline;">2.5 Кортежі (tuple)</h3>
+    <p>Кортеж — незмінний список. Добре підходить для даних, які не повинні змінюватись.</p>
+    <div class="code-block"><code>data = (10, 20, 30)
+print(data[1])  # 20</code></div>
+
+    <!-- 2.6 Набори -->
+    <h3 id="t2-6" style="text-decoration: underline;">2.6 Набори (set)</h3>
+    <p>Набір — колекція унікальних значень (без повторів).</p>
+    <div class="code-block"><code>nums = {1, 2, 3, 3, 2}
+print(nums)  # {1, 2, 3}
+
+a = {1, 2, 3}
+b = {3, 4}
+
+print(a | b)   # об’єднання → {1, 2, 3, 4}
+print(a & b)   # перетин → {3}</code></div>
+
+    <!-- 2.7 Словники -->
+    <h3 id="t2-7" style="text-decoration: underline;">2.7 Словники (dict)</h3>
+    <p>Словник — це пари ключ:значення. Добре підходить для зберігання структурованих даних.</p>
+    <div class="code-block"><code>person = {
+    "name": "Anna",
+    "age": 17
+}
+print(person["name"])  # Anna
+person["age"] = 18</code></div>
+
+    <!-- 2.8 Ітератори -->
+    <h3 id="t2-8" style="text-decoration: underline;">2.8 Ітератори</h3>
+    <div class="code-block"><code>my_list = [1, 2, 3]
+it = iter(my_list)
+print(next(it))  # 1
+print(next(it))  # 2</code></div>
+
+    <!-- 2.9 Вбудовані функції для структур даних -->
+    <h3 id="t2-9" style="text-decoration: underline;">2.9 Вбудовані функції для структур даних</h3>
+    <ul>
+        <li>len() — довжина</li>
+        <li>max() — найбільше</li>
+        <li>min() — найменше</li>
+        <li>sum() — сума</li>
+        <li>sorted() — сортування</li>
+    </ul>
+    <div class="code-block"><code>nums = [5, 1, 10]
+print(len(nums))      # 3
+print(sorted(nums))   # [1, 5, 10]</code></div>
+
+    <!-- 2.10 Спискові включення -->
+    <h3 id="t2-10" style="text-decoration: underline;">2.10 Спискові включення (list comprehension)</h3>
+    <div class="code-block"><code>numbers = [x * 2 for x in range(5)]
+print(numbers)  # [0, 2, 4, 6, 8]</code></div>
+
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 2</button>
+
+</section>
+
+<section class="theory-section" id="topic3">
+
+    <h2 style="text-align:center;">ТЕМА 3: Умови та розгалуження в Python</h2>
+    <p>Умови дозволяють програмі «приймати рішення» — виконувати певний код тільки тоді, коли певна умова істинна.</p>
+
+    <!-- 3.1 Оператор if -->
+    <h3 id="t3-1" style="text-decoration: underline;">3.1 Оператор if — основа умов</h3>
+    <p>Оператор if виконує блок коду, якщо умова має значення True.</p>
+    <ul>
+        <li>Умова завжди повертає True або False.</li>
+        <li>Відступи обов’язкові — блок коду під if має бути відступлений на 4 пробіли.</li>
+        <li>Якщо умова False, код під if пропускається.</li>
+    </ul>
+    <div class="code-block"><code>age = 18
+
+if age >= 18:
+    print("Ви повнолітні")</code></div>
+
+    <!-- 3.2 Оператор else -->
+    <h3 id="t3-2" style="text-decoration: underline;">3.2 Оператор else — дія, коли умова False</h3>
+    <p>else виконується тоді, коли всі попередні умови були False.</p>
+    <div class="code-block"><code>x = 5
+
+if x > 10:
+    print("Більше 10")
+else:
+    print("10 або менше")</code></div>
+
+    <!-- 3.3 Оператор elif -->
+    <h3 id="t3-3" style="text-decoration: underline;">3.3 Оператор elif — перевірка кількох умов</h3>
+    <p>Використовується, коли є кілька взаємовиключних варіантів. Виконується тільки перший elif, що є True.</p>
+    <div class="code-block"><code>score = 75
+
+if score >= 90:
+    print("A")
+elif score >= 80:
+    print("B")
+elif score >= 70:
+    print("C")
+else:
+    print("D")</code></div>
+
+    <!-- 3.4 Логічні оператори в умовах -->
+    <h3 id="t3-4" style="text-decoration: underline;">3.4 Умови з логічними операторами (and, or, not)</h3>
+    <p>Комбінуйте кілька умов для складнішої логіки.</p>
+    <div class="code-block"><code>age = 20
+has_id = True
+
+if age >= 18 and has_id:
+    print("Можна увійти")</code></div>
+
+    <!-- 3.5 Вкладені умови -->
+    <h3 id="t3-5" style="text-decoration: underline;">3.5 Вкладені умови (if всередині if)</h3>
+    <p>Можна будувати структури з кількома рівнями перевірок.</p>
+    <div class="code-block"><code>age = 20
+student = True
+
+if age >= 18:
+    if student:
+        print("Квиток зі знижкою")
+    else:
+        print("Звичайний квиток")</code></div>
+
+    <!-- 3.6 Порівняння рядків -->
+    <h3 id="t3-6" style="text-decoration: underline;">3.6 Порівняння рядків в умовах</h3>
+    <p>Рядки порівнюються за значенням. Регістр має значення: "Hello" ≠ "hello".</p>
+    <div class="code-block"><code>name = "Admin"
+
+if name.lower() == "admin":
+    print("Вхід дозволено")</code></div>
+
+    <!-- 3.7 Умови з числами -->
+    <h3 id="t3-7" style="text-decoration: underline;">3.7 Умови з числами (>, <, ==, !=, <=, >=)</h3>
+    <p>Числові порівняння — найпоширеніший варіант умов.</p>
+    <div class="code-block"><code>x = 15
+
+if 10 <= x <= 20:
+    print("Число в діапазоні 10–20")</code></div>
+
+    <!-- 3.8 Тернарний оператор -->
+    <h3 id="t3-8" style="text-decoration: underline;">3.8 Тернарний оператор — коротка форма if/else</h3>
+    <div class="code-block"><code>age = 17
+
+status = "Дорослий" if age >= 18 else "Неповнолітній"
+print(status)</code></div>
+
+    <!-- 3.9 match-case -->
+    <h3 id="t3-9" style="text-decoration: underline;">3.9 match-case (аналог switch у Python)</h3>
+    <p>Доступно з Python 3.10. Заміна багатьох elif для вибору з фіксованих значень.</p>
+    <div class="code-block"><code>day = 3
+match day:
+    case 1:
+        print("Понеділок")
+    case 2:
+        print("Вівторок")
+    case 3:
+        print("Середа")
+    case _:
+        print("Невідомий день")</code></div>
+
+    <!-- 3.10 Умови в одній лінії -->
+    <h3 id="t3-10" style="text-decoration: underline;">3.10 Умови в одній лінії</h3>
+    <div class="code-block"><code>x = 5
+if x > 0: print("Позитивне число")</code></div>
+
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 3</button>
+
+</section>
+
+<section class="theory-section" id="topic4">
+
+    <h2 style="text-align:center;">ТЕМА 4: Цикли в Python</h2>
+    <p>Цикли дозволяють виконувати один і той самий код багато разів — це основа автоматизації, обробки даних, роботи зі списками та файлами.</p>
+
+    <!-- 4.1 Цикл for -->
+    <h3 id="t4-1" style="text-decoration: underline;">4.1 Цикл for — перебір елементів колекцій</h3>
+    <p>Цикл for проходить по кожному елементу послідовності: список, рядок, кортеж, словник, множина, range().</p>
+    <div class="code-block"><code>fruits = ["apple", "banana", "cherry"]
+
+for f in fruits:
+    print(f)</code></div>
+
+    <!-- 4.2 Цикл for + range() -->
+    <h3 id="t4-2" style="text-decoration: underline;">4.2 Цикл for + range() — повтори певну кількість разів</h3>
+    <p>range() створює послідовність чисел:</p>
+    <ul>
+        <li>range(stop) → 0 … stop-1</li>
+        <li>range(start, stop)</li>
+        <li>range(start, stop, step)</li>
+    </ul>
+    <div class="code-block"><code>for i in range(5):
+    print(i)</code></div>
+
+    <!-- 4.3 Перебір рядків -->
+<h3 id="t4-3" style="text-decoration: underline;">4.3 Перебір рядків циклом for</h3>
+<p>
+У Python рядок є послідовністю символів. Це означає, що його можна перебирати
+циклом <b>for</b>, отримуючи кожен символ окремо.  
+Такий перебір зручно використовувати для аналізу тексту, підрахунку символів,
+фільтрації, пошуку тощо.
+</p>
+
+<div class="code-block"><code>
+text = "Hello"
+
+for char in text:
+    print(char)
+</code></div>
+
+<!-- 4.4 Перебір словника -->
+<h3 id="t4-4" style="text-decoration: underline;">4.4 Перебір словника</h3>
+<p>
+Словник (dict) зберігає дані у форматі <b>ключ: значення</b>.  
+Через цикл <b>for</b> ми можемо отримувати:
+</p>
+
+<ul>
+<li><b>лише ключі</b></li>
+<li><b>лише значення</b></li>
+<li><b>пари ключ–значення</b> (через .items())</li>
+</ul>
+
+<div class="code-block"><code>
+mydict = {"name": "Alice", "age": 25}
+
+# Ключі
+for key in mydict:
+    print(key)
+
+# Значення
+for value in mydict.values():
+    print(value)
+
+# Ключ + значення
+for key, value in mydict.items():
+    print(key, value)
+</code></div>
+
+<!-- 4.5 Цикл while -->
+<h3 id="t4-5" style="text-decoration: underline;">4.5 Цикл while — виконується, поки умова True</h3>
+<p>
+Цикл <b>while</b> повторює блок коду доти, доки вказана умова залишається істинною.
+Важливо змінювати змінні всередині циклу, щоб уникнути нескінченного виконання.
+</p>
+
+<div class="code-block"><code>
+x = 1
+
+while x <= 5:
+    print(x)
+    x += 1
+</code></div>
+
+<!-- 4.6 Нескінчений цикл -->
+<h3 id="t4-6" style="text-decoration: underline;">4.6 Нескінчений цикл (while True)</h3>
+<p>
+Нескінченний цикл — це цикл, який ніколи самостійно не завершується.  
+Найчастіше використовується у програмах, які повинні постійно чекати на введення
+користувача або події.  
+Вихід із такого циклу зазвичай роблять через <b>break</b>.
+</p>
+
+<div class="code-block"><code>
+while True:
+    cmd = input("Введіть команду: ")
+    if cmd == "exit":
+        break
+</code></div>
+
+<!-- 4.7 break -->
+<h3 id="t4-7" style="text-decoration: underline;">4.7 break — зупиняє цикл повністю</h3>
+<p>
+Оператор <b>break</b> миттєво завершує виконання циклу (for або while),  
+незалежно від того, чи виконалися всі ітерації.  
+Зручно використовувати при пошуку або для дострокового завершення.
+</p>
+
+<div class="code-block"><code>
+for i in range(10):
+    if i == 5:
+        break
+    print(i)
+</code></div>
+
+<!-- 4.8 continue -->
+<h3 id="t4-8" style="text-decoration: underline;">4.8 continue — пропускає ітерацію</h3>
+<p>
+Оператор <b>continue</b> пропускає поточну ітерацію циклу і переходить до наступної.  
+Зручно, коли потрібно пропустити певні значення без зупинки циклу.
+</p>
+
+<div class="code-block"><code>
+for i in range(5):
+    if i == 2:
+        continue
+    print(i)
+</code></div>
+
+<!-- 4.9 else після циклу -->
+<h3 id="t4-9" style="text-decoration: underline;">4.9 else після циклу</h3>
+<p>
+У Python цикл <b>for</b> або <b>while</b> може мати блок <b>else</b>.  
+Він виконається ТІЛЬКИ якщо цикл завершився природно (не через break).  
+Це зручно при пошуку значень — можна повідомити, що елемент не знайдено.
+</p>
+
+<div class="code-block"><code>
+for i in range(5):
+    print(i)
+else:
+    print("Цикл завершено")
+</code></div>
+
+<!-- 4.10 Вкладені цикли -->
+<h3 id="t4-10" style="text-decoration: underline;">4.10 Вкладені цикли</h3>
+<p>
+Вкладений цикл — це цикл всередині іншого циклу.  
+Використовується для роботи з матрицями, таблицями, багатовимірними структурами
+даних або для подвійних переборів (наприклад, комбінацій).
+</p>
+
+<div class="code-block"><code>
+for i in range(3):
+    for j in range(3):
+        print(i, j)
+</code></div>
+
+        <!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 4</button>
+
+</section>
+
+<section class="theory-section" id="topic5">
+
+    <h2 style="text-align:center;">ТЕМА 5: Функції в Python</h2>
+    <p>Функції дозволяють структурувати код, робити його повторно використовуваним та зрозумілішим.</p>
+
+    <!-- 5.1 Створення функції -->
+<h3 id="t5-1" style="text-decoration: underline;">5.1 Створення функції</h3>
+<p>
+У Python функції створюють за допомогою ключового слова <code>def</code>.  
+Функція виконує блок коду, який запускається лише після виклику.  
+Назви функцій пишуть у стилі <b>snake_case</b>.  
+Код усередині функції обов’язково має відступ 4 пробіли.
+</p>
+<div class="code-block"><code>def greet():
+    """Проста функція, яка нічого не приймає і лише друкує текст."""
+    print("Привіт, Python!")
+
+greet()  # виклик функції
+</code></div>
+
+
+<!-- 5.2 Функція з параметрами -->
+<h3 id="t5-2" style="text-decoration: underline;">5.2 Функція з параметрами</h3>
+<p>
+Параметри дозволяють передавати дані всередину функції.  
+Функція може використовувати їх у своїх обчисленнях.
+</p>
+<div class="code-block"><code>def greet(name):
+    """Функція приймає одне значення — ім’я."""
+    print(f"Привіт, {name}!")
+
+greet("Alice")
+greet("Bob")
+</code></div>
+
+
+<!-- 5.3 Функція з поверненням значення -->
+<h3 id="t5-3" style="text-decoration: underline;">5.3 Функція з поверненням значення</h3>
+<p>
+Функція може повернути результат роботи за допомогою <code>return</code>.  
+Після return виконання функції зупиняється.
+</p>
+<div class="code-block"><code>def add(a, b):
+    """Повертає суму двох чисел."""
+    return a + b
+
+result = add(5, 3)
+print(result)  # 8
+</code></div>
+
+
+<!-- 5.4 Значення за замовчуванням -->
+<h3 id="t5-4" style="text-decoration: underline;">5.4 Значення за замовчуванням (default)</h3>
+<p>
+Значення за замовчуванням використовується, якщо аргумент не передали.  
+Це зручно для необов’язкових параметрів.
+</p>
+<div class="code-block"><code>def greet(name="Гість"):
+    """Якщо ім'я не передано — використовується 'Гість'."""
+    print(f"Привіт, {name}!")
+
+greet()        # Привіт, Гість!
+greet("Alice") # Привіт, Alice!
+</code></div>
+
+
+<!-- 5.5 Функції з необмеженою кількістю аргументів (*args) -->
+<h3 id="t5-5" style="text-decoration: underline;">5.5 Функції з необмеженою кількістю аргументів (*args)</h3>
+<p>
+<code>*args</code> дозволяє передати у функцію будь-яку кількість позиційних аргументів.  
+Всередині <code>args</code> — це кортеж.
+</p>
+<div class="code-block"><code>def sum_all(*args):
+    """Підсумовує будь-яку кількість чисел."""
+    total = 0
+    for num in args:
+        total += num
+    return total
+
+print(sum_all(1, 2, 3, 4))  # 10
+</code></div>
+
+
+<!-- 5.6 Функції з ключовими аргументами (**kwargs) -->
+<h3 id="t5-6" style="text-decoration: underline;">5.6 Функції з ключовими аргументами (**kwargs)</h3>
+<p>
+<code>**kwargs</code> дозволяє передавати необмежену кількість параметрів у вигляді  
+"ключ = значення". Усередині — це словник.
+</p>
+<div class="code-block"><code>def greet_all(**kwargs):
+    """Перебирає всі ключові аргументи."""
+    for name, msg in kwargs.items():
+        print(f"{name}: {msg}")
+
+greet_all(Alice="Привіт!", Bob="Здрастуйте!")
+</code></div>
+
+
+<!-- 5.7 Анонімні функції (lambda) -->
+<h3 id="t5-7" style="text-decoration: underline;">5.7 Анонімні функції (lambda)</h3>
+<p>
+<code>lambda</code> — маленька функція без назви.  
+Зазвичай використовується для коротких одноразових операцій.
+</p>
+<div class="code-block"><code>square = lambda x: x**2
+print(square(5))  # 25
+</code></div>
+
+
+<!-- 5.8 Вбудовані функції Python -->
+<h3 id="t5-8" style="text-decoration: underline;">5.8 Вбудовані функції Python</h3>
+<p>
+Python має багато корисних вбудованих функцій:  
+<code>len(), sum(), max(), min(), sorted()</code> та інші.
+</p>
+<div class="code-block"><code>nums = [1, 2, 3, 4, 5]
+
+print(len(nums))  # 5
+print(sum(nums))  # 15
+print(max(nums))  # 5
+print(min(nums))  # 1
+</code></div>
+
+
+<!-- 5.9 Рекурсія -->
+<h3 id="t5-9" style="text-decoration: underline;">5.9 Рекурсія</h3>
+<p>
+Рекурсія — це коли функція викликає сама себе.  
+Важливо: завжди має бути базова умова, щоб уникнути нескінченності.
+</p>
+<div class="code-block"><code>def factorial(n):
+    """Обчислення факторіала через рекурсію."""
+    if n == 0:
+        return 1
+    return n * factorial(n-1)
+
+print(factorial(5))  # 120
+</code></div>
+
+
+<!-- 5.10 Документація функцій (docstring) -->
+<h3 id="t5-10" style="text-decoration: underline;">5.10 Документація функцій (docstring)</h3>
+<p>
+Docstring — це текстова документація всередині функції.  
+Використовується для пояснень роботи та параметрів.  
+Переглядається через <code>help()</code>.
+</p>
+<div class="code-block"><code>def greet(name):
+    """
+    Функція вітає користувача за іменем.
+
+    Параметри:
+        name (str): Ім'я користувача
+    """
+    print(f"Привіт, {name}!")
+
+help(greet)  # покаже документацію
+</code></div>
+
+
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 5</button>
+
+</section>
+
+<section class="theory-section" id="topic6">
+
+    <h2 style="text-align:center;">ТЕМА 6: Модулі та імпорт в Python</h2>
+    <p>Модулі дозволяють організовувати код у файли, робити його повторно використовуваним та легше підтримуваним.</p>
+
+    <!-- 6.1 Що таке модуль -->
+<h3 id="t6-1" style="text-decoration: underline;">6.1 Що таке модуль</h3>
+<p>
+Модуль — це будь-який Python-файл (*.py*), який містить змінні, функції або класи.  
+Його призначення — розділяти код на логічні частини та повторно використовувати функції у різних програмах.  
+Завдяки модулям код стає охайнішим, легшим для тестування та зрозумілішим.
+</p>
+<div class="code-block"><code># файл math_utils.py
+def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+</code></div>
+
+
+<!-- 6.2 Імпорт модуля -->
+<h3 id="t6-2" style="text-decoration: underline;">6.2 Імпорт модуля</h3>
+<p>
+Щоб скористатися функціями з іншого файлу, його потрібно імпортувати.  
+Імпорт завантажує модуль у програму і дає доступ до всіх його об’єктів.
+</p>
+<div class="code-block"><code>import math_utils
+
+print(math_utils.add(5, 3))      # 8
+print(math_utils.subtract(5, 3)) # 2
+</code></div>
+
+
+<!-- 6.3 Імпорт окремих функцій -->
+<h3 id="t6-3" style="text-decoration: underline;">6.3 Імпорт окремих функцій</h3>
+<p>
+Можна імпортувати не весь модуль, а лише необхідні функції.  
+Це робить код коротшим і зручнішим.
+</p>
+<div class="code-block"><code>from math_utils import add
+
+print(add(10, 5))  # 15
+</code></div>
+
+
+<!-- 6.4 Імпорт з псевдонімом (alias) -->
+<h3 id="t6-4" style="text-decoration: underline;">6.4 Імпорт з псевдонімом (alias)</h3>
+<p>
+Псевдонім дозволяє скоротити ім’я модуля, що зручно у великих проєктах.  
+Зазвичай використовують короткі позначення, наприклад <code>np</code> для numpy.
+</p>
+<div class="code-block"><code>import math_utils as mu
+
+print(mu.add(2, 3))  # 5
+</code></div>
+
+
+<!-- 6.5 Вбудовані модулі Python -->
+<h3 id="t6-5" style="text-decoration: underline;">6.5 Вбудовані модулі Python</h3>
+<p>
+Python містить сотні стандартних модулів, доступних без встановлення:  
+<code>math</code>, <code>random</code>, <code>os</code>, <code>datetime</code>, <code>json</code> та інші.  
+Вони допомагають працювати з математикою, файлами, системою, датами та випадковістю.
+</p>
+<div class="code-block"><code>import math
+import random
+
+print(math.sqrt(16))       # 4.0
+print(random.randint(1,5)) # випадкове число від 1 до 5
+</code></div>
+
+
+<!-- 6.6 Модуль datetime -->
+<h3 id="t6-6" style="text-decoration: underline;">6.6 Модуль datetime</h3>
+<p>
+Модуль <code>datetime</code> дозволяє працювати з датами та часом:  
+поточний час, форматування дати, різниця між датами тощо.
+</p>
+<div class="code-block"><code>from datetime import datetime
+
+now = datetime.now()
+print(now)        # поточна дата та час
+print(now.year)   # рік
+print(now.month)  # місяць
+print(now.day)    # день
+</code></div>
+
+
+<!-- 6.7 Модуль os -->
+<h3 id="t6-7" style="text-decoration: underline;">6.7 Модуль os</h3>
+<p>
+Модуль <code>os</code> дозволяє взаємодіяти з операційною системою:  
+керувати файлами, папками, шляхами, отримувати поточну директорію.
+</p>
+<div class="code-block"><code>import os
+
+print(os.getcwd())        # поточна директорія
+os.mkdir("test_folder")   # створити папку
+</code></div>
+
+
+<!-- 6.8 Модуль random -->
+<h3 id="t6-8" style="text-decoration: underline;">6.8 Модуль random</h3>
+<p>
+Модуль <code>random</code> використовується для генерації випадкових чисел,  
+вибору випадкового елемента та перемішування списків.
+</p>
+<div class="code-block"><code>import random
+
+print(random.randint(1, 10))        # випадкове число від 1 до 10
+print(random.choice(["a","b","c"])) # випадковий елемент
+nums = [1,2,3]
+random.shuffle(nums)                 # перемішування списку
+print(nums)
+</code></div>
+
+
+<!-- 6.9 Створення власного пакета -->
+<h3 id="t6-9" style="text-decoration: underline;">6.9 Створення власного пакета</h3>
+<p>
+Пакет — це папка, що містить кілька модулів та файл <code>__init__.py</code>.  
+Він дозволяє структурувати великий проєкт та імпортувати модулі з підпакетів.
+</p>
+<div class="code-block"><code>mypackage/
+    __init__.py
+    math_utils.py
+    string_utils.py
+
+# Виклик функцій з пакета
+from mypackage.math_utils import add
+print(add(2,3))  # 5
+</code></div>
+
+
+<!-- 6.10 Імпорт всіх функцій з модуля -->
+<h3 id="t6-10" style="text-decoration: underline;">6.10 Імпорт всіх функцій з модуля</h3>
+<p>
+Імпорт через <code>*</code> завантажує всі функції модуля.  
+Але це не рекомендується — може створити конфлікт назв та ускладнити розуміння коду.
+</p>
+<div class="code-block"><code>from math_utils import *
+
+print(add(4,5))       # 9
+print(subtract(10,3)) # 7
+</code></div>
+
+
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 6</button>
+
+</section>
+
+<section class="theory-section" id="topic7">
+
+    <h2 style="text-align:center;">ТЕМА 7: Файли та введення/виведення (I/O) в Python</h2>
+    <p>Python дозволяє читати і записувати дані у файли, працювати з текстовими та бінарними файлами, а також отримувати ввід від користувача через клавіатуру.</p>
+
+    <!-- 7.1 Ввід від користувача -->
+<h3 id="t7-1" style="text-decoration: underline;">7.1 Ввід від користувача</h3>
+<p>
+Функція <code>input()</code> зупиняє програму та чекає введення користувача з клавіатури.  
+Введене завжди повертається як рядок (<code>str</code>).
+</p>
+<div class="code-block"><code>name = input("Введіть своє ім'я: ")
+print("Привіт,", name)
+</code></div>
+
+<!-- 7.2 Вивід на екран -->
+<h3 id="t7-2" style="text-decoration: underline;">7.2 Вивід на екран</h3>
+<p>
+Функція <code>print()</code> виводить текст, числа або змінні на екран.  
+Можна форматувати рядки через f-рядки або конкатенацію.
+</p>
+<div class="code-block"><code>age = 20
+print("Вік:", age)
+print(f"Вік користувача: {age}")
+</code></div>
+
+<!-- 7.3 Відкриття файлу -->
+<h3 id="t7-3" style="text-decoration: underline;">7.3 Відкриття файлу</h3>
+<p>
+Файл відкривається через <code>open(filename, mode)</code>, де <code>mode</code> визначає режим:  
+<code>"r"</code> – читання, <code>"w"</code> – запис (перезапис), <code>"a"</code> – додавання.
+</p>
+<div class="code-block"><code>file = open("example.txt", "w")
+file.write("Привіт, файл!\n")
+file.close()
+</code></div>
+
+<!-- 7.4 Читання файлу -->
+<h3 id="t7-4" style="text-decoration: underline;">7.4 Читання файлу</h3>
+<p>
+Можна прочитати весь файл одразу через <code>read()</code>, що повертає рядок із всім вмістом.
+</p>
+<div class="code-block"><code>file = open("example.txt", "r")
+content = file.read()
+print(content)
+file.close()
+</code></div>
+
+<!-- 7.5 Читання файлу рядок за рядком -->
+<h3 id="t7-5" style="text-decoration: underline;">7.5 Читання файлу рядок за рядком</h3>
+<p>
+Зручно для великих файлів. Цикл перебирає рядки, можна застосувати <code>strip()</code> для видалення пробілів і символів нового рядка.
+</p>
+<div class="code-block"><code>with open("example.txt", "r") as file:
+    for line in file:
+        print(line.strip())
+</code></div>
+
+<!-- 7.6 Запис у файл -->
+<h3 id="t7-6" style="text-decoration: underline;">7.6 Запис у файл</h3>
+<p>
+Метод <code>writelines()</code> записує список рядків у файл.  
+При цьому кожен рядок повинен закінчуватися символом нового рядка <code>\n</code>.
+</p>
+<div class="code-block"><code>lines = ["Перший рядок\n", "Другий рядок\n"]
+
+with open("example.txt", "w") as file:
+    file.writelines(lines)
+</code></div>
+
+<!-- 7.7 Додаткові параметри відкриття файлу -->
+<h3 id="t7-7" style="text-decoration: underline;">7.7 Додаткові параметри відкриття файлу</h3>
+<p>
+Режим <code>"a"</code> додає рядки в кінець файлу, не перезаписуючи існуючий вміст.  
+Також існують режим <code>"rb"</code> та <code>"wb"</code> для бінарного читання/запису.
+</p>
+<div class="code-block"><code>with open("example.txt", "a") as file:
+    file.write("Ще один рядок\n")
+</code></div>
+
+<!-- 7.8 Робота з бінарними файлами -->
+<h3 id="t7-8" style="text-decoration: underline;">7.8 Робота з бінарними файлами</h3>
+<p>
+Бінарні файли містять дані у вигляді байтів. Використовуйте <code>"rb"</code> і <code>"wb"</code>.  
+Так можна працювати з зображеннями, аудіо та іншими непоточними даними.
+</p>
+<div class="code-block"><code>with open("example.bin", "wb") as file:
+    file.write(b'\x00\x01\x02\x03')
+    
+with open("example.bin", "rb") as file:
+    data = file.read()
+    print(data)
+</code></div>
+
+<!-- 7.9 Перевірка наявності файлу -->
+<h3 id="t7-9" style="text-decoration: underline;">7.9 Перевірка наявності файлу</h3>
+<p>
+Модуль <code>os</code> дозволяє перевіряти, чи існує файл або папка, перед тим як виконувати операції.
+</p>
+<div class="code-block"><code>import os
+
+if os.path.exists("example.txt"):
+    print("Файл існує")
+else:
+    print("Файл не знайдено")
+</code></div>
+
+<!-- 7.10 Видалення та перейменування файлів -->
+<h3 id="t7-10" style="text-decoration: underline;">7.10 Видалення та перейменування файлів</h3>
+<p>
+Модуль <code>os</code> дозволяє:  
+- <code>os.rename()</code> – перейменування файлу  
+- <code>os.remove()</code> – видалення файлу
+</p>
+<div class="code-block"><code>import os
+
+os.rename("example.txt", "new_example.txt")
+os.remove("new_example.txt")
+</code></div>
+
+
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 7</button>
+
+</section>
+
+<section class="theory-section" id="topic8">
+
+    <h2 style="text-align:center;">ТЕМА 8: Об’єктно-орієнтоване програмування (ООП) в Python</h2>
+    <p>ООП дозволяє створювати класи, об’єкти і використовувати такі концепції, як наслідування, поліморфізм, інкапсуляція.</p>
+
+    <!-- 8.1 Клас та об’єкт -->
+<h3 id="t8-1" style="text-decoration: underline;">8.1 Клас та об’єкт</h3>
+<p>
+Клас – це шаблон для створення об’єктів. Об’єкт – конкретний екземпляр класу.  
+Об’єкти можуть мати атрибути (дані) та методи (функції).
+</p>
+<div class="code-block"><code>class Person:
+    def __init__(self, name, age):
+        self.name = name  # атрибут об’єкта
+        self.age = age
+
+# створення об’єкта
+person1 = Person("Alice", 25)
+print(person1.name)  # Alice
+print(person1.age)   # 25
+</code></div>
+
+<!-- 8.2 Метод __init__ -->
+<h3 id="t8-2" style="text-decoration: underline;">8.2 Метод __init__</h3>
+<p>
+Метод <code>__init__</code> викликається автоматично під час створення об’єкта.  
+Він використовується для ініціалізації атрибутів.
+</p>
+<div class="code-block"><code>class Car:
+    def __init__(self, brand, model):
+        self.brand = brand
+        self.model = model
+
+car1 = Car("Toyota", "Corolla")
+print(car1.brand)  # Toyota
+print(car1.model)  # Corolla
+</code></div>
+
+<!-- 8.3 Атрибути об’єкта -->
+<h3 id="t8-3" style="text-decoration: underline;">8.3 Атрибути об’єкта</h3>
+<p>
+Атрибути зберігають стан об’єкта. Можна додавати атрибути після створення об’єкта.
+</p>
+<div class="code-block"><code>class Dog:
+    def __init__(self, name, breed):
+        self.name = name
+        self.breed = breed
+
+dog1 = Dog("Buddy", "Labrador")
+print(dog1.name)   # Buddy
+print(dog1.breed)  # Labrador
+
+# Додавання нового атрибута
+dog1.age = 3
+print(dog1.age)    # 3
+</code></div>
+
+<!-- 8.4 Методи об’єкта -->
+<h3 id="t8-4" style="text-decoration: underline;">8.4 Методи об’єкта</h3>
+<p>
+Методи – це функції, що належать об’єкту. Вони можуть використовувати або змінювати атрибути.
+</p>
+<div class="code-block"><code>class Dog:
+    def __init__(self, name):
+        self.name = name
+    
+    def bark(self):
+        print(f"{self.name} гавкає!")
+
+dog1 = Dog("Buddy")
+dog1.bark()  # Buddy гавкає!
+</code></div>
+
+<!-- 8.5 Наслідування -->
+<h3 id="t8-5" style="text-decoration: underline;">8.5 Наслідування</h3>
+<p>
+Клас-нащадок успадковує атрибути та методи батьківського класу.  
+Можна додавати нові методи або перевизначати існуючі.
+</p>
+<div class="code-block"><code>class Animal:
+    def eat(self):
+        print("Тварина їсть")
+
+class Cat(Animal):  # наслідування
+    def meow(self):
+        print("Кіт нявкає")
+
+cat1 = Cat()
+cat1.eat()   # успадкований метод
+cat1.meow()  # власний метод
+</code></div>
+
+<!-- 8.6 Поліморфізм -->
+<h3 id="t8-6" style="text-decoration: underline;">8.6 Поліморфізм</h3>
+<p>
+Поліморфізм – здатність об’єктів різних класів відповідати на один і той же метод.  
+Це дозволяє працювати з різними типами об’єктів однаково.
+</p>
+<div class="code-block"><code>class Dog:
+    def sound(self):
+        print("Гав-гав")
+
+class Cat:
+    def sound(self):
+        print("Няв")
+
+animals = [Dog(), Cat()]
+for animal in animals:  # виклик одного методу для різних об’єктів
+    animal.sound()
+</code></div>
+
+<!-- 8.7 Інкапсуляція -->
+<h3 id="t8-7" style="text-decoration: underline;">8.7 Інкапсуляція</h3>
+<p>
+Інкапсуляція приховує дані об’єкта, роблячи їх недоступними ззовні.  
+Приватні атрибути починаються з <code>__</code>. Доступ до них через методи класу.
+</p>
+<div class="code-block"><code>class Person:
+    def __init__(self, name, age):
+        self.__name = name  # приватний атрибут
+        self.age = age
+
+    def get_name(self):
+        return self.__name  # доступ через метод
+
+person1 = Person("Alice", 25)
+print(person1.get_name())  # Alice
+# print(person1.__name) -> помилка!
+</code></div>
+
+<!-- 8.8 Метод __str__ -->
+<h3 id="t8-8" style="text-decoration: underline;">8.8 Метод __str__</h3>
+<p>
+Метод <code>__str__</code> дозволяє виводити об’єкт у вигляді зрозумілого рядка,  
+замість стандартного <code>&lt;object object at ...&gt;</code>.
+</p>
+<div class="code-block"><code>class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def __str__(self):
+        return f"{self.name}, {self.age} років"
+
+person1 = Person("Alice", 25)
+print(person1)  # Alice, 25 років
+</code></div>
+
+<!-- 8.9 Статичні та класові методи -->
+<h3 id="t8-9" style="text-decoration: underline;">8.9 Статичні та класові методи</h3>
+<p>
+<code>@staticmethod</code> – метод без доступу до об’єкта чи класу, викликається через клас.  
+<code>@classmethod</code> – метод, що отримує клас як перший аргумент <code>cls</code>.
+</p>
+<div class="code-block"><code>class Math:
+    name = "Math"
+    
+    @staticmethod
+    def add(a, b):
+        return a + b
+    
+    @classmethod
+    def info(cls):
+        print(f"Це клас {cls.name}")
+
+print(Math.add(5, 3))  # 8
+Math.info()            # Це клас Math
+</code></div>
+
+<!-- 8.10 Видалення об’єктів та атрибутів -->
+<h3 id="t8-10" style="text-decoration: underline;">8.10 Видалення об’єктів та атрибутів</h3>
+<p>
+За допомогою <code>del</code> можна видаляти атрибути об’єкта або сам об’єкт.  
+Якщо об’єкт видаляється, всі посилання на нього втрачаються.
+</p>
+<div class="code-block"><code>class Person:
+    def __init__(self, name):
+        self.name = name
+
+person1 = Person("Alice")
+del person1.name  # видалення атрибута
+# del person1      # видалення об’єкта
+</code></div>
+
+
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 8</button>
+
+</section>
+
+<section class="theory-section" id="topic9">
+
+    <h2 style="text-align:center;">ТЕМА 9: Модулі, пакети та бібліотеки в Python</h2>
+    <p>Модулі та пакети дозволяють організовувати код, робити його повторно використовуваним та структурованим, а бібліотеки надають готові функції та класи для різних задач.</p>
+
+    <!-- 9.1 Модуль у Python -->
+<h3 id="t9-1" style="text-decoration: underline;">9.1 Модуль у Python</h3>
+<p>
+Модуль — це файл з розширенням <code>.py</code>, що містить Python-код (функції, змінні, класи),  
+який можна повторно використовувати в інших програмах.  
+Використання модулів дозволяє структурувати код і уникати дублювання.
+</p>
+<div class="code-block"><code># файл my_module.py
+def greet(name):
+    return f"Привіт, {name}!"
+
+def add(a, b):
+    return a + b
+
+PI = 3.14159</code></div>
+
+<div class="code-block"><code># головний файл
+import my_module
+
+print(my_module.greet("Alice"))   # Привіт, Alice!
+print(my_module.add(5, 3))        # 8
+print(my_module.PI)               # 3.14159</code></div>
+
+<!-- 9.2 Імпорт модулів -->
+<h3 id="t9-2" style="text-decoration: underline;">9.2 Імпорт модулів</h3>
+<p>
+Для використання модуля в іншому файлі застосовується ключове слово <code>import</code>.  
+Можна імпортувати весь модуль або окремі елементи.
+</p>
+<div class="code-block"><code>from my_module import greet, add
+
+print(greet("Bob"))  # Привіт, Bob!
+print(add(10, 7))    # 17</code></div>
+
+<!-- 9.3 Стандартна бібліотека Python -->
+<h3 id="t9-3" style="text-decoration: underline;">9.3 Стандартна бібліотека Python</h3>
+<p>
+Python постачає велику стандартну бібліотеку, що включає модулі для роботи з файлами, датами, 
+математикою, випадковими числами, системними операціями та інше.
+</p>
+<div class="code-block"><code>import os
+import math
+import random
+
+print(os.getcwd())           # поточна директорія
+print(math.sqrt(25))         # 5.0
+print(random.randint(1, 10)) # випадкове число від 1 до 10</code></div>
+
+<!-- 9.4 Пакети -->
+<h3 id="t9-4" style="text-decoration: underline;">9.4 Пакети</h3>
+<p>
+Пакет — це каталог, що містить модулі та файл <code>__init__.py</code>.  
+Пакети дозволяють організувати модулі у ієрархічну структуру.
+</p>
+<div class="code-block"><code># структура
+my_package/
+│
+├─ __init__.py
+├─ module1.py
+└─ module2.py
+
+# головний файл
+from my_package.module1 import func1
+func1()</code></div>
+
+<!-- 9.5 Встановлення зовнішніх бібліотек -->
+<h3 id="t9-5" style="text-decoration: underline;">9.5 Встановлення зовнішніх бібліотек</h3>
+<p>
+Бібліотеки, яких немає у стандартній бібліотеці, можна встановлювати через <code>pip</code>.
+</p>
+<div class="code-block"><code># приклад з бібліотекою requests
+import requests
+
+response = requests.get("https://api.github.com")
+print(response.status_code)
+print(response.json())</code></div>
+
+<!-- 9.6 Використання бібліотеки NumPy -->
+<h3 id="t9-6" style="text-decoration: underline;">9.6 Використання бібліотеки NumPy</h3>
+<p>
+NumPy — бібліотека для наукових обчислень. Основна структура даних — масив <code>ndarray</code>.
+</p>
+<div class="code-block"><code>import numpy as np
+
+arr = np.array([1, 2, 3, 4])
+print(arr * 2)          # [2 4 6 8]
+print(arr + 5)          # [6 7 8 9]
+print(np.mean(arr))     # 2.5</code></div>
+
+<!-- 9.7 Використання бібліотеки Pandas -->
+<h3 id="t9-7" style="text-decoration: underline;">9.7 Використання бібліотеки Pandas</h3>
+<p>
+Pandas використовується для роботи з таблицями і серіями даних.
+</p>
+<div class="code-block"><code>import pandas as pd
+
+data = {'Name': ['Alice', 'Bob'], 'Age': [25, 30]}
+df = pd.DataFrame(data)
+
+print(df)
+print(df['Name'])  # стовпець 'Name'
+print(df.iloc[0])  # перший рядок</code></div>
+
+<!-- 9.8 Використання бібліотеки Matplotlib -->
+<h3 id="t9-8" style="text-decoration: underline;">9.8 Використання бібліотеки Matplotlib</h3>
+<p>
+Matplotlib — бібліотека для візуалізації даних.
+</p>
+<div class="code-block"><code>import matplotlib.pyplot as plt
+
+x = [1, 2, 3, 4]
+y = [10, 20, 25, 30]
+
+plt.plot(x, y, marker='o')
+plt.title("Графік")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.grid(True)
+plt.show()</code></div>
+
+<!-- 9.9 Використання бібліотеки Requests -->
+<h3 id="t9-9" style="text-decoration: underline;">9.9 Використання бібліотеки Requests</h3>
+<p>
+Requests спрощує роботу з HTTP-запитами.
+</p>
+<div class="code-block"><code>import requests
+
+response = requests.get("https://api.github.com")
+if response.status_code == 200:
+    data = response.json()
+    print(data)
+else:
+    print("Помилка запиту")</code></div>
+
+<!-- 9.10 Створення власного пакета -->
+<h3 id="t9-10" style="text-decoration: underline;">9.10 Створення власного пакета</h3>
+<p>
+Власний пакет дозволяє організувати модулі у проекті.  
+Структура: каталог з <code>__init__.py</code> та модулями.  
+Імпорт з пакета можна здійснювати через точкову нотацію.
+</p>
+<div class="code-block"><code># структура
+my_package/
+├─ __init__.py
+├─ greetings.py
+
+# greetings.py
+def hello(name):
+    return f"Hello, {name}!"
+
+# головний файл
+from my_package.greetings import hello
+print(hello("Alice"))  # Hello, Alice!</code></div>
+
+
+
+<!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 9</button>
+
+</section>
+
+<section class="theory-section" id="topic10">
+
+    <h2 style="text-align:center;">ТЕМА 10: Робота з файлами та базами даних у Python</h2>
+    <p>Python дозволяє читати та записувати файли, працювати з текстовими, CSV, JSON файлами, а також підключатися до баз даних.</p>
+
+    <!-- 10.1 Робота з текстовими файлами — відкриття та закриття -->
+<h3 id="t10-1" style="text-decoration: underline;">10.1 Робота з текстовими файлами — відкриття та закриття</h3>
+<p>
+Текстові файли відкриваються за допомогою <code>open(filename, mode)</code>.  
+Режими: 'r' — читання, 'w' — запис, 'a' — додавання, 'x' — створення нового файлу.  
+Після роботи обов’язково закривати файл через <code>file.close()</code>.
+</p>
+<div class="code-block"><code># запис у файл
+file = open("example.txt", "w")
+file.write("Привіт, Python!\n")
+file.close()
+
+# читання з файлу
+file = open("example.txt", "r")
+content = file.read()
+print(content)
+file.close()</code></div>
+
+<!-- 10.2 Робота з файлами за допомогою with -->
+<h3 id="t10-2" style="text-decoration: underline;">10.2 Робота з файлами за допомогою with</h3>
+<p>
+Блок <code>with</code> забезпечує автоматичне закриття файлу.
+</p>
+<div class="code-block"><code>with open("example.txt", "r") as file:
+    content = file.read()
+    print(content)</code></div>
+
+<!-- 10.3 Читання файлів построчно -->
+<h3 id="t10-3" style="text-decoration: underline;">10.3 Читання файлів построчно</h3>
+<div class="code-block"><code>with open("example.txt", "r") as file:
+    for line in file:
+        print(line.strip())</code></div>
+
+<!-- 10.4 Запис у файл построчно -->
+<h3 id="t10-4" style="text-decoration: underline;">10.4 Запис у файл построчно</h3>
+<div class="code-block"><code>lines = ["Перша лінія\n", "Друга лінія\n", "Третя лінія\n"]
+with open("example.txt", "a") as file:
+    file.writelines(lines)</code></div>
+
+<!-- 10.5 Робота з CSV файлами -->
+<h3 id="t10-5" style="text-decoration: underline;">10.5 Робота з CSV файлами</h3>
+<div class="code-block"><code>import csv
+
+# запис у CSV
+with open("data.csv", "w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Name", "Age"])
+    writer.writerow(["Alice", 25])
+    writer.writerow(["Bob", 30])
+
+# читання CSV
+with open("data.csv", "r") as file:
+    reader = csv.reader(file)
+    for row in reader:
+        print(row)</code></div>
+
+<!-- 10.6 Робота з JSON файлами -->
+<h3 id="t10-6" style="text-decoration: underline;">10.6 Робота з JSON файлами</h3>
+<div class="code-block"><code>import json
+
+data = {"name": "Alice", "age": 25}
+
+# запис у JSON
+with open("data.json", "w") as file:
+    json.dump(data, file)
+
+# читання з JSON
+with open("data.json", "r") as file:
+    loaded_data = json.load(file)
+    print(loaded_data["name"])</code></div>
+
+<!-- 10.7 Робота з файлами Excel -->
+<h3 id="t10-7" style="text-decoration: underline;">10.7 Робота з файлами Excel</h3>
+<div class="code-block"><code>from openpyxl import Workbook
+
+wb = Workbook()
+ws = wb.active
+ws['A1'] = "Name"
+ws['B1'] = "Age"
+ws.append(["Alice", 25])
+ws.append(["Bob", 30])
+wb.save("data.xlsx")</code></div>
+
+<!-- 10.8 Підключення до SQLite бази даних -->
+<h3 id="t10-8" style="text-decoration: underline;">10.8 Підключення до SQLite бази даних</h3>
+<div class="code-block"><code>import sqlite3
+
+conn = sqlite3.connect("my_database.db")
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    age INTEGER
+)
+""")
+conn.commit()
+conn.close()</code></div>
+
+<!-- 10.9 Додавання та читання даних у базі -->
+<h3 id="t10-9" style="text-decoration: underline;">10.9 Додавання та читання даних у базі</h3>
+<div class="code-block"><code>conn = sqlite3.connect("my_database.db")
+cursor = conn.cursor()
+
+# додавання даних
+cursor.execute("INSERT INTO users (name, age) VALUES (?, ?)", ("Alice", 25))
+cursor.execute("INSERT INTO users (name, age) VALUES (?, ?)", ("Bob", 30))
+conn.commit()
+
+# читання даних
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+for row in rows:
+    print(row)
+
+conn.close()</code></div>
+
+<!-- 10.10 Обробка помилок при роботі з файлами та базами -->
+<h3 id="t10-10" style="text-decoration: underline;">10.10 Обробка помилок при роботі з файлами та базами</h3>
+<div class="code-block"><code>try:
+    with open("nonexistent.txt", "r") as file:
+        content = file.read()
+except FileNotFoundError:
+    print("Файл не знайдено!")
+
+try:
+    conn = sqlite3.connect("my_database.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM nonexistent_table")
+except sqlite3.Error as e:
+    print("Помилка бази даних:", e)
+finally:
+    conn.close()</code></div>
+
+
+
+    <!-- Кнопка тестування -->
+    <button class="test-btn" style="margin-top:20px;">Перейти до тестування за темою 10</button>
+
+</section>
+
+
+<script>
+
+
+// Генерація 100 анімованих зірок на фоні
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(star);
+}
+
+// Відкриття/закриття бічного меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+    sideMenu.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+    sideMenu.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+// Підменю "Курси" у боковому меню
+const menuToggles = document.querySelectorAll('.menu-toggle');
+menuToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentItem = toggle.parentElement;
+        parentItem.classList.toggle('active');
+    });
+});
+
+// Відкриття/закриття підтеми у правому меню
+const topicToggles = document.querySelectorAll('.topic-toggle');
+
+topicToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parentTopic = toggle.parentElement;
+
+        // Закриваємо інші відкриті теми
+        topicToggles.forEach(t => {
+            if (t !== toggle) {
+                t.parentElement.classList.remove('active');
+            }
+        });
+
+        // Відкриваємо або закриваємо поточну тему
+        parentTopic.classList.toggle('active');
+    });
+});
+
+// Кнопка входу
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', () => {
+    window.location.href = 'login.html';
+});
+
+</script>
+</body>
+</html>
