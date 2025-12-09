@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python - Теорія | CodeCraft</title>
+<title>CSS - Теорія | CodeCraft</title>
 
 <style>
 * {
@@ -1141,6 +1141,15 @@ topicToggles.forEach(toggle => {
 const loginBtn = document.getElementById('loginBtn');
 loginBtn.addEventListener('click', () => {
     window.location.href = 'login.html';
+});
+
+const buttons = document.querySelectorAll('.test-btn');
+
+buttons.forEach((btn, index) => {
+    const theme = index + 1; // 1,2,3,... по черзі
+    btn.addEventListener('click', () => {
+        window.location.href = `${theme}-Theme-CSS.html`;
+    });
 });
 
 </script>

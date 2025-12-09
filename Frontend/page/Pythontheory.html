@@ -608,11 +608,11 @@ td {
                     <li><a href="#t2-3">2.3. Оператори порівняння</a></li>
                     <li><a href="#t2-4">2.4. Списки (list)</a></li>
                     <li><a href="#t2-5">2.5. Кортежі (tuple)</a></li>
-                    <li><a href="#t2-5">2.6. Набори (set)</a></li>
-                    <li><a href="#t2-5">2.7. Словники (dict)</a></li>
-                    <li><a href="#t2-5">2.8. Ітератори</a></li>
-                    <li><a href="#t2-5">2.9. Вбудовані функції для структур даних</a></li>
-                    <li><a href="#t2-5">2.10. Спискові включення (list comprehension)</a></li>
+                    <li><a href="#t2-6">2.6. Набори (set)</a></li>
+                    <li><a href="#t2-7">2.7. Словники (dict)</a></li>
+                    <li><a href="#t2-8">2.8. Ітератори</a></li>
+                    <li><a href="#t2-9">2.9. Вбудовані функції для структур даних</a></li>
+                    <li><a href="#t2-10">2.10. Спискові включення (list comprehension)</a></li>
                 </ul>
             </li>
             
@@ -2313,6 +2313,18 @@ const loginBtn = document.getElementById('loginBtn');
 loginBtn.addEventListener('click', () => {
     window.location.href = 'login.html';
 });
+
+const buttons = document.querySelectorAll('.test-btn');
+
+buttons.forEach((btn, index) => {
+    const theme = index + 1; // 1,2,3,... по черзі
+    btn.addEventListener('click', () => {
+        window.location.href = `${theme}-Theme-Python.html`;
+    });
+});
+
+
+
 
 </script>
 </body>

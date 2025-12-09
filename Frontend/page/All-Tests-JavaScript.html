@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python - Тести | CodeCraft</title>
+<title>JavaScript - Тести | CodeCraft</title>
 
 <style>
 * {
@@ -408,141 +408,101 @@ nav {
 
 <div class="container">
     <div class="page-header">
-        <h1>Тести з Python</h1>
+        <h1>Тести з JavaScript</h1>
         <p>Оберіть тему для проходження тесту</p>
     </div>
-
     <div class="topics-list">
-        <div class="topic-card" onclick="startTest(1)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 1</div>
-                <div class="topic-title">Основи Python</div>
-                <div class="topic-progress">12 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
+    <div class="topic-card" onclick="startTest(1)">
+        <div class="topic-info">
+            <div class="topic-number">ТЕМА 1</div>
+            <div class="topic-title">Основи JavaScript</div>
+            <div class="topic-progress">25 запитань</div>
         </div>
-
-        <div class="topic-card" onclick="startTest(2)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 2</div>
-                <div class="topic-title">Операції та структури даних</div>
-                <div class="topic-progress">18 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(3)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 3</div>
-                <div class="topic-title">Умови та розгалуження</div>
-                <div class="topic-progress">20 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(4)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 4</div>
-                <div class="topic-title">Цикли</div>
-                <div class="topic-progress">20 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(5)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 5</div>
-                <div class="topic-title">Функції</div>
-                <div class="topic-progress">22 запитання</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(6)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 6</div>
-                <div class="topic-title">Модулі та імпорт</div>
-                <div class="topic-progress">19 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(7)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 7</div>
-                <div class="topic-title">Файли та введення/виведення (I/O)</div>
-                <div class="topic-progress">21 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(8)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 8</div>
-                <div class="topic-title">Об'єктно-орієнтоване програмування (ООП)</div>
-                <div class="topic-progress">30 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(9)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 9</div>
-                <div class="topic-title">Модулі, пакети та бібліотеки</div>
-                <div class="topic-progress">20 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
-        </div>
-
-        <div class="topic-card" onclick="startTest(10)">
-            <div class="topic-info">
-                <div class="topic-number">ТЕМА 10</div>
-                <div class="topic-title">Робота з файлами та базами даних</div>
-                <div class="topic-progress">17 запитань</div>
-            </div>
-            <div class="topic-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </div>
+        <div class="topic-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
         </div>
     </div>
+
+    <div class="topic-card" onclick="startTest(2)">
+        <div class="topic-info">
+            <div class="topic-number">ТЕМА 2</div>
+            <div class="topic-title">Функції та області видимості</div>
+            <div class="topic-progress">23 запитання</div>
+        </div>
+        <div class="topic-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    </div>
+
+    <div class="topic-card" onclick="startTest(3)">
+        <div class="topic-info">
+            <div class="topic-number">ТЕМА 3</div>
+            <div class="topic-title">Масиви та об’єкти</div>
+            <div class="topic-progress">20 запитань</div>
+        </div>
+        <div class="topic-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    </div>
+
+    <div class="topic-card" onclick="startTest(4)">
+        <div class="topic-info">
+            <div class="topic-number">ТЕМА 4</div>
+            <div class="topic-title">DOM (Document Object Model)</div>
+            <div class="topic-progress">19 запитань</div>
+        </div>
+        <div class="topic-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    </div>
+
+    <div class="topic-card" onclick="startTest(5)">
+        <div class="topic-info">
+            <div class="topic-number">ТЕМА 5</div>
+            <div class="topic-title">Події</div>
+            <div class="topic-progress">21 запитань</div>
+        </div>
+        <div class="topic-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    </div>
+
+    <div class="topic-card" onclick="startTest(6)">
+        <div class="topic-info">
+            <div class="topic-number">ТЕМА 6</div>
+            <div class="topic-title">Класи</div>
+            <div class="topic-progress">27 запитань</div>
+        </div>
+        <div class="topic-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    </div>
+
+    <div class="topic-card" onclick="startTest(7)">
+        <div class="topic-info">
+            <div class="topic-number">ТЕМА 7</div>
+            <div class="topic-title">Асинхронність</div>
+            <div class="topic-progress">20 запитань</div>
+        </div>
+        <div class="topic-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    </div>
+</div>
 </div>
 
 <script>
@@ -593,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Функція початку тесту
 function startTest(topicId) {
-    window.location.href = `${topicId}-Theme-Python.html`;
+    window.location.href = `${topicId}-Theme-JavaScript.html`;
 }
 
 </script>
