@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест CSharp | CodeCraft</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1c40 0%, #2f3485 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+nav {
+    display: grid;
+    grid-template-columns: 1fr auto 25fr;
+    align-items: center;
+    padding: 15px 50px;
+    position:sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 14, 36, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.menu-btn {
+    background: transparent;
+    border: 2px solid #00D9FF;
+    color: #00D9FF;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    width: 50px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn:hover {
+    background: #00d9ff;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.login-btn {
+    background: transparent;
+    border: 2px solid #00d9ff;
+    color: #00D9FF;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    height: 45px;
+}
+
+.login-btn:hover {
+    background: #00D9FF;
+    color: #0D0E24;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+}
+
+.question-nav {
+    background: rgba(13, 14, 36, 0.8);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.question-number {
+     width: 60px;
+    height: 60px;
+    background: #2f3485;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.question-number:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.question-number.active {
+    background: #00D9FF;
+    color: #0D0E24;
+}
+
+.question-number.answered {
+    background: #10B981;
+    color: white;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(13, 14, 36, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 80px 30px 30px 30px;
+    transition: left 0.4s ease;
+    z-index: 99;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 28px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+.menu-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-items li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.menu-items li a:hover {
+    background: rgba(0, 217, 255, 0.1);
+    color: #00D9FF;
+    transform: translateX(5px);
+}
+
+.menu-item-with-submenu {
+    position: relative;
+}
+
+.menu-toggle {
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.menu-item-with-submenu.active .arrow-icon {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-left: 20px;
+}
+
+.menu-item-with-submenu.active .submenu {
+    max-height: 400px;
+}
+
+.submenu li {
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 12px 15px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s;
+    z-index: 98;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.question-card {
+    background: rgba(13, 14, 36, 0.85);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: none;
+    color: rgba(255,255,255,0.9);
+}
+
+.question-card.active {
+    display: block;
+}
+
+.question-header {
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    color: rgba(255,255,255,0.9);
+}
+
+.question-title {
+    font-size: 24px;
+    color: #00D9FF;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, 0.5);
+    color: #00FF88;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.answer-option {
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 3px solid transparent;
+    font-size: 18px;
+    color: rgba(255,255,255,0.9);
+}
+
+.answer-option:hover {
+    background: rgba(0,0,0,0.5);
+    transform: translateX(5px);
+}
+
+.answer-option.selected {
+    border-color: #00D9FF;
+    background: rgba(0,217,255,0.2);
+    color: #0D0E24;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.nav-button {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.prev-btn {
+    background: #6B7280;
+    color: white;
+}
+
+.prev-btn:hover:not(:disabled) {
+    background: #4B5563;
+    transform: translateY(-2px);
+}
+
+.next-btn {
+    background: #00D9FF;
+    color: #0D0E24;
+}
+
+.next-btn:hover:not(:disabled) {
+    background: #00B8D9;
+    transform: translateY(-2px);
+}
+
+.nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Стилі для результатів */
+.results-container {
+    background: rgba(13, 14, 36, 0.9);
+    border-radius: 30px;
+    padding: 60px;
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    margin: 0 auto;
+    animation: slideUp 0.5s ease-out;
+    display: none;
+    color: rgba(255,255,255,0.9);
+}
+
+.results-container.active {
+    display: block;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.results-title {
+    font-size: 42px;
+    color: #00D9FF;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.score-display {
+    font-size: 96px;
+    font-weight: 700;
+    color: #00D9FF;
+    margin: 30px 0;
+    text-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+}
+
+.score-display.excellent { color: #10B981; }
+.score-display.good { color: #00D9FF; }
+.score-display.average { color: #F59E0B; }
+.score-display.poor { color: #EF4444; }
+
+.result-message {
+    font-size: 24px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 40px;
+    line-height: 1.5;
+}
+
+.results-details {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin: 40px 0;
+    padding: 30px 0;
+    border-top: 2px solid rgba(0,217,255,0.3);
+    border-bottom: 2px solid rgba(0,217,255,0.3);
+}
+
+.result-item {
+    text-align: center;
+}
+
+.result-number.correct { color: #10B981; }
+.result-number.incorrect { color: #EF4444; }
+.result-number { font-size: 48px; font-weight: 700; margin-bottom: 10px; color: rgba(255,255,255,0.9); }
+
+.result-label {
+    color: rgba(255,255,255,0.8);
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.results-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.result-btn {
+    padding: 18px 40px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.review-btn {
+    background: #00D9FF;
+    color: #0D0E24;
+}
+
+.review-btn:hover {
+    background: #00B8D9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,217,255,0.4);
+}
+
+.retry-btn {
+    background: #10B981;
+    color: white;
+}
+
+.retry-btn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16,185,129,0.4);
+}
+
+.back-btn {
+    background: #6B7280;
+    color: white;
+}
+
+.back-btn:hover {
+    background: #4B5563;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(107, 114, 128, 0.4);
+}
+
+@media(max-width: 768px) {
+    .logo-nav { font-size: 24px; }
+    .question-nav { padding: 15px; gap: 10px; }
+    .question-number { width: 50px; height: 50px; font-size: 16px; }
+    .question-card { padding: 25px; }
+    .question-title { font-size: 18px; }
+    .results-container { padding: 40px 30px; }
+    .results-title { font-size: 32px; }
+    .score-display { font-size: 72px; }
+    .result-message { font-size: 18px; }
+    .results-details { gap: 40px; }
+    .result-number { font-size: 36px; }
+    .result-label { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-title">CodeCraft</div>
+    <ul class="menu-items">
+        <li>
+            <a href="home.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Головна
+            </a>
+        </li>
+        <li class="menu-item-with-submenu">
+            <a href="#" class="menu-toggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                Курси
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </a>
+            <ul class="submenu">
+                <li><a href="Pythonhome.html">Python</a></li>
+                <li><a href="C++home.html">C++</a></li>
+                <li><a href="CSharphome.html">C#</a></li>
+                <li><a href="JavaScripthome.html">JavaScript</a></li>
+                <li><a href="HTMLhome.html">HTML</a></li>
+                <li><a href="CSShome.html">CSS</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<nav>
+    <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+    <div class="logo-nav">CodeCraft</div>
+    <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Вхід
+        </button>
+    </div>
+</nav>
+
+<div class="question-nav" id="questionNav"></div>
+
+<div class="container" id="testContainer">
+    <div id="questionsContainer"></div>
+</div>
+
+<div class="container" style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 200px);">
+    <div class="results-container" id="resultsContainer">
+        <h1 class="results-title">Тест завершено!</h1>
+        
+        <div class="score-display" id="scoreDisplay">0%</div>
+        
+        <div class="result-message" id="resultMessage">
+            Потрібно краще вивчити тему.
+        </div>
+        
+        <div class="results-details">
+            <div class="result-item">
+                <div class="result-number correct" id="correctCount">0</div>
+                <div class="result-label">Правильних</div>
+            </div>
+            <div class="result-item">
+                <div class="result-number incorrect" id="incorrectCount">0</div>
+                <div class="result-label">Неправильних</div>
+            </div>
+        </div>
+        
+        <div class="results-buttons">
+            <button class="result-btn review-btn" onclick="reviewAnswers()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                Переглянути відповіді
+            </button>
+
+            <button class="result-btn retry-btn" onclick="retryTest()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+                Пройти ще раз
+            </button>
+            
+            <button class="result-btn back-btn" onclick="location.href='All-Tests-CSharp.html'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Повернутися до тестів
+            </button>
+        </div>
+    </div>
+</div>
+<script>const questions = [
+    {
+        id: 1,
+        question: "Що таке C#?",
+        answers: [
+            "Мова сценаріїв для веб-сторінок",
+            "Об'єктно-орієнтована мова програмування",
+            "Мова розмітки",
+            "Система керування базами даних"
+        ],
+        correct: 1
+    },
+    {
+        id: 2,
+        question: "Хто створив C#?",
+        answers: ["Microsoft", "Apple", "Google", "IBM"],
+        correct: 0
+    },
+    {
+        id: 3,
+        question: "Яка платформа пов'язана з C#?",
+        answers: [".NET", "Java EE", "Node.js", "Android SDK"],
+        correct: 0
+    },
+    {
+        id: 4,
+        question: "Що таке CLR?",
+        answers: [
+            "Середовище виконання C#",
+            "Компілятор C#",
+            "База даних .NET",
+            "Фреймворк для графіки"
+        ],
+        correct: 0
+    },
+    {
+        id: 5,
+        question: "Що таке BCL у .NET?",
+        answers: [
+            "Базова бібліотека класів",
+            "Комп'ютерна мережа",
+            "Мова програмування",
+            "Інструмент для тестування"
+        ],
+        correct: 0
+    },
+    {
+        id: 6,
+        question: "Які IDE підходять для C#?",
+        answers: ["Visual Studio", "Rider", "VS Code", "Усі перелічені"],
+        correct: 3
+    },
+    {
+        id: 7,
+        question: "Що означає JIT-компіляція?",
+        answers: [
+            "Компільований код під час виконання",
+            "Статична компіляція",
+            "Мережеве з'єднання",
+            "Тестування програм"
+        ],
+        correct: 0
+    },
+    {
+        id: 8,
+        question: "Який базовий синтаксис для виводу тексту в консоль?",
+        answers: [
+            "print('Hello World!')",
+            "Console.WriteLine('Hello World!')",
+            "echo 'Hello World!'",
+            "System.out.println('Hello World!')"
+        ],
+        correct: 1
+    },
+    {
+        id: 9,
+        question: "Який простір імен містить клас Console?",
+        answers: ["System", "Microsoft", "CSharp", "NetCore"],
+        correct: 0
+    },
+    {
+        id: 10,
+        question: "Яка структура класичної програми C#?",
+        answers: [
+            "using namespace; class Program { static void Main() {} }",
+            "using System; class Program { static void Main(string[] args) {} }",
+            "namespace Program { void main() {} }",
+            "public Program { static void main() {} }"
+        ],
+        correct: 1
+    },
+    {
+        id: 11,
+        question: "Яке розширення має файл з кодом C#?",
+        answers: [".java", ".cs", ".cpp", ".py"],
+        correct: 1
+    },
+    {
+        id: 12,
+        question: "Яка команда запускає C# програму через .NET CLI?",
+        answers: ["dotnet run", "csc run", "execute program", "run file.cs"],
+        correct: 0
+    },
+    {
+        id: 13,
+        question: "Що таке managed code у C#?",
+        answers: [
+            "Код, який керується CLR",
+            "Код без компіляції",
+            "Мережевий код",
+            "Код для мобільних додатків"
+        ],
+        correct: 0
+    },
+    {
+        id: 14,
+        question: "Який тип мови C#?",
+        answers: ["Слабко типізована", "Сильна типізація", "Сценарна", "Машинна"],
+        correct: 1
+    },
+    {
+        id: 15,
+        question: "Які додатки можна створювати на C#?",
+        answers: [
+            "Настільні, веб, мобільні, ігри",
+            "Лише мобільні",
+            "Лише настільні",
+            "Тільки веб-додатки"
+        ],
+        correct: 0
+    },
+    {
+        id: 16,
+        question: "Яка команда створює новий проект C# через .NET CLI?",
+        answers: ["dotnet new console", "dotnet create project", "csc new", "new csproject"],
+        correct: 0
+    },
+    {
+        id: 17,
+        question: "Що таке namespace у C#?",
+        answers: [
+            "Простір імен для організації класів",
+            "База даних",
+            "Тип змінної",
+            "Компілятор"
+        ],
+        correct: 0
+    },
+    {
+        id: 18,
+        question: "Який модифікатор доступу дозволяє доступ з будь-якого коду?",
+        answers: ["private", "protected", "public", "internal"],
+        correct: 2
+    },
+    {
+        id: 19,
+        question: "Що робить static метод?",
+        answers: [
+            "Не потребує створення об'єкта для виклику",
+            "Завжди змінює змінні класу",
+            "Може викликати лише інші статичні методи",
+            "Обмежує доступ до методу"
+        ],
+        correct: 0
+    },
+    {
+        id: 20,
+        question: "Який ключовий метод запускає програму?",
+        answers: ["Init", "Main", "Start", "Run"],
+        correct: 1
+    },
+    {
+        id: 21,
+        question: "Який символ закінчує оператор у C#?",
+        answers: ["Точка", "Крапка з комою", "Кома", "Двокрапка"],
+        correct: 1
+    },
+    {
+        id: 22,
+        question: "Що таке IDE?",
+        answers: [
+            "Інтегроване середовище розробки",
+            "Інструмент для тестування",
+            "Система баз даних",
+            "Мережевий протокол"
+        ],
+        correct: 0
+    },
+    {
+        id: 23,
+        question: "Що таке JIT у .NET?",
+        answers: [
+            "Just-In-Time компіляція",
+            "Тип змінної",
+            "Метод виводу даних",
+            "Бібліотека класів"
+        ],
+        correct: 0
+    },
+    {
+        id: 24,
+        question: "Що робить Console.ReadLine()?",
+        answers: [
+            "Виводить текст на екран",
+            "Читає рядок з консолі",
+            "Закриває програму",
+            "Створює файл"
+        ],
+        correct: 1
+    },
+    {
+        id: 25,
+        question: "Який тип проекту використовується для створення консольного додатку?",
+        answers: [
+            "Console Application",
+            "Web Application",
+            "Class Library",
+            "Windows Forms"
+        ],
+        correct: 0
+    }
+];
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+let showingResults = false;
+// Генерація зірок
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(star);
+}
+
+// Меню
+    const menuBtn = document.getElementById('menuBtn');
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+
+    menuBtn.addEventListener('click', () => {
+        sideMenu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sideMenu.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    // Підменю курси
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menuItemWithSubmenu = document.querySelector('.menu-item-with-submenu');
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            menuItemWithSubmenu.classList.toggle('active');
+        });
+    }
+
+    // Кнопка входу
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.addEventListener('click', () => {
+        window.location.href = 'login.html';
+    });
+
+// Створення навігації
+function createQuestionNav() {
+    const nav = document.getElementById('questionNav');
+    questions.forEach((q, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'question-number';
+        btn.textContent = index + 1;
+        btn.onclick = () => goToQuestion(index);
+        nav.appendChild(btn);
+    });
+    updateQuestionNav();
+}
+
+// Оновлення навігації
+function updateQuestionNav() {
+    const buttons = document.querySelectorAll('.question-number');
+    buttons.forEach((btn, index) => {
+        btn.classList.remove('active', 'answered');
+        if (index === currentQuestion) {
+            btn.classList.add('active');
+        }
+        if (userAnswers[index] !== null) {
+            btn.classList.add('answered');
+        }
+    });
+}
+
+// Створення питань
+function createQuestions() {
+    const container = document.getElementById('questionsContainer');
+    
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        if (index === 0) card.classList.add('active');
+        
+        let questionHTML = `
+            <div class="question-header">
+                <div class="question-title">${q.question}</div>
+            </div>
+        `;
+        
+        if (q.code) {
+            const codeText = q.codeText || q.answers[q.correct];
+            questionHTML += `<div class="code-block"><pre>${codeText}</pre></div>`;
+        }
+        
+        questionHTML += '<div class="answers">';
+        q.answers.forEach((answer, i) => {
+            if (q.code && !q.codeText) {
+                questionHTML += `
+                    <div class="answer-option" onclick="selectAnswer(${index}, ${i})">
+                        <strong>${String.fromCharCode(65 + i)}.</strong>
+                        <div class="code-block" style="margin: 10px 0 0 0;"><pre>${answer}</pre></div>
+                    </div>
+                `;
+            } else {
+                questionHTML += `
+                    <div class="answer-option" onclick="selectAnswer(${index}, ${i})">
+                        <strong>${String.fromCharCode(65 + i)}.</strong> ${answer}
+                    </div>
+                `;
+            }
+        });
+        questionHTML += '</div>';
+        
+        questionHTML += `
+            <div class="navigation-buttons">
+                <button class="nav-button prev-btn" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>
+                    ← Попереднє
+                </button>
+                <button class="nav-button next-btn" onclick="nextQuestion()">
+                    ${index === questions.length - 1 ? 'Завершити тест' : 'Наступне →'}
+                </button>
+            </div>
+        `;
+        
+        card.innerHTML = questionHTML;
+        container.appendChild(card);
+    });
+}
+
+// Вибір відповіді
+function selectAnswer(questionIndex, answerIndex) {
+    userAnswers[questionIndex] = answerIndex;
+    
+    const card = document.querySelectorAll('.question-card')[questionIndex];
+    const options = card.querySelectorAll('.answer-option');
+    
+    options.forEach((option, i) => {
+        option.classList.remove('selected');
+        if (i === answerIndex) {
+            option.classList.add('selected');
+        }
+    });
+    
+    updateQuestionNav();
+}
+
+// Перехід до питання
+function goToQuestion(index) {
+    currentQuestion = index;
+    const cards = document.querySelectorAll('.question-card');
+    cards.forEach((card, i) => {
+        card.classList.remove('active');
+        if (i === index) {
+            card.classList.add('active');
+        }
+    });
+    updateQuestionNav();
+}
+
+// Попереднє питання
+function previousQuestion() {
+    if (currentQuestion > 0) {
+        goToQuestion(currentQuestion - 1);
+    }
+}
+
+// Наступне питання
+function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+        goToQuestion(currentQuestion + 1);
+    } else {
+        finishTest();
+    }
+}
+
+// Завершення тесту
+function finishTest() {
+    // Підрахунок результатів
+    let correct = 0;
+    questions.forEach((q, index) => {
+        if (userAnswers[index] === q.correct) {
+            correct++;
+        }
+    });
+    
+    const total = questions.length;
+    const incorrect = total - correct;
+    const percentage = Math.round((correct / total) * 100);
+    
+    // Приховуємо тест
+    document.getElementById('questionNav').style.display = 'none';
+    document.getElementById('testContainer').style.display = 'none';
+    
+    // Показуємо результати
+    const resultsContainer = document.getElementById('resultsContainer');
+    resultsContainer.classList.add('active');
+    
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    scoreDisplay.textContent = percentage + '%';
+    
+    // Колір залежно від результату
+    if (percentage >= 90) {
+        scoreDisplay.className = 'score-display excellent';
+    } else if (percentage >= 70) {
+        scoreDisplay.className = 'score-display good';
+    } else if (percentage >= 50) {
+        scoreDisplay.className = 'score-display average';
+    } else {
+        scoreDisplay.className = 'score-display poor';
+    }
+    
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('incorrectCount').textContent = incorrect;
+    
+    // Повідомлення залежно від результату
+    let message = '';
+    if (percentage >= 90) {
+        message = 'Відмінно! Ви чудово знаєте матеріал!';
+    } else if (percentage >= 70) {
+        message = 'Добре! Є невеликі прогалини, але загалом непогано!';
+    } else if (percentage >= 50) {
+        message = 'Задовільно. Варто повторити матеріал.';
+    } else {
+        message = 'Потрібно краще вивчити тему.';
+    }
+    
+    document.getElementById('resultMessage').textContent = message;
+    
+    showingResults = true;
+}
+
+// Перегляд відповідей
+function reviewAnswers() {
+    // Приховуємо результати
+    document.getElementById('resultsContainer').classList.remove('active');
+    
+    // Показуємо тест
+    document.getElementById('questionNav').style.display = 'flex';
+    document.getElementById('testContainer').style.display = 'block';
+    
+    // Підсвічуємо всі відповіді
+    questions.forEach((q, qIndex) => {
+        const card = document.querySelectorAll('.question-card')[qIndex];
+        const options = card.querySelectorAll('.answer-option');
+        
+        options.forEach((option, i) => {
+    // Видаляємо старі класи
+    option.classList.remove('selected');
+    option.style.borderColor = 'transparent';
+    option.style.background = 'rgba(0,0,0,0.3)';
+    option.style.color = 'rgba(255,255,255,0.9)';
+    
+    // Показуємо правильну відповідь
+    if (i === q.correct) {
+        option.style.borderColor = '#10B981';
+        option.style.background = '#D1FAE5';
+        option.style.color = '#0D0E24';
+    }
+    
+    // Показуємо неправильну відповідь користувача
+    if (userAnswers[qIndex] === i && i !== q.correct) {
+        option.style.borderColor = '#EF4444';
+        option.style.background = '#FEE2E2';
+        option.style.color = '#0D0E24';
+    }
+    
+    // Показуємо правильну відповідь користувача
+    if (userAnswers[qIndex] === i && i === q.correct) {
+        option.style.borderColor = '#10B981';
+        option.style.background = '#D1FAE5';
+        option.style.color = '#0D0E24';
+    }
+});
+
+        
+        // Додаємо кнопку "Назад до результатів"
+        const navButtons = card.querySelector('.navigation-buttons');
+        if (!navButtons.querySelector('.back-to-results-btn')) {
+            const backBtn = document.createElement('button');
+            backBtn.className = 'nav-button back-to-results-btn';
+            backBtn.style.background = '#00D9FF';
+            backBtn.style.color = 'white';
+            backBtn.textContent = '← Назад до результатів';
+            backBtn.onclick = backToResults;
+            navButtons.innerHTML = '';
+            navButtons.appendChild(backBtn);
+        }
+    });
+    
+    
+}
+
+// Повернутися до результатів
+function backToResults() {
+    // Приховуємо тест
+    document.getElementById('questionNav').style.display = 'none';
+    document.getElementById('testContainer').style.display = 'none';
+    
+    // Показуємо результати
+    document.getElementById('resultsContainer').classList.add('active');
+}
+
+// Повторити тест — оновлена версія
+function retryTest() {
+    // Скидаємо стан
+    currentQuestion = 0;
+    userAnswers = new Array(questions.length).fill(null);
+    showingResults = false;
+
+    // Приховуємо результати
+    document.getElementById('resultsContainer').classList.remove('active');
+
+    // Очищаємо і відтворюємо навігацію по питаннях і самі картки
+    const nav = document.getElementById('questionNav');
+    const questionsContainer = document.getElementById('questionsContainer');
+
+    // Видаляємо старі елементи (щоб прибрати змінені inline-стилі та змінену HTML структуру)
+    nav.innerHTML = '';
+    questionsContainer.innerHTML = '';
+
+    // Повторно створюємо панель навігації і картки питань
+    createQuestionNav();
+    createQuestions();
+
+    // Показуємо тест
+    document.getElementById('questionNav').style.display = 'flex';
+    document.getElementById('testContainer').style.display = 'block';
+
+    // Повертаємось до першого питання
+    goToQuestion(0);
+}
+
+// Повернутися на початок
+function backToStart() {
+    location.reload();
+}
+
+// Ініціалізація
+createQuestionNav();
+createQuestions();
+</script>
+</body>
+</html>
