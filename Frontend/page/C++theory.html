@@ -1822,6 +1822,15 @@ loginBtn.addEventListener('click', () => {
     window.location.href = 'login.html';
 });
 
+const buttons = document.querySelectorAll('.test-btn');
+
+buttons.forEach((btn, index) => {
+    const theme = index + 1; // 1,2,3,... по черзі
+    btn.addEventListener('click', () => {
+        window.location.href = `${theme}-Theme-C++.html`;
+    });
+});
+
 </script>
 </body>
 </html>
