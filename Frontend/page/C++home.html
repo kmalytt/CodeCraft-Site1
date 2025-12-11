@@ -1,401 +1,214 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CodeCraft</title>
-  <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
-    html,body { height:100%; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0D0E24 0%, #4349BA 100%);
-      color: #fff;
-      min-height:100vh;
-      position:relative;
-      overflow-x:hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeCraft - C++</title>
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+html, body { height:100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0D0E24 0%, #4349BA 100%); color: #fff; position: relative; overflow-x:hidden; }
 
-    .stars { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-    .star { position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; animation:twinkle 3s infinite; opacity:0.4; }
-    @keyframes twinkle { 0%,100% { opacity:0.3 } 50% { opacity:1 } }
+/* Зорі */
+.stars { position: fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+.star { position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; animation:twinkle 3s infinite; opacity:0.4; }
+@keyframes twinkle { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
-    /* ---- НАВІГАЦІЯ (оновлена з головної) ---- */
-    nav {
-      display: grid;
-      grid-template-columns: 1fr auto 25fr;
-      align-items: center;
-      padding: 15px 50px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(13, 14, 36, 0.7);
-      backdrop-filter: blur(10px);
-    }
+/* Навігація */
+nav { display:grid; grid-template-columns:1fr auto 25fr; align-items:center; padding:15px 50px; position:fixed; top:0; left:0; right:0; z-index:100; background: rgba(13,14,36,0.7); backdrop-filter: blur(10px);}
+.nav-left{display:flex; justify-content:flex-start;}
+.nav-right{display:flex; justify-content:flex-end;}
 
-    .nav-left { display:flex; justify-content:flex-start; }
-    .nav-right { display:flex; justify-content:flex-end; }
+/* Логотип з неоновим ефектом */
+.logo-nav {
+    font-size: 45px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
 
-    .logo-nav {
-      font-size: 45px;
-      color: white;
-      font-weight: 700;
-      opacity: 1;
-      text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-      text-align: center;
-    }
+/* Кнопки навігації */
+.menu-btn { background:transparent; border:2px solid #00D9FF; color:#00D9FF; padding:10px 15px; border-radius:8px; cursor:pointer; font-size:20px; width:50px; height:45px; display:flex; align-items:center; justify-content:center; transition: all 0.3s;}
+.menu-btn:hover { background:#00D9FF; color:#0D0E24; transform:translateY(-2px); box-shadow:0 5px 20px rgba(0,217,255,0.4);}
+.login-btn { background:transparent; border:2px solid #00D9FF; color:#00D9FF; padding:10px 30px; border-radius:8px; cursor:pointer; font-size:16px; display:flex; align-items:center; gap:8px; transition: all 0.3s; height:45px;}
+.login-btn:hover { background:#00D9FF; color:#0D0E24; transform:translateY(-2px); box-shadow:0 5px 20px rgba(0,217,255,0.4);}
 
-    .menu-btn {
-      background: transparent;
-      border: 2px solid #00D9FF;
-      color: #00D9FF;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 20px;
-      transition: all 0.3s;
-      width: 50px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .menu-btn:hover {
-      background: #00d9ff;
-      color: #0D0E24;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
-    }
+/* Бокове меню */
+.side-menu { position:fixed; top:0; left:-350px; width:300px; height:100vh; background: rgba(13,14,36,0.95); backdrop-filter: blur(20px); padding:80px 30px 30px 30px; transition:left 0.4s ease; z-index:99; box-shadow:5px 0 30px rgba(0,0,0,0.5);}
+.side-menu.active { left:0; }
+.menu-title { position:absolute; top:20px; left:30px; font-size:28px; color:white; font-weight:700; text-shadow: 0 0 20px rgba(0, 217, 255,0.5);}
+.menu-items { list-style:none; display:flex; flex-direction:column; gap:20px; }
+.menu-items li a { color:white; text-decoration:none; font-size:18px; display:flex; align-items:center; gap:15px; padding:15px; border-radius:8px; transition: all 0.3s;}
+.menu-items li a:hover { background: rgba(0,217,255,0.1); color:#00D9FF; transform:translateX(5px);}
+.menu-item-with-submenu { position:relative; }
+.menu-toggle { justify-content:space-between; cursor:pointer; }
+.arrow-icon { transition: transform 0.3s ease; margin-left:auto; }
+.menu-item-with-submenu.active .arrow-icon { transform:rotate(180deg); }
+.submenu { list-style:none; max-height:0; overflow:hidden; transition:max-height 0.4s ease; padding-left:20px; }
+.menu-item-with-submenu.active .submenu { max-height:400px; }
+.submenu li { margin-top:10px; }
+.submenu li a { font-size:16px; padding:12px 15px; display:flex; align-items:center; color: rgba(255,255,255,0.8); }
+.submenu li a:hover { color:#00D9FF; background: rgba(0,217,255,0.1); transform:translateX(5px); }
 
-    .login-btn {
-      background: transparent;
-      border: 2px solid #00d9ff;
-      color: #00D9FF;
-      padding: 10px 30px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s;
-      height: 45px;
-    }
-    .login-btn:hover {
-      background: #00D9FF;
-      color: #0D0E24;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
-    }
+/* Оверлей */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); opacity:0; visibility:hidden; transition:all .3s; z-index:98; }
+.overlay.active { opacity:1; visibility:visible; }
 
-    /* ---- бокове меню (оновлене з головної) ---- */
-    .side-menu {
-      position: fixed;
-      top: 0;
-      left: -350px;
-      width: 300px;
-      height: 100vh;
-      background: rgba(13, 14, 36, 0.95);
-      backdrop-filter: blur(20px);
-      padding: 80px 30px 30px 30px;
-      transition: left 0.4s ease;
-      z-index: 99;
-      box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
-    }
-    .side-menu.active { left: 0; }
+/* Контент */
+main { position:relative; z-index:5; padding-top:96px; display:flex; flex-direction:column; align-items:center; gap:28px; min-height:calc(100vh - 96px);}
+.cpp-banner { background: rgba(13,14,36,0.8); color:#00D9FF; padding:22px 32px; border-radius:14px; display:flex; align-items:center; gap:16px; width:min(1100px,94%); justify-content:center; font-weight:800; font-size:36px;}
+.cards-wrap { width:min(1100px,94%); display:flex; justify-content:center; align-items:center; padding:40px 10px; }
+.cards-section { display:flex; gap:36px; justify-content:center; align-items:center; width:100%; }
 
-    .menu-title {
-      position: absolute;
-      top: 20px;
-      left: 30px;
-      font-size: 28px;
-      color: white;
-      font-weight: 700;
-      text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-    }
+/* Картки */
+.card { background: rgba(13,14,36,0.8); color:white; width:300px; border-radius:20px; padding:28px 18px 28px; text-align:center; box-shadow:0 0 18px rgba(0,217,255,0.3); border:3px solid #00D9FF; transition: transform .32s cubic-bezier(.2,.9,.2,1), box-shadow .32s; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:14px; position:relative;}
+.card:hover { transform: scale(1.12); box-shadow:0 0 40px rgba(0,217,255,0.6);}
+.card-icon { width:130px; height:130px; display:flex; align-items:center; justify-content:center; border-radius:16px; }
+.card-icon img { width:92px; height:92px; }
+.card-title { font-size:24px; font-weight:700; color:white;}
+.card-sub { font-size:14px; color:white;}
+.card-btn { margin-top:6px; background:#00D9FF; border:none; color:#0D0E24; padding:12px 28px; border-radius:999px; font-weight:700; cursor:pointer; box-shadow:0 0 18px rgba(0,217,255,0.6); transition: transform .18s, box-shadow .18s;}
+.card-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow:0 0 40px rgba(0,217,255,0.8); }
 
-    .menu-items {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .menu-items li a {
-      color: white;
-      text-decoration: none;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 15px;
-      border-radius: 8px;
-      transition: all 0.3s;
-      position: relative;
-    }
-    .menu-items li a:hover {
-      background: rgba(0, 217, 255, 0.1);
-      color: #00D9FF;
-      transform: translateX(5px);
-    }
-
-    .menu-item-with-submenu { position: relative; }
-    .menu-toggle { justify-content: space-between; cursor: pointer; }
-    .arrow-icon { transition: transform 0.3s ease; margin-left: auto; }
-    .menu-item-with-submenu.active .arrow-icon { transform: rotate(180deg); }
-
-    .submenu {
-      list-style: none;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-      padding-left: 20px;
-    }
-    .menu-item-with-submenu.active .submenu { max-height: 400px; }
-    .submenu li { margin-top: 10px; }
-    .submenu li a {
-      font-size: 16px;
-      padding: 12px 15px;
-      display: flex;
-      align-items: center;
-      color: rgba(255, 255, 255, 0.8);
-    }
-    .submenu li a:hover {
-      color: #00D9FF;
-      background: rgba(0, 217, 255, 0.1);
-      transform: translateX(5px);
-    }
-
-    .overlay {
-      position:fixed; inset:0; background:rgba(0,0,0,0.45);
-      opacity:0; visibility:hidden; transition:all .3s; z-index:98;
-    }
-    .overlay.active { opacity:1; visibility:visible; }
-
-    /* ---- контент ---- */
-    main { position:relative; z-index:5; padding-top:96px; display:flex; flex-direction:column; align-items:center; gap:28px; min-height:calc(100vh - 96px); }
-
-    .cpp-banner {
-      background: rgba(255,255,255,0.95);
-      color:#111;
-      padding:22px 32px;
-      border-radius:14px;
-      box-shadow:0 10px 35px rgba(0,0,0,0.18);
-      display:flex;
-      align-items:center;
-      gap:16px;
-      width:min(1100px, 94%);
-      justify-content:center;
-      font-weight:800;
-      font-size:36px;
-    }
-
-    .cards-wrap { width:min(1100px,94%); display:flex; justify-content:center; align-items:center; padding:40px 10px; }
-    .cards-section { display:flex; gap:36px; justify-content:center; align-items:center; width:100%; }
-
-    .card {
-      background: rgba(255,255,255,0.98);
-      color:#1a1d2e;
-      width:300px;
-      border-radius:20px;
-      padding:28px 18px 28px;
-      text-align:center;
-      box-shadow:0 12px 40px rgba(0,0,0,0.22);
-      transition: transform .32s cubic-bezier(.2,.9,.2,1), box-shadow .32s;
-      cursor:pointer;
-      display:flex; flex-direction:column; align-items:center; gap:14px;
-      position:relative;
-    }
-
-    .card:hover { transform: scale(1.12); z-index:8; box-shadow:0 0 40px rgba(0,217,255,0.6); }
-
-    .card-icon { width:130px; height:130px; display:flex; align-items:center; justify-content:center; border-radius:16px; }
-    .card-icon svg { width:92px; height:92px; fill:#00D9FF; }
-
-    .card-title { font-size:24px; font-weight:700; margin-top:6px; color:#111; }
-    .card-sub { color:#555; font-size:14px; }
-
-    .card-btn {
-      margin-top:6px;
-      background:#00D9FF;
-      border:none;
-      color:#06202B;
-      padding:12px 28px;
-      border-radius:999px;
-      font-weight:700;
-      cursor:pointer;
-      transition:transform .18s, box-shadow .18s;
-      box-shadow:0 0 18px rgba(0,217,255,0.6);
-    }
-    .card-btn:hover { transform:translateY(-4px) scale(1.03); box-shadow:0 0 40px rgba(0,217,255,0.8); }
-
-    @media(max-width: 768px){
-      nav { padding:15px 20px; }
-      .logo-nav { font-size:24px; }
-      .card { width:85%; }
-    }
-  </style>
+@media(max-width:768px){ nav { padding:15px 20px; } .logo-nav{font-size:24px;} .card{width:85%;} }
+</style>
 </head>
 <body>
-    
-  <div class="stars" id="stars"></div>
 
-  <!-- Оновлене бокове меню -->
-  <div class="side-menu" id="sideMenu">
-    <div class="menu-title">CodeCraft</div>
-    <ul class="menu-items">
-      <li>
-        <a href="home.html">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          </svg>
-          Головна
-        </a>
-      </li>
-      <li class="menu-item-with-submenu">
-        <a href="#" class="menu-toggle">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          Курси
-          <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </a>
-        <ul class="submenu">
-          <li><a href="Pythonhome.html">Python</a></li>
-          <li><a href="C++home.html">C++</a></li>
-          <li><a href="CSharphome.html">C#</a></li>
-          <li><a href="JavaScripthome.html">JavaScript</a></li>
-          <li><a href="HTMLhome.html">HTML</a></li>
-          <li><a href="CSShome.html">CSS</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+<div class="stars" id="stars"></div>
+<div class="overlay" id="overlay"></div>
 
-  <!-- Оновлена навігація -->
-  <nav>
-    <div class="nav-left">
-      <button class="menu-btn" id="menuBtn">☰</button>
-    </div>
-    <div class="logo-nav">CodeCraft</div>
-    <div class="nav-right">
-      <button class="login-btn" id="loginBtn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
+<!-- Бокове меню -->
+<div class="side-menu" id="sideMenu">
+  <div class="menu-title">CodeCraft</div>
+  <ul class="menu-items">
+    <li>
+      <a href="home.html">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
         </svg>
-        Вхід
-      </button>
-    </div>
-  </nav>
+        Головна
+      </a>
+    </li>
+    <li class="menu-item-with-submenu">
+      <a href="#" class="menu-toggle">
+        Курси
+        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </a>
+      <ul class="submenu">
+        <li><a href="Pythonhome.html">Python</a></li>
+        <li><a href="C++home.html">C++</a></li>
+        <li><a href="CSharphome.html">C#</a></li>
+        <li><a href="JavaScripthome.html">JavaScript</a></li>
+        <li><a href="HTMLhome.html">HTML</a></li>
+        <li><a href="CSShome.html">CSS</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
 
-  <div class="overlay" id="overlay"></div>
+<!-- Навігація -->
+<nav>
+  <div class="nav-left">
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </div>
+  <div class="logo-nav" id="logoNav">CodeCraft</div>
+  <div class="nav-right">
+    <button class="login-btn" id="loginBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      Вхід
+    </button>
+  </div>
+</nav>
 
-  <main>
-    <div class="cpp-banner">C++</div>
-
-    <div class="cards-wrap">
-      <div class="cards-section" id="cardsSection">
-        <!-- Теорія -->
-        <div class="card" data-target="theory">
-          <div class="card-icon">
-            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-              <path d="M56 10H16a6 6 0 0 0-6 6v36a2 2 0 0 0 3.18 1.63L20 47.3l6.82 6.33A2 2 0 0 0 28 55a2 2 0 0 0 .82-.17L40 50.36l11.18 4.47A2 2 0 0 0 54 53V12a2 2 0 0 0-2-2Zm-2 39.79-9.18-3.67a2 2 0 0 0-1.64 0L30 50.69V14h24Z"/>
-            </svg>
-          </div>
-          <div class="card-title">Теорія</div>
-          <div class="card-sub">основи, синтаксис, приклади</div>
-          <button class="card-btn">Почати</button>
+<main>
+  <div class="cpp-banner">C++</div>
+  <div class="cards-wrap">
+    <div class="cards-section">
+      <div class="card" data-target="theory">
+        <div class="card-icon">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%2300D9FF' d='M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z'/%3E%3C/svg%3E" alt="Теорія">
         </div>
-
-        <!-- Практичні -->
-        <div class="card" data-target="practice">
-          <div class="card-icon">
-            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-              <path d="M56 8H8a4 4 0 0 0-4 4v40a4 4 0 0 0 4 4h48a4 4 0 0 0 4-4V12a4 4 0 0 0-4-4ZM8 52V12h48v40Z"/>
-              <path d="M16 20h32v4H16zm0 10h24v4H16zm0 10h32v4H16z" fill="#06202B"/>
-            </svg>
-          </div>
-          <div class="card-title">Практичні</div>
-          <div class="card-sub">завдання та вправи</div>
-          <button class="card-btn">Почати</button>
+        <div class="card-title">Теорія</div>
+        <div class="card-sub">Основи, синтаксис, приклади</div>
+        <button class="card-btn">Почати</button>
+      </div>
+      <div class="card" data-target="practice">
+        <div class="card-icon">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%2300D9FF' d='M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z'/%3E%3C/svg%3E" alt="Практика">
         </div>
-
-        <!-- Тести -->
-        <div class="card" data-target="tests">
-          <div class="card-icon">
-            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-              <path d="M32 8a24 24 0 1 0 24 24A24.027 24.027 0 0 0 32 8Zm0 44A20 20 0 1 1 52 32 20.022 20.022 0 0 1 32 52Z"/>
-              <path d="M34 20h-4v14l10.5 6.3 2-3.3-8.5-5Z"/>
-            </svg>
-          </div>
-          <div class="card-title">Тести</div>
-          <div class="card-sub">перевірка знань</div>
-          <button class="card-btn">Почати</button>
+        <div class="card-title">Практичні</div>
+        <div class="card-sub">Завдання та вправи</div>
+        <button class="card-btn">Почати</button>
+      </div>
+      <div class="card" data-target="tests">
+        <div class="card-icon">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%2300D9FF' d='M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z'/%3E%3C/svg%3E" alt="Тести">
         </div>
+        <div class="card-title">Тести</div>
+        <div class="card-sub">Перевірка знань</div>
+        <button class="card-btn">Почати</button>
       </div>
     </div>
-  </main>
+  </div>
+</main>
 
-  <script>
-    // зорі
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 120; i++) {
-      const s = document.createElement('div');
-      s.className = 'star';
-      s.style.left = Math.random() * 100 + '%';
-      s.style.top = Math.random() * 100 + '%';
-      s.style.opacity = (0.2 + Math.random() * 0.9).toString();
-      s.style.animationDelay = (Math.random() * 3).toFixed(2) + 's';
-      s.style.transform = `scale(${0.6 + Math.random()*1.8})`;
-      starsContainer.appendChild(s);
-    }
+<script>
+// Зорі
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.left = Math.random()*100+'%';
+  s.style.top = Math.random()*100+'%';
+  s.style.opacity = (0.2 + Math.random()*0.9).toString();
+  s.style.animationDelay = (Math.random()*3).toFixed(2)+'s';
+  starsContainer.appendChild(s);
+}
 
-    const menuBtn = document.getElementById('menuBtn');
-    const sideMenu = document.getElementById('sideMenu');
-    const overlay = document.getElementById('overlay');
-    const menuToggle = document.querySelector('.menu-toggle');
-    const menuItemWithSubmenu = document.querySelector('.menu-item-with-submenu');
+// Меню
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const overlay = document.getElementById('overlay');
+menuBtn.addEventListener('click', ()=>{
+  sideMenu.classList.toggle('active');
+  overlay.classList.toggle('active');
+});
+overlay.addEventListener('click', ()=>{
+  sideMenu.classList.remove('active');
+  overlay.classList.remove('active');
+});
 
-    menuBtn.addEventListener('click', () => {
-      sideMenu.classList.toggle('active');
-      overlay.classList.toggle('active');
-    });
-    overlay.addEventListener('click', () => {
-      sideMenu.classList.remove('active');
-      overlay.classList.remove('active');
-    });
+// Підменю
+const menuToggle = document.querySelector('.menu-toggle');
+const menuItemWithSubmenu = document.querySelector('.menu-item-with-submenu');
+menuToggle.addEventListener('click', (e)=>{
+  e.preventDefault();
+  menuItemWithSubmenu.classList.toggle('active');
+});
 
-    // відкриття / закриття підменю
-    menuToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      menuItemWithSubmenu.classList.toggle('active');
-    });
+// Картки
+const cards = document.querySelectorAll('.card');
+cards.forEach(card=>{
+  card.addEventListener('click', ()=>{
+    const target = card.dataset.target;
+    if(target==='theory'){ window.location.href='C++theory.html'; }
+    else if(target==='practice'){ window.location.href='C++practice.html'; }
+    else if(target==='tests'){ window.location.href='C++tests.html'; }
+  });
+});
 
-    // перехід між картками
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        const target = card.dataset.target;
-        if (target === 'theory') {
-          window.location.href = 'C++theory.html';
-        } else if (target === 'practice') {
-          window.location.href = 'C++practice.html';
-        } else if (target === 'tests') {
-          window.location.href = 'All-Tests-C++.html';
-        }
-      });
-    });
+// Вхід
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', ()=>{
+  window.location.href='login.html';
+});
+</script>
 
-    // кнопка Вхід
-    const loginBtn = document.getElementById('loginBtn');
-    loginBtn.addEventListener('click', () => {
-      window.location.href = 'login.html';
-    });
-  </script>
 </body>
 </html>
