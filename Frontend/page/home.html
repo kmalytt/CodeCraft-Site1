@@ -1,790 +1,897 @@
 <!DOCTYPE html>
 <html lang="uk">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CodeCraft</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeCraft</title>
 
-<style>
-/* Скидання стилів */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    <style>
+      /* Скидання стилів */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-/* Стилі для body */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow-x: hidden;
-    background: linear-gradient(135deg, #0D0E24 0%, #4349BA 100%);
-    min-height: 100vh;
-    position: relative;
-}
+      /* Стилі для body */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+        background: linear-gradient(135deg, #0d0e24 0%, #4349ba 100%);
+        min-height: 100vh;
+        position: relative;
+      }
 
-/* Контейнер для анімованих зірок */
-.stars {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
+      /* Контейнер для анімованих зірок */
+      .stars {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
 
-/* Стиль для кожної зірки */
-.star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: white;
-    border-radius: 50%;
-    animation: twinkle 3s infinite;
-}
+      /* Стиль для кожної зірки */
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 3s infinite;
+      }
 
-/* Анімація мерехтіння зірок */
-@keyframes twinkle {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
-}
+      /* Анімація мерехтіння зірок */
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
 
-/* Навігаційна панель */
-nav {
-    display: grid;
-    grid-template-columns: 1fr auto 25fr;
-    align-items: center;
-    padding: 15px 50px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(13, 14, 36, 0.7);
-    backdrop-filter: blur(10px);
-}
+      /* Навігаційна панель */
+      nav {
+        display: grid;
+        grid-template-columns: 1fr auto 25fr;
+        align-items: center;
+        padding: 15px 50px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(13, 14, 36, 0.7);
+        backdrop-filter: blur(10px);
+      }
 
-/* Контейнер для кнопки меню */
-.nav-left {
-    display: flex;
-    justify-content: flex-start;
-}
+      /* Контейнер для кнопки меню */
+      .nav-left {
+        display: flex;
+        justify-content: flex-start;
+      }
 
-/* Контейнер для кнопки входу */
-.nav-right {
-    display: flex;
-    justify-content: flex-end;
-}
+      /* Контейнер для кнопки входу */
+      .nav-right {
+        display: flex;
+        justify-content: flex-end;
+      }
 
-/* Логотип в навігації */
-.logo-nav {
-    font-size: 45px;
-    color: white;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-    text-align: center;
-}
-
-.logo-nav.visible {
-    opacity: 1;
-}
-
-.logo-nav.skip-animation {
-    opacity: 1;
-    transition: none;
-}
-
-/* Кнопка меню (гамбургер) */
-.menu-btn {
-    background: transparent;
-    border: 2px solid #00D9FF;
-    color: #00D9FF;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 20px;
-    transition: all 0.3s;
-    width: 50px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.menu-btn:hover {
-    background: #00d9ff;
-    color: #0D0E24;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
-}
-
-/* Кнопка входу */
-.login-btn {
-    background: transparent;
-    border: 2px solid #00d9ff;
-    color: #00D9FF;
-    padding: 10px 30px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s;
-    height: 45px;
-}
-
-.login-btn:hover {
-    background: #00D9FF;
-    color: #0D0E24;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
-}
-
-/* Бічне меню */
-.side-menu {
-    position: fixed;
-    top: 0;
-    left: -350px;
-    width: 300px;
-    height: 100vh;
-    background: rgba(13, 14, 36, 0.95);
-    backdrop-filter: blur(20px);
-    padding: 80px 30px 30px 30px;
-    transition: left 0.4s ease;
-    z-index: 99;
-    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
-}
-
-.side-menu.active {
-    left: 0;
-}
-
-/* Назва сайту в меню */
-.menu-title {
-    position: absolute;
-    top: 20px;
-    left: 30px;
-    font-size: 28px;
-    color: white;
-    font-weight: 700;
-    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-}
-
-/* Пункти меню */
-.menu-items {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.menu-items li a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px;
-    border-radius: 8px;
-    transition: all 0.3s;
-    position: relative;
-}
-
-.menu-items li a:hover {
-    background: rgba(0, 217, 255, 0.1);
-    color: #00D9FF;
-    transform: translateX(5px);
-}
-
-/* Стилі для пункту меню з підменю */
-.menu-item-with-submenu {
-    position: relative;
-}
-
-.menu-toggle {
-    justify-content: space-between;
-    cursor: pointer;
-}
-
-.arrow-icon {
-    transition: transform 0.3s ease;
-    margin-left: auto;
-}
-
-.menu-item-with-submenu.active .arrow-icon {
-    transform: rotate(180deg);
-}
-
-/* Підменю */
-.submenu {
-    list-style: none;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-    padding-left: 20px;
-}
-
-.menu-item-with-submenu.active .submenu {
-    max-height: 400px;
-}
-
-.submenu li {
-    margin-top: 10px;
-}
-
-.submenu li a {
-    font-size: 16px;
-    padding: 12px 15px;
-    display: flex;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.submenu li a:hover {
-    color: #00D9FF;
-    background: rgba(0, 217, 255, 0.1);
-    transform: translateX(5px);
-}
-
-/* Оверлей для затемнення фону */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s;
-    z-index: 98;
-}
-
-.overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Головна секція по центру */
-.hero {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    text-align: center;
-    padding: 50px 20px;
-}
-
-/* Контейнер для всіх кнопок */
-.languages-container {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    margin-top: 50px;
-    opacity: 0;
-    animation: fadeInButtons 1s ease-out 2.4s forwards;
-}
-
-.languages-container.skip-animation {
-    opacity: 1;
-    animation: none;
-}
-
-/* Контейнер для кнопок мов програмування */
-.language-buttons {
-    display: flex;
-    gap: 40px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-@keyframes fadeInButtons {
-    to { opacity: 1; }
-}
-
-/* Картка мови програмування */
-.language-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    perspective: 1000px;
-    width: 280px;
-    height: 320px;
-}
-
-.card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
-
-.language-btn:hover .card-inner {
-    transform: rotateY(180deg);
-}
-
-.card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.card-front {
-    background: rgba(13, 14, 36, 0.8);
-    border: 3px solid #00D9FF;
-    backdrop-filter: blur(10px);
-    gap: 15px;
-}
-
-.card-back {
-    background: rgba(0, 217, 255, 0.95);
-    transform: rotateY(180deg);
-    gap: 15px;
-    justify-content: space-between;
-}
-
-.language-btn:hover .card-front {
-    box-shadow: 0 10px 40px rgba(0, 217, 255, 0.6);
-}
-
-.card-front img {
-    width: 120px;
-    height: 120px;
-}
-
-.card-front .name {
-    color: white;
-    font-size: 22px;
-    font-weight: 600;
-}
-
-.card-back-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-}
-
-.card-back .name {
-    color: #0D0E24;
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.card-back .description {
-    color: #0D0E24;
-    font-size: 14px;
-    text-align: center;
-    line-height: 1.6;
-}
-
-.start-btn {
-    background: #0D0E24;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: auto;
-}
-
-.start-btn:hover {
-    background: #1a1d4a;
-    transform: scale(1.05);
-}
-
-/* Контейнер для анімації */
-.animation-container {
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-    z-index: 50;
-}
-
-/* Назва CodeCraft */
-.logo-main {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    animation: logoFadeIn 1.2s ease-out forwards, logoFadeOut 0.8s ease-in 1.5s forwards;
-}
-
-.logo-main.skip-animation {
-    display: none;
-}
-
-.logo-main h1 {
-    font-size: 80px;
-    color: white;
-    font-weight: 700;
-    text-shadow: 0 0 30px rgba(0, 217, 255, 0.8);
-}
-
-/* Анімація появи логотипу */
-@keyframes logoFadeIn {
-    0% {
+      /* Логотип в навігації */
+      .logo-nav {
+        font-size: 45px;
+        color: white;
+        font-weight: 700;
         opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
+        transition: opacity 0.8s ease;
+        text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        text-align: center;
+      }
 
-/* Анімація зникнення логотипу */
-@keyframes logoFadeOut {
-    0% {
+      .logo-nav.visible {
         opacity: 1;
-    }
-    100% {
+      }
+
+      .logo-nav.skip-animation {
+        opacity: 1;
+        transition: none;
+      }
+
+      /* Кнопка меню (гамбургер) */
+      .menu-btn {
+        background: transparent;
+        border: 2px solid #00d9ff;
+        color: #00d9ff;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 20px;
+        transition: all 0.3s;
+        width: 50px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .menu-btn:hover {
+        background: #00d9ff;
+        color: #0d0e24;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+      }
+
+      /* Кнопка входу */
+      .login-btn {
+        background: transparent;
+        border: 2px solid #00d9ff;
+        color: #00d9ff;
+        padding: 10px 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        height: 45px;
+      }
+
+      .login-btn:hover {
+        background: #00d9ff;
+        color: #0d0e24;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
+      }
+
+      /* Бічне меню */
+      .side-menu {
+        position: fixed;
+        top: 0;
+        left: -350px;
+        width: 300px;
+        height: 100vh;
+        background: rgba(13, 14, 36, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 80px 30px 30px 30px;
+        transition: left 0.4s ease;
+        z-index: 99;
+        box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .side-menu.active {
+        left: 0;
+      }
+
+      /* Назва сайту в меню */
+      .menu-title {
+        position: absolute;
+        top: 20px;
+        left: 30px;
+        font-size: 28px;
+        color: white;
+        font-weight: 700;
+        text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+      }
+
+      /* Пункти меню */
+      .menu-items {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .menu-items li a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .menu-items li a:hover {
+        background: rgba(0, 217, 255, 0.1);
+        color: #00d9ff;
+        transform: translateX(5px);
+      }
+
+      /* Стилі для пункту меню з підменю */
+      .menu-item-with-submenu {
+        position: relative;
+      }
+
+      .menu-toggle {
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .arrow-icon {
+        transition: transform 0.3s ease;
+        margin-left: auto;
+      }
+
+      .menu-item-with-submenu.active .arrow-icon {
+        transform: rotate(180deg);
+      }
+
+      /* Підменю */
+      .submenu {
+        list-style: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        padding-left: 20px;
+      }
+
+      .menu-item-with-submenu.active .submenu {
+        max-height: 400px;
+      }
+
+      .submenu li {
+        margin-top: 10px;
+      }
+
+      .submenu li a {
+        font-size: 16px;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .submenu li a:hover {
+        color: #00d9ff;
+        background: rgba(0, 217, 255, 0.1);
+        transform: translateX(5px);
+      }
+
+      /* Оверлей для затемнення фону */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
         opacity: 0;
-    }
-}
+        visibility: hidden;
+        transition: all 0.4s;
+        z-index: 98;
+      }
 
-/* Адаптивність для мобільних */
-@media(max-width: 768px) {
-    nav {
-        padding: 15px 20px;
-    }
+      .overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
 
-    .logo-main h1 {
-        font-size: 50px;
-    }
-    
-    .logo-nav {
+      /* Контейнер для заголовка сторінки */
+      .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+        opacity: 0;
+        animation: fadeInHeader 1s ease-out 2.4s forwards;
+      }
+
+      .page-header.skip-animation {
+        opacity: 1;
+        animation: none;
+      }
+
+      .page-header h1 {
+        color: #00d9ff;
+        font-size: 48px;
+        margin-bottom: 10px;
+        text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+      }
+
+      .page-header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 18px;
+      }
+
+      @keyframes fadeInHeader {
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Головна секція по центру */
+      .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+        padding: 100px 20px 50px;
+      }
+
+      /* Контейнер для всіх кнопок */
+      .languages-container {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeInButtons 1s ease-out 2.4s forwards;
+      }
+
+      .languages-container.skip-animation {
+        opacity: 1;
+        animation: none;
+      }
+
+      /* Контейнер для кнопок мов програмування */
+      .language-buttons {
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      @keyframes fadeInButtons {
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Картка мови програмування */
+      .language-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        perspective: 1000px;
+        width: 280px;
+        height: 320px;
+      }
+
+      .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .language-btn:hover .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .card-front,
+      .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-front {
+        background: rgba(13, 14, 36, 0.8);
+        border: 3px solid #00d9ff;
+        backdrop-filter: blur(10px);
+        gap: 15px;
+      }
+
+      .card-back {
+        background: rgba(0, 217, 255, 0.95);
+        transform: rotateY(180deg);
+        gap: 15px;
+        justify-content: space-between;
+      }
+
+      .language-btn:hover .card-front {
+        box-shadow: 0 10px 40px rgba(0, 217, 255, 0.6);
+      }
+
+      .card-front img {
+        width: 120px;
+        height: 120px;
+      }
+
+      .card-front .name {
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .card-back-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .card-back .name {
+        color: #0d0e24;
         font-size: 24px;
-    }
-    
-    .language-btn {
-        width: 240px;
-        height: 280px;
-    }
-    
-    .card-front img {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .card-back .description {
-        font-size: 13px;
-    }
-}
-</style>
-</head>
-<body>
+        font-weight: 700;
+      }
 
-<!--Контейнер для анімованих зірок на фоні-->
-<div class="stars" id="stars"></div>
+      .card-back .description {
+        color: #0d0e24;
+        font-size: 14px;
+        text-align: center;
+        line-height: 1.6;
+      }
 
-<!--Оверлей для затемнення-->
-<div class="overlay" id="overlay"></div>
+      .start-btn {
+        background: #0d0e24;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: auto;
+      }
 
-<!--Бічне меню-->
-<div class="side-menu" id="sideMenu">
-    <div class="menu-title">CodeCraft</div>
-    <ul class="menu-items">
+      .start-btn:hover {
+        background: #1a1d4a;
+        transform: scale(1.05);
+      }
+
+      /* Контейнер для анімації */
+      .animation-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        z-index: 50;
+      }
+
+      /* Назва CodeCraft */
+      .logo-main {
+        opacity: 0;
+        animation: logoFadeIn 1.2s ease-out forwards,
+          logoFadeOut 0.8s ease-in 1.5s forwards;
+      }
+
+      .logo-main.skip-animation {
+        display: none;
+      }
+
+      .logo-main h1 {
+        font-size: 80px;
+        color: white;
+        font-weight: 700;
+        text-shadow: 0 0 30px rgba(0, 217, 255, 0.8);
+      }
+
+      /* Анімація появи логотипу */
+      @keyframes logoFadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Анімація зникнення логотипу */
+      @keyframes logoFadeOut {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* Адаптивність для мобільних */
+      @media (max-width: 768px) {
+        nav {
+          padding: 15px 20px;
+        }
+
+        .logo-main h1 {
+          font-size: 50px;
+        }
+
+        .logo-nav {
+          font-size: 24px;
+        }
+
+        .page-header h1 {
+          font-size: 32px;
+        }
+
+        .page-header p {
+          font-size: 16px;
+        }
+
+        .language-btn {
+          width: 240px;
+          height: 280px;
+        }
+
+        .card-front img {
+          width: 100px;
+          height: 100px;
+        }
+
+        .card-back .description {
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--Контейнер для анімованих зірок на фоні-->
+    <div class="stars" id="stars"></div>
+
+    <!--Оверлей для затемнення-->
+    <div class="overlay" id="overlay"></div>
+
+    <!--Бічне меню-->
+    <div class="side-menu" id="sideMenu">
+      <div class="menu-title">CodeCraft</div>
+      <ul class="menu-items">
         <li>
-            <a href="home.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                </svg>
-                Головна
-            </a>
+          <a href="home.html">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            Головна
+          </a>
         </li>
         <li class="menu-item-with-submenu">
-            <a href="#" class="menu-toggle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="16 18 22 12 16 6"></polyline>
-                    <polyline points="8 6 2 12 8 18"></polyline>
-                </svg>
-                Курси
-                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </a>
-            <ul class="submenu">
-                <li><a href="Pythonhome.html">Python</a></li>
-                <li><a href="C++home.html">C++</a></li>
-                <li><a href="CSharphome.html">C#</a></li>
-                <li><a href="JavaScripthome.html">JavaScript</a></li>
-                <li><a href="HTMLhome.html">HTML</a></li>
-                <li><a href="CSShome.html">CSS</a></li>
-            </ul>
-        </li>
-    </ul>
-</div>
-
-<!--Навігаційна панель-->
-<nav>
-    <!--Ліва частина: кнопка меню-->
-    <div class="nav-left">
-        <button class="menu-btn" id="menuBtn">☰</button>
-    </div>
-
-    <!--Центр: логотип(з'явиться після анімації)-->
-    <div class="logo-nav" id="logoNav">CodeCraft</div>
-
-    <!--Права частина: кнопка входу-->
-    <div class="nav-right">
-        <button class="login-btn" id="loginBtn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+          <a href="#" class="menu-toggle">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
             </svg>
-            Вхід
-        </button>
+            Курси
+            <svg
+              class="arrow-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </a>
+          <ul class="submenu">
+            <li><a href="Pythonhome.html">Python</a></li>
+            <li><a href="C++home.html">C++</a></li>
+            <li><a href="CSharphome.html">C#</a></li>
+            <li><a href="JavaScripthome.html">JavaScript</a></li>
+            <li><a href="HTMLhome.html">HTML</a></li>
+            <li><a href="CSShome.html">CSS</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
-</nav>
 
-<!--Головна секція з анімацією-->
-<div class="hero">
-    <div class="animation-container">
+    <!--Навігаційна панель-->
+    <nav>
+      <!--Ліва частина: кнопка меню-->
+      <div class="nav-left">
+        <button class="menu-btn" id="menuBtn">☰</button>
+      </div>
+
+      <!--Центр: логотип(з'явиться після анімації)-->
+      <div class="logo-nav" id="logoNav">CodeCraft</div>
+
+      <!--Права частина: кнопка входу-->
+      <div class="nav-right">
+        <button class="login-btn" id="loginBtn">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Вхід
+        </button>
+      </div>
+    </nav>
+
+    <!--Головна секція з анімацією-->
+    <div class="hero">
+      <div class="animation-container">
         <!--Назва сайту-->
         <div class="logo-main">
-            <h1>CodeCraft</h1>
+          <h1>CodeCraft</h1>
         </div>
-    </div>
+      </div>
 
-    <!--Кнопки мов програмування-->
-    <div class="languages-container">
+      <!--Заголовок сторінки-->
+      <div class="page-header" id="pageHeader">
+        <h1>Курси програмування</h1>
+        <p>Оберіть курс та розпочніть свій шлях у світ програмування</p>
+      </div>
+
+      <!--Кнопки мов програмування-->
+      <div class="languages-container">
         <!--Перший ряд-->
         <div class="language-buttons">
-            <!-- Python -->
-            <div class="language-btn">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="image\python_5968350 (1).png" alt="Python">
-                        <div class="name">Python</div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <div class="name">Python</div>
-                            <div class="description">
-                                Універсальна мова програмування для веб-розробки, аналізу даних та штучного інтелекту
-                            </div>
-                        </div>
-                        <button class="start-btn" onclick="selectLanguage('python')">Почати навчання</button>
-                    </div>
+          <!-- Python -->
+          <div class="language-btn">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image\python_5968350 (1).png" alt="Python" />
+                <div class="name">Python</div>
+              </div>
+              <div class="card-back">
+                <div class="card-back-content">
+                  <div class="name">Python</div>
+                  <div class="description">
+                    Універсальна мова програмування для веб-розробки, аналізу
+                    даних та штучного інтелекту
+                  </div>
                 </div>
+                <button class="start-btn" onclick="selectLanguage('python')">
+                  Почати навчання
+                </button>
+              </div>
             </div>
+          </div>
 
-            <!-- C++ -->
-            <div class="language-btn">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="image\c_6132222 (2).png" alt="C++">
-                        <div class="name">C++</div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <div class="name">C++</div>
-                            <div class="description">
-                                Потужна мова для системного програмування, ігор та високопродуктивних додатків
-                            </div>
-                        </div>
-                        <button class="start-btn" onclick="selectLanguage('cpp')">Почати навчання</button>
-                    </div>
+          <!-- C++ -->
+          <div class="language-btn">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image\c_6132222 (2).png" alt="C++" />
+                <div class="name">C++</div>
+              </div>
+              <div class="card-back">
+                <div class="card-back-content">
+                  <div class="name">C++</div>
+                  <div class="description">
+                    Потужна мова для системного програмування, ігор та
+                    високопродуктивних додатків
+                  </div>
                 </div>
+                <button class="start-btn" onclick="selectLanguage('cpp')">
+                  Почати навчання
+                </button>
+              </div>
             </div>
+          </div>
 
-            <!-- C# -->
-            <div class="language-btn">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="image\c-sharp_6132221.png" alt="C#">
-                        <div class="name">C#</div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <div class="name">C#</div>
-                            <div class="description">
-                                Сучасна мова для розробки Windows-додатків, ігор на Unity та веб-сервісів
-                            </div>
-                        </div>
-                        <button class="start-btn" onclick="selectLanguage('cs')">Почати навчання</button>
-                    </div>
+          <!-- C# -->
+          <div class="language-btn">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image\c-sharp_6132221.png" alt="C#" />
+                <div class="name">C#</div>
+              </div>
+              <div class="card-back">
+                <div class="card-back-content">
+                  <div class="name">C#</div>
+                  <div class="description">
+                    Сучасна мова для розробки Windows-додатків, ігор на Unity та
+                    веб-сервісів
+                  </div>
                 </div>
+                <button class="start-btn" onclick="selectLanguage('cs')">
+                  Почати навчання
+                </button>
+              </div>
             </div>
+          </div>
         </div>
 
         <!--Другий ряд-->
         <div class="language-buttons">
-            <!-- JavaScript -->
-            <div class="language-btn">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="image\js-file_8422177.png" alt="JavaScript">
-                        <div class="name">JavaScript</div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <div class="name">JavaScript</div>
-                            <div class="description">
-                                Основна мова для інтерактивних веб-сайтів та сучасних веб-додатків
-                            </div>
-                        </div>
-                        <button class="start-btn" onclick="selectLanguage('javascript')">Почати навчання</button>
-                    </div>
+          <!-- JavaScript -->
+          <div class="language-btn">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image\js-file_8422177.png" alt="JavaScript" />
+                <div class="name">JavaScript</div>
+              </div>
+              <div class="card-back">
+                <div class="card-back-content">
+                  <div class="name">JavaScript</div>
+                  <div class="description">
+                    Основна мова для інтерактивних веб-сайтів та сучасних
+                    веб-додатків
+                  </div>
                 </div>
+                <button
+                  class="start-btn"
+                  onclick="selectLanguage('javascript')"
+                >
+                  Почати навчання
+                </button>
+              </div>
             </div>
+          </div>
 
-            <!-- HTML -->
-            <div class="language-btn">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="image\html-5_5968267.png" alt="HTML">
-                        <div class="name">HTML</div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <div class="name">HTML</div>
-                            <div class="description">
-                                Основа всіх веб-сторінок - структура та контент вашого сайту
-                            </div>
-                        </div>
-                        <button class="start-btn" onclick="selectLanguage('html')">Почати навчання</button>
-                    </div>
+          <!-- HTML -->
+          <div class="language-btn">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image\html-5_5968267.png" alt="HTML" />
+                <div class="name">HTML</div>
+              </div>
+              <div class="card-back">
+                <div class="card-back-content">
+                  <div class="name">HTML</div>
+                  <div class="description">
+                    Основа всіх веб-сторінок - структура та контент вашого сайту
+                  </div>
                 </div>
+                <button class="start-btn" onclick="selectLanguage('html')">
+                  Почати навчання
+                </button>
+              </div>
             </div>
+          </div>
 
-            <!-- CSS -->
-            <div class="language-btn">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <img src="image\css-3_5968242.png" alt="CSS">
-                        <div class="name">CSS</div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <div class="name">CSS</div>
-                            <div class="description">
-                                Стилізація веб-сторінок - кольори, шрифти, анімації та дизайн
-                            </div>
-                        </div>
-                        <button class="start-btn" onclick="selectLanguage('css')">Почати навчання</button>
-                    </div>
+          <!-- CSS -->
+          <div class="language-btn">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image\css-3_5968242.png" alt="CSS" />
+                <div class="name">CSS</div>
+              </div>
+              <div class="card-back">
+                <div class="card-back-content">
+                  <div class="name">CSS</div>
+                  <div class="description">
+                    Стилізація веб-сторінок - кольори, шрифти, анімації та
+                    дизайн
+                  </div>
                 </div>
+                <button class="start-btn" onclick="selectLanguage('css')">
+                  Почати навчання
+                </button>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
 
-<script>
-// Використовуємо sessionStorage, щоб знати, чи була анімація вже показана в поточній сесії
-const ANIMATION_SHOWN_KEY = 'codecraft_animation_shown';
-const animationShown = sessionStorage.getItem(ANIMATION_SHOWN_KEY) === 'true';
+    <script>
+      // Використовуємо sessionStorage, щоб знати, чи була анімація вже показана в поточній сесії
+      const ANIMATION_SHOWN_KEY = "codecraft_animation_shown";
+      const animationShown =
+        sessionStorage.getItem(ANIMATION_SHOWN_KEY) === "true";
 
-// Генерація 100 анімованих зірок на фоні
-const starsContainer = document.getElementById('stars');
+      // Генерація 100 анімованих зірок на фоні
+      const starsContainer = document.getElementById("stars");
 
-for (let i = 0; i < 100; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDelay = Math.random() * 3 + 's';
-    starsContainer.appendChild(star);
-}
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.animationDelay = Math.random() * 3 + "s";
+        starsContainer.appendChild(star);
+      }
 
-// Функція для пропуску анімації
-function skipIntroAnimation() {
-    // 1. Приховуємо великий логотип
-    document.querySelector('.logo-main').classList.add('skip-animation');
-    // 2. Одразу показуємо логотип в навігації
-    document.getElementById('logoNav').classList.add('skip-animation'); 
-    // 3. Одразу показуємо кнопки мов програмування
-    document.querySelector('.languages-container').classList.add('skip-animation');
-}
+      // Функція для пропуску анімації
+      function skipIntroAnimation() {
+        // 1. Приховуємо великий логотип
+        document.querySelector(".logo-main").classList.add("skip-animation");
+        // 2. Одразу показуємо логотип в навігації
+        document.getElementById("logoNav").classList.add("skip-animation");
+        // 3. Одразу показуємо заголовок сторінки
+        document.getElementById("pageHeader").classList.add("skip-animation");
+        // 4. Одразу показуємо кнопки мов програмування
+        document
+          .querySelector(".languages-container")
+          .classList.add("skip-animation");
+      }
 
-// Логіка показу/пропуску анімації
-if (animationShown) {
-    // Якщо анімація вже була, пропускаємо її
-    skipIntroAnimation();
-} else {
-    // Якщо анімація ще не була показана
-    
-    // Встановлюємо позначку, що анімація була показана
-    sessionStorage.setItem(ANIMATION_SHOWN_KEY, 'true');
-    
-    // Запускаємо таймер для показу логотипу в навігації після завершення анімації
-    setTimeout(() => {
-        document.getElementById('logoNav').classList.add('visible');
-    }, 2400); // Час має відповідати загальній тривалості анімацій логотипу
-}
+      // Логіка показу/пропуску анімації
+      if (animationShown) {
+        // Якщо анімація вже була, пропускаємо її
+        skipIntroAnimation();
+      } else {
+        // Якщо анімація ще не була показана
 
-// Функціонал меню
-const menuBtn = document.getElementById('menuBtn');
-const sideMenu = document.getElementById('sideMenu');
-const overlay = document.getElementById('overlay');
+        // Встановлюємо позначку, що анімація була показана
+        sessionStorage.setItem(ANIMATION_SHOWN_KEY, "true");
 
-menuBtn.addEventListener('click', () => {
-    sideMenu.classList.toggle('active');
-    overlay.classList.toggle('active');
-});
+        // Запускаємо таймер для показу логотипу в навігації після завершення анімації
+        setTimeout(() => {
+          document.getElementById("logoNav").classList.add("visible");
+        }, 2400); // Час має відповідати загальній тривалості анімацій логотипу
+      }
 
-overlay.addEventListener('click', () => {
-    sideMenu.classList.remove('active');
-    overlay.classList.remove('active');
-});
+      // Функціонал меню
+      const menuBtn = document.getElementById("menuBtn");
+      const sideMenu = document.getElementById("sideMenu");
+      const overlay = document.getElementById("overlay");
 
-// Функціонал для розкриття підменю "Курси"
-const menuToggle = document.querySelector('.menu-toggle');
-const menuItemWithSubmenu = document.querySelector('.menu-item-with-submenu');
+      menuBtn.addEventListener("click", () => {
+        sideMenu.classList.toggle("active");
+        overlay.classList.toggle("active");
+      });
 
-menuToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    menuItemWithSubmenu.classList.toggle('active');
-});
+      overlay.addEventListener("click", () => {
+        sideMenu.classList.remove("active");
+        overlay.classList.remove("active");
+      });
 
-// Кнопка входу - перехід на login.html
-const loginBtn = document.getElementById('loginBtn');
-loginBtn.addEventListener('click', () => {
-    window.location.href = 'login.html';
-});
+      // Функціонал для розкриття підменю "Курси"
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menuItemWithSubmenu = document.querySelector(
+        ".menu-item-with-submenu"
+      );
 
-// Функціонал вибору мови програмування
-function selectLanguage(language) {
-    console.log('Вибрана мова:', language);
-    if (language === 'javascript') {
-        window.location.href = 'JavaScripthome.html'; 
-    }
-    if (language === 'python') {
-        window.location.href = 'Pythonhome.html'; 
-    }
-    if (language === 'cpp') {
-        window.location.href = 'C++home.html'; 
-    }
-    if (language === 'cs') {
-        window.location.href = 'CSharphome.html'; 
-    }
-    if (language === 'html') {
-        window.location.href = 'HTMLhome.html'; 
-    }
-    if (language === 'css') {
-        window.location.href = 'CSShome.html'; 
-    }
-}
-</script>
-</body>
+      menuToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        menuItemWithSubmenu.classList.toggle("active");
+      });
+
+      // Кнопка входу - перехід на login.html
+      const loginBtn = document.getElementById("loginBtn");
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "login.html";
+      });
+
+      // Функціонал вибору мови програмування
+      function selectLanguage(language) {
+        console.log("Вибрана мова:", language);
+        if (language === "javascript") {
+          window.location.href = "JavaScripthome.html";
+        }
+        if (language === "python") {
+          window.location.href = "Pythonhome.html";
+        }
+        if (language === "cpp") {
+          window.location.href = "C++home.html";
+        }
+        if (language === "cs") {
+          window.location.href = "CSharphome.html";
+        }
+        if (language === "html") {
+          window.location.href = "HTMLhome.html";
+        }
+        if (language === "css") {
+          window.location.href = "CSShome.html";
+        }
+      }
+    </script>
+  </body>
 </html>
