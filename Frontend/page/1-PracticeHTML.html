@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JHTML - Практика | CodeCraft</title>
+    <title>HTML - Практика | CodeCraft</title>
 
     <style>
       * {
@@ -750,104 +750,147 @@
 
 
 const questions = [
-  {
-    question: "Введіть тег для вставки зображення.",
-    codeLines: [{ type: "input", before: "", after: "" }],
-    correctAnswer: "<img"
-  },
-  {
-    question: "Введіть атрибут, що визначає шлях до зображення.",
-    codeLines: [{ type: "input", before: "<img ", after: "=\"image.jpg\" alt=\"Фото\">" }],
-    correctAnswer: "src"
-  },
-  {
-    question: "Введіть атрибут для альтернативного тексту зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" ", after: ">" }],
-    correctAnswer: "alt"
-  },
-  {
-    question: "Введіть атрибут для ширини зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" alt=\"Фото\" ", after: ">" }],
-    correctAnswer: "width"
-  },
-  {
-    question: "Введіть тег для додавання фавікону.",
-    codeLines: [{ type: "input", before: "", after: " rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "<link"
-  },
-  {
-    question: "Введіть атрибут для підключення фавікону.",
-    codeLines: [{ type: "input", before: "<link ", after: " href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "rel"
-  },
-  {
-    question: "Введіть атрибут для шляху фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" ", after: " type=\"image/x-icon\">" }],
-    correctAnswer: "href"
-  },
-  {
-    question: "Введіть атрибут для типу файлу фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" href=\"favicon.ico\" ", after: ">" }],
-    correctAnswer: "type"
-  },
-  {
-    question: "Введіть тег для заголовка сторінки.",
-    codeLines: [{ type: "input", before: "", after: ">Моя сторінка</title>" }],
-    correctAnswer: "<title"
-  },
-  {
-    question: "Введіть тег для створення таблиці.",
-    codeLines: [{ type: "input", before: "", after: " border=\"1\">" }],
-    correctAnswer: "<table"
-  },
-  {
-    question: "Введіть тег для рядка таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<tr"
-  },
-  {
-    question: "Введіть тег для заголовка стовпця таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<th"
-  },
-  {
-    question: "Введіть тег для клітинки таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<td"
-  },
-  {
-    question: "Введіть тег для нумерованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ol"
-  },
-  {
-    question: "Введіть тег для маркованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ul"
-  },
-  {
-    question: "Введіть тег для пункту списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<li"
-  },
-  {
-    question: "Введіть атрибут для додавання бордера таблиці.",
-    codeLines: [{ type: "input", before: "<table ", after: "=\"1\">" }],
-    correctAnswer: "border"
-  },
-  {
-    question: "Введіть тег для вставки відео.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<video"
-  },
-  {
-    question: "Введіть тег для вставки аудіо.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<audio"
-  },
- 
+    {
+        question: "Введіть DOCTYPE для HTML5.",
+        codeLines: [
+            { type: "input", before: "", after: "" }
+        ],
+        correctAnswer: "<!DOCTYPE html>"
+    },
+    {
+        question: "Введіть відкриваючий тег html.",
+        codeLines: [
+            { type: "input", before: "", after: " lang=\"uk\">" }
+        ],
+        correctAnswer: "<html"
+    },
+    {
+        question: "Введіть відкриваючий тег head.",
+        codeLines: [
+            { type: "input", before: "", after: ">" }
+        ],
+        correctAnswer: "<head"
+    },
+    {
+        question: "Введіть відкриваючий тег body.",
+        codeLines: [
+            { type: "input", before: "", after: ">" }
+        ],
+        correctAnswer: "<body"
+    },
+    {
+        question: "Введіть тег заголовка h1.",
+        codeLines: [
+            { type: "input", before: "", after: ">Привіт!</h1>" }
+        ],
+        correctAnswer: "<h1"
+    },
+    {
+        question: "Введіть відкриваючий тег абзацу.",
+        codeLines: [
+            { type: "input", before: "", after: ">Це абзац.</p>" }
+        ],
+        correctAnswer: "<p"
+    },
+    {
+        question: "Введіть тег для зображення.",
+        codeLines: [
+            { type: "input", before: "", after: " src=\"img.jpg\" alt=\"Фото\">" }
+        ],
+        correctAnswer: "<img"
+    },
+    {
+        question: "Введіть відкриваючий тег посилання.",
+        codeLines: [
+            { type: "input", before: "", after: " href=\"https://example.com\">Link</a>" }
+        ],
+        correctAnswer: "<a"
+    },
+    {
+        question: "Введіть атрибут альтернативного тексту.",
+        codeLines: [
+            { type: "input", before: "<img src=\"cat.jpg\" ", after: "=\"Кіт\">" }
+        ],
+        correctAnswer: "alt"
+    },
+    {
+        question: "Введіть атрибут для адреси посилання.",
+        codeLines: [
+            { type: "input", before: "<a ", after: "=\"page.html\">Текст</a>" }
+        ],
+        correctAnswer: "href"
+    },
+    {
+        question: "Введіть тег заголовка h2.",
+        codeLines: [
+            { type: "input", before: "", after: ">Підзаголовок</h2>" }
+        ],
+        correctAnswer: "<h2"
+    },
+    {
+        question: "Введіть тег списку ul.",
+        codeLines: [
+            { type: "input", before: "", after: ">\n  <li>Елемент</li>\n</ul>" }
+        ],
+        correctAnswer: "<ul"
+    },
+    {
+        question: "Введіть тег елемента списку.",
+        codeLines: [
+            { type: "input", before: "", after: ">Елемент</li>" }
+        ],
+        correctAnswer: "<li"
+    },
+    {
+        question: "Введіть відкриваючий тег таблиці.",
+        codeLines: [
+            { type: "input", before: "", after: ">\n  <tr><td>1</td></tr>\n</table>" }
+        ],
+        correctAnswer: "<table"
+    },
+    {
+        question: "Введіть тег рядка таблиці.",
+        codeLines: [
+            { type: "input", before: "", after: ">\n  <td>Текст</td>\n</tr>" }
+        ],
+        correctAnswer: "<tr"
+    },
+    {
+        question: "Введіть тег комірки таблиці.",
+        codeLines: [
+            { type: "input", before: "", after: ">Дані</td>" }
+        ],
+        correctAnswer: "<td"
+    },
+    {
+        question: "Введіть відкриваючу частину HTML-коментаря.",
+        codeLines: [
+            { type: "input", before: "", after: " Коментар -->" }
+        ],
+        correctAnswer: "<!--"
+    },
+    {
+        question: "Введіть тег горизонтальної лінії.",
+        codeLines: [
+            { type: "input", before: "", after: "" }
+        ],
+        correctAnswer: "<hr>"
+    },
+    {
+        question: "Введіть тег переносу рядка.",
+        codeLines: [
+            { type: "input", before: "", after: "" }
+        ],
+        correctAnswer: "<br>"
+    },
+    {
+        question: "Введіть атрибут для унікального ідентифікатора.",
+        codeLines: [
+            { type: "input", before: "<div ", after: "=\"main\"></div>" }
+        ],
+        correctAnswer: "id"
+    }
 ];
-
 
       let currentQuestion = 0;
       let userAnswers = {};

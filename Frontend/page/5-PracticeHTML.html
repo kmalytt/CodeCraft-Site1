@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JHTML - Практика | CodeCraft</title>
+    <title>HTML - Практика | CodeCraft</title>
 
     <style>
       * {
@@ -748,104 +748,107 @@
         window.location.href = "login.html";
       });
 
-
 const questions = [
   {
-    question: "Введіть тег для вставки зображення.",
-    codeLines: [{ type: "input", before: "", after: "" }],
+    question: "Введіть тег для шапки сайту.",
+    codeLines: [{ type: "input", before: "", after: ">Моя шапка</header>" }],
+    correctAnswer: "<header"
+  },
+  {
+    question: "Введіть тег для футера сайту.",
+    codeLines: [{ type: "input", before: "", after: ">Футер</footer>" }],
+    correctAnswer: "<footer"
+  },
+  {
+    question: "Введіть тег для головного контенту.",
+    codeLines: [{ type: "input", before: "", after: ">Контент</main>" }],
+    correctAnswer: "<main"
+  },
+  {
+    question: "Введіть тег для розділу.",
+    codeLines: [{ type: "input", before: "", after: ">Стаття</section>" }],
+    correctAnswer: "<section"
+  },
+  {
+    question: "Введіть тег для самостійного матеріалу.",
+    codeLines: [{ type: "input", before: "", after: ">Новина</article>" }],
+    correctAnswer: "<article"
+  },
+  {
+    question: "Введіть тег для бічної панелі.",
+    codeLines: [{ type: "input", before: "", after: ">Додатковий контент</aside>" }],
+    correctAnswer: "<aside"
+  },
+  {
+    question: "Введіть тег для навігації на сторінці.",
+    codeLines: [{ type: "input", before: "", after: ">Меню</nav>" }],
+    correctAnswer: "<nav"
+  },
+  {
+    question: "Введіть мета-тег viewport для адаптивності.",
+    codeLines: [{ type: "input", before: "", after: ">"}],
+    correctAnswer: "<meta"
+  },
+  {
+    question: "Введіть атрибут для ширини viewport.",
+    codeLines: [{ type: "input", before: "<meta ", after: ">"}],
+    correctAnswer: "name"
+  },
+  {
+    question: "Введіть атрибут для початкового масштабу viewport.",
+    codeLines: [{ type: "input", before: "<meta name=\"viewport\" ", after: ">"}],
+    correctAnswer: "content"
+  },
+  {
+    question: "Введіть тег для контейнера flex.",
+    codeLines: [{ type: "input", before: "", after: ">Контейнер</div>" }],
+    correctAnswer: "<div"
+  },
+  {
+    question: "Введіть клас для елемента, що масштабується flex.",
+    codeLines: [{ type: "input", before: "<div ", after: ">Контейнер</div>" }],
+    correctAnswer: "class"
+  },
+  {
+    question: "Введіть CSS-селектора для медіа-запиту.",
+    codeLines: [{ type: "input", before: "@media ", after: "{ }"}],
+    correctAnswer: "(max-width: 600px)"
+  },
+  {
+    question: "Введіть HTML-сутність для менше '<'.",
+    codeLines: [{ type: "input", before: "", after: ""}],
+    correctAnswer: "&lt;"
+  },
+  {
+    question: "Введіть HTML-сутність для більше '>'.",
+    codeLines: [{ type: "input", before: "", after: ""}],
+    correctAnswer: "&gt;"
+  },
+  {
+    question: "Введіть HTML-сутність для амперсанд '&'.",
+    codeLines: [{ type: "input", before: "", after: ""}],
+    correctAnswer: "&amp;"
+  },
+  {
+    question: "Введіть HTML-сутність для серця.",
+    codeLines: [{ type: "input", before: "", after: ""}],
+    correctAnswer: "&hearts;"
+  },
+  {
+    question: "Введіть тег для вставки зображення в HTML5.",
+    codeLines: [{ type: "input", before: "", after: " alt=\"Логотип\">" }],
     correctAnswer: "<img"
   },
   {
-    question: "Введіть атрибут, що визначає шлях до зображення.",
-    codeLines: [{ type: "input", before: "<img ", after: "=\"image.jpg\" alt=\"Фото\">" }],
-    correctAnswer: "src"
+    question: "Введіть правильний закриваючий слеш для XHTML.",
+    codeLines: [{ type: "input", before: "<img src=\"logo.png\" alt=\"Логотип\"", after: ">" }],
+    correctAnswer: "/"
   },
   {
-    question: "Введіть атрибут для альтернативного тексту зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" ", after: ">" }],
-    correctAnswer: "alt"
-  },
-  {
-    question: "Введіть атрибут для ширини зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" alt=\"Фото\" ", after: ">" }],
-    correctAnswer: "width"
-  },
-  {
-    question: "Введіть тег для додавання фавікону.",
-    codeLines: [{ type: "input", before: "", after: " rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "<link"
-  },
-  {
-    question: "Введіть атрибут для підключення фавікону.",
-    codeLines: [{ type: "input", before: "<link ", after: " href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "rel"
-  },
-  {
-    question: "Введіть атрибут для шляху фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" ", after: " type=\"image/x-icon\">" }],
-    correctAnswer: "href"
-  },
-  {
-    question: "Введіть атрибут для типу файлу фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" href=\"favicon.ico\" ", after: ">" }],
-    correctAnswer: "type"
-  },
-  {
-    question: "Введіть тег для заголовка сторінки.",
-    codeLines: [{ type: "input", before: "", after: ">Моя сторінка</title>" }],
-    correctAnswer: "<title"
-  },
-  {
-    question: "Введіть тег для створення таблиці.",
-    codeLines: [{ type: "input", before: "", after: " border=\"1\">" }],
-    correctAnswer: "<table"
-  },
-  {
-    question: "Введіть тег для рядка таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<tr"
-  },
-  {
-    question: "Введіть тег для заголовка стовпця таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<th"
-  },
-  {
-    question: "Введіть тег для клітинки таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<td"
-  },
-  {
-    question: "Введіть тег для нумерованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ol"
-  },
-  {
-    question: "Введіть тег для маркованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ul"
-  },
-  {
-    question: "Введіть тег для пункту списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<li"
-  },
-  {
-    question: "Введіть атрибут для додавання бордера таблиці.",
-    codeLines: [{ type: "input", before: "<table ", after: "=\"1\">" }],
-    correctAnswer: "border"
-  },
-  {
-    question: "Введіть тег для вставки відео.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<video"
-  },
-  {
-    question: "Введіть тег для вставки аудіо.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<audio"
-  },
- 
+    question: "Вкажіть правильний charset для UTF-8.",
+    codeLines: [{ type: "input", before: "<meta ", after: ">"}],
+    correctAnswer: "charset"
+  }
 ];
 
 
@@ -1006,6 +1009,7 @@ const questions = [
 
         loadQuestion();
       }
+
 
       function backToStart() {
         window.location.href = "All-Practice-HTML.html";

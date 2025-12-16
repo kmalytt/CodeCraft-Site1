@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JHTML - Практика | CodeCraft</title>
+    <title>CSS - Практика | CodeCraft</title>
 
     <style>
       * {
@@ -749,107 +749,152 @@
       });
 
 
+  // Завдання
 const questions = [
   {
-    question: "Введіть тег для вставки зображення.",
-    codeLines: [{ type: "input", before: "", after: "" }],
-    correctAnswer: "<img"
+    question: "Введіть медіа-запит для екранів до 768px.",
+    codeLines: [
+      { type: "input", before: "", after: "{ body { background-color: lightblue; } }" }
+    ],
+    correctAnswer: "@media (max-width: 768px)"
   },
   {
-    question: "Введіть атрибут, що визначає шлях до зображення.",
-    codeLines: [{ type: "input", before: "<img ", after: "=\"image.jpg\" alt=\"Фото\">" }],
-    correctAnswer: "src"
+    question: "Введіть медіа-запит для екранів від 1024px.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .container { width: 80%; } }" }
+    ],
+    correctAnswer: "@media (min-width: 1024px)"
   },
   {
-    question: "Введіть атрибут для альтернативного тексту зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" ", after: ">" }],
-    correctAnswer: "alt"
+    question: "Введіть медіа-запит для екранів від 768px до 1024px.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .menu { display: flex; } }" }
+    ],
+    correctAnswer: "@media (min-width: 768px) and (max-width: 1024px)"
   },
   {
-    question: "Введіть атрибут для ширини зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" alt=\"Фото\" ", after: ">" }],
-    correctAnswer: "width"
+    question: "Введіть медіа-запит з логічним 'або' (max-width або портретна орієнтація).",
+    codeLines: [
+      { type: "input", before: "", after: "{ .sidebar { display: none; } }" }
+    ],
+    correctAnswer: "@media (max-width: 480px), (orientation: portrait)"
   },
   {
-    question: "Введіть тег для додавання фавікону.",
-    codeLines: [{ type: "input", before: "", after: " rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "<link"
+    question: "Введіть медіа-запит із вкладеними селекторами (menu всередині container).",
+    codeLines: [
+      { type: "input", before: "", after: "{ .container { .menu { display: none; } } }" }
+    ],
+    correctAnswer: "@media (max-width: 768px)"
   },
   {
-    question: "Введіть атрибут для підключення фавікону.",
-    codeLines: [{ type: "input", before: "<link ", after: " href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "rel"
+    question: "Введіть псевдоклас для наведення на кнопку.",
+    codeLines: [
+      { type: "input", before: "button", after: " { background-color: green; }" }
+    ],
+    correctAnswer: ":hover"
   },
   {
-    question: "Введіть атрибут для шляху фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" ", after: " type=\"image/x-icon\">" }],
-    correctAnswer: "href"
+    question: "Введіть медіа-запит для екранів від 600px (зміна ширини box).",
+    codeLines: [
+      { type: "input", before: "", after: "{ .box { width: 400px; } }" }
+    ],
+    correctAnswer: "@media (min-width: 600px)"
   },
   {
-    question: "Введіть атрибут для типу файлу фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" href=\"favicon.ico\" ", after: ">" }],
-    correctAnswer: "type"
+    question: "Введіть медіа-запит для декількох умов через кому (header прихований).",
+    codeLines: [
+      { type: "input", before: "", after: "{ .header { display: none; } }" }
+    ],
+    correctAnswer: "@media (max-width: 500px), (orientation: portrait)"
   },
   {
-    question: "Введіть тег для заголовка сторінки.",
-    codeLines: [{ type: "input", before: "", after: ">Моя сторінка</title>" }],
-    correctAnswer: "<title"
+    question: "Введіть медіа-запит для темної схеми кольорів.",
+    codeLines: [
+      { type: "input", before: "", after: "{ body { background-color: #222; color: #fff; } }" }
+    ],
+    correctAnswer: "@media (prefers-color-scheme: dark)"
   },
   {
-    question: "Введіть тег для створення таблиці.",
-    codeLines: [{ type: "input", before: "", after: " border=\"1\">" }],
-    correctAnswer: "<table"
+    question: "Введіть псевдоклас для наведення на посилання.",
+    codeLines: [
+      { type: "input", before: "a", after: " { color: red; }" }
+    ],
+    correctAnswer: ":hover"
   },
   {
-    question: "Введіть тег для рядка таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<tr"
+    question: "Введіть псевдоклас для фокусу на input.",
+    codeLines: [
+      { type: "input", before: "input", after: " { border-color: blue; }" }
+    ],
+    correctAnswer: ":focus"
   },
   {
-    question: "Введіть тег для заголовка стовпця таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<th"
+    question: "Введіть медіа-запит для екранів між 320px і 480px.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .mobile { font-size: 14px; } }" }
+    ],
+    correctAnswer: "@media (min-width: 320px) and (max-width: 480px)"
   },
   {
-    question: "Введіть тег для клітинки таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<td"
+    question: "Введіть медіа-запит для планшетів (768px–1024px).",
+    codeLines: [
+      { type: "input", before: "", after: "{ .tablet { padding: 20px; } }" }
+    ],
+    correctAnswer: "@media (min-width: 768px) and (max-width: 1024px)"
   },
   {
-    question: "Введіть тег для нумерованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ol"
+    question: "Введіть медіа-запит для екранів менше 1200px.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .container { margin: 10px; } }" }
+    ],
+    correctAnswer: "@media (max-width: 1200px)"
   },
   {
-    question: "Введіть тег для маркованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ul"
+    question: "Введіть псевдоклас для активного посилання.",
+    codeLines: [
+      { type: "input", before: "a", after: " { color: green; }" }
+    ],
+    correctAnswer: ":active"
   },
   {
-    question: "Введіть тег для пункту списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<li"
+    question: "Введіть псевдоклас для першого елемента li.",
+    codeLines: [
+      { type: "input", before: "li", after: " { font-weight: bold; }" }
+    ],
+    correctAnswer: ":first-child"
   },
   {
-    question: "Введіть атрибут для додавання бордера таблиці.",
-    codeLines: [{ type: "input", before: "<table ", after: "=\"1\">" }],
-    correctAnswer: "border"
+    question: "Введіть псевдоклас для останнього елемента li.",
+    codeLines: [
+      { type: "input", before: "li", after: " { font-style: italic; }" }
+    ],
+    correctAnswer: ":last-child"
   },
   {
-    question: "Введіть тег для вставки відео.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<video"
+    question: "Введіть медіа-запит для темної теми при prefers-color-scheme: light.",
+    codeLines: [
+      { type: "input", before: "", after: "{ body { background-color: #fff; color: #000; } }" }
+    ],
+    correctAnswer: "@media (prefers-color-scheme: light)"
   },
   {
-    question: "Введіть тег для вставки аудіо.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<audio"
+    question: "Введіть псевдоклас для елемента при наведенні та фокусі одночасно.",
+    codeLines: [
+      { type: "input", before: "button", after: " { outline: 2px solid blue; }" }
+    ],
+    correctAnswer: ":hover:focus"
   },
- 
+  {
+    question: "Введіть медіа-запит для екрану з мінімальною шириною 1440px.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .large-screen { max-width: 1200px; } }" }
+    ],
+    correctAnswer: "@media (min-width: 1440px)"
+  }
 ];
 
 
-      let currentQuestion = 0;
+let currentQuestion = 0;
       let userAnswers = {};
 
       const btnPrev = document.getElementById("btnPrev");
@@ -1008,7 +1053,7 @@ const questions = [
       }
 
       function backToStart() {
-        window.location.href = "All-Practice-HTML.html";
+        window.location.href = "All-Practice-CSS.html";
       }
 
       loadQuestion();
