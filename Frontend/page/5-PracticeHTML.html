@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python - Практика | CodeCraft</title>
+    <title>HTML - Практика | CodeCraft</title>
 
     <style>
       * {
@@ -177,6 +177,54 @@
         transform: translateX(5px);
       }
 
+      .menu-item-with-submenu {
+        position: relative;
+      }
+
+      .menu-toggle {
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .arrow-icon {
+        transition: transform 0.3s ease;
+        margin-left: auto;
+      }
+
+      .menu-item-with-submenu.active .arrow-icon {
+        transform: rotate(180deg);
+      }
+
+      .submenu {
+        list-style: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        padding-left: 20px;
+      }
+
+      .menu-item-with-submenu.active .submenu {
+        max-height: 400px;
+      }
+
+      .submenu li {
+        margin-top: 10px;
+      }
+
+      .submenu li a {
+        font-size: 16px;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .submenu li a:hover {
+        color: #00d9ff;
+        background: rgba(0, 217, 255, 0.1);
+        transform: translateX(5px);
+      }
+
       .overlay {
         position: fixed;
         top: 0;
@@ -333,6 +381,21 @@
         border: none;
         flex: 1;
         max-width: 250px;
+      }
+
+      .btn-prev {
+        background: #10b981;
+        color: rgb(255, 255, 255);
+      }
+
+      .btn-prev:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .btn-prev:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
       }
 
       .btn-clear {
@@ -505,7 +568,7 @@
       <div class="menu-title">CodeCraft</div>
       <ul class="menu-items">
         <li>
-          <a href="#">
+          <a href="home.html">
             <svg
               width="20"
               height="20"
@@ -519,8 +582,8 @@
             Головна
           </a>
         </li>
-        <li>
-          <a href="#">
+        <li class="menu-item-with-submenu">
+          <a href="#" class="menu-toggle">
             <svg
               width="20"
               height="20"
@@ -533,7 +596,26 @@
               <polyline points="8 6 2 12 8 18"></polyline>
             </svg>
             Курси
+            <svg
+              class="arrow-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </a>
+          <ul class="submenu">
+            <li><a href="Pythonhome.html">Python</a></li>
+            <li><a href="C++home.html">C++</a></li>
+            <li><a href="CSharphome.html">C#</a></li>
+            <li><a href="JavaScripthome.html">JavaScript</a></li>
+            <li><a href="HTMLhome.html">HTML</a></li>
+            <li><a href="CSShome.html">CSS</a></li>
+          </ul>
         </li>
       </ul>
     </div>
@@ -582,6 +664,7 @@
         </div>
 
         <div class="button-container">
+          <button class="btn btn-prev" id="btnPrev" disabled>« Назад</button>
           <button class="btn btn-clear" id="btnClear">Очистити</button>
           <button class="btn btn-check" id="btnCheck">
             Показати відповідь
@@ -591,11 +674,16 @@
       </div>
 
       <div class="results-container" id="resultsContainer">
-        <h1 class="results-title"> Тест завершено!</h1>
+        <h1 class="results-title">Завдання завершено!</h1>
         <div class="score-display" id="scoreDisplay">0%</div>
         <p class="result-message" id="resultMessage"></p>
 
         <div class="stats-container">
+          <div
+            id="reviewContainer"
+            style="margin-top: 30px; text-align: left"
+          ></div>
+
           <div class="stat-box correct">
             <div class="stat-label">Правильних відповідей</div>
             <div class="stat-value" id="correctCount">0</div>
@@ -611,7 +699,7 @@
             Пройти знову
           </button>
           <button class="btn btn-check" onclick="backToStart()">
-             На головну
+            На головну
           </button>
         </div>
       </div>
@@ -640,6 +728,23 @@
       overlay.addEventListener("click", () => {
         sideMenu.classList.remove("active");
         overlay.classList.remove("active");
+      });
+
+      // Функціонал для розкриття підменю "Курси"
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menuItemWithSubmenu = document.querySelector(
+        ".menu-item-with-submenu"
+      );
+
+      menuToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        menuItemWithSubmenu.classList.toggle("active");
+      });
+
+      // Кнопка входу - перехід на login.html
+      const loginBtn = document.getElementById("loginBtn");
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "login.html";
       });
 
 const questions = [
@@ -747,8 +852,15 @@ const questions = [
 
 
       let currentQuestion = 0;
-      let userInput;
       let userAnswers = {};
+
+      const btnPrev = document.getElementById("btnPrev");
+      btnPrev.addEventListener("click", () => {
+        if (currentQuestion > 0) {
+          currentQuestion--;
+          loadQuestion();
+        }
+      });
 
       function loadQuestion() {
         const q = questions[currentQuestion];
@@ -757,66 +869,80 @@ const questions = [
         const codeBlock = document.getElementById("codeBlock");
         let html = "";
 
-        q.codeLines.forEach((line) => {
+        q.codeLines.forEach((line, index) => {
           if (line.type === "input") {
             html += `
-                <div class="code-line">
-                    ${
-                      line.before
-                        ? `<span class="code-text">${line.before}</span>`
-                        : ""
-                    }
-                    <input type="text" class="code-input" id="userInput" placeholder="______">
-                    ${
-                      line.after
-                        ? `<span class="code-text">${line.after}</span>`
-                        : ""
-                    }
-                </div>
-            `;
+          <div class="code-line">
+              ${
+                line.before
+                  ? `<span class="code-text">${line.before}</span>`
+                  : ""
+              }
+              <input type="text" class="code-input" id="input_${index}" placeholder="______">
+              ${
+                line.after ? `<span class="code-text">${line.after}</span>` : ""
+              }
+          </div>`;
           } else {
             html += `
-                <div class="code-line">
-                    <span class="code-text">${line.text}</span>
-                </div>
-            `;
+          <div class="code-line">
+              <span class="code-text">${line.text}</span>
+          </div>`;
           }
         });
 
         codeBlock.innerHTML = html;
 
-        userInput = document.getElementById("userInput");
+        // повернути попередні відповіді (якщо були)
+        const inputs = document.querySelectorAll(".code-input");
         if (userAnswers[currentQuestion]) {
-          userInput.value = userAnswers[currentQuestion];
+          inputs.forEach((input, index) => {
+            if (userAnswers[currentQuestion][index]) {
+              input.value = userAnswers[currentQuestion][index];
+            }
+          });
         }
 
         document.getElementById("answerBox").style.display = "none";
 
+        // прогрес
         const progress = ((currentQuestion + 1) / questions.length) * 100;
         document.getElementById("progressFill").style.width = progress + "%";
         document.getElementById("progressText").textContent = `Завдання ${
           currentQuestion + 1
         } з ${questions.length}`;
+
+        btnPrev.disabled = currentQuestion === 0;
       }
 
+      // Очистити
       document.getElementById("btnClear").addEventListener("click", () => {
-        userInput.value = "";
-        userInput.classList.remove("correct", "wrong");
-        document.getElementById("answerBox").style.display = "none";
+        const inputs = document.querySelectorAll(".code-input");
+        inputs.forEach((input) => {
+          input.value = "";
+          input.classList.remove("correct", "wrong");
+        });
+
         delete userAnswers[currentQuestion];
+        document.getElementById("answerBox").style.display = "none";
       });
 
+      // Показати відповідь
       document.getElementById("btnCheck").addEventListener("click", () => {
-        if (userInput.value.trim()) {
-          document.getElementById("answerBox").style.display = "block";
-          document.getElementById("answerText").textContent =
-            questions[currentQuestion].correctAnswer;
-        }
+        document.getElementById("answerText").textContent =
+          questions[currentQuestion].correctAnswer;
+        document.getElementById("answerBox").style.display = "block";
       });
 
+      // Далі
       document.getElementById("btnNext").addEventListener("click", () => {
-        if (userInput.value.trim()) {
-          userAnswers[currentQuestion] = userInput.value.trim();
+        const inputs = document.querySelectorAll(".code-input");
+
+        // якщо інпутів немає — все одно переходимо далі
+        if (inputs.length > 0) {
+          const answers = [];
+          inputs.forEach((input) => answers.push(input.value.trim()));
+          userAnswers[currentQuestion] = answers;
         }
 
         if (currentQuestion < questions.length - 1) {
@@ -829,13 +955,11 @@ const questions = [
 
       function showResults() {
         let correct = 0;
+
         questions.forEach((q, index) => {
-          if (
-            userAnswers[index] &&
-            userAnswers[index].toLowerCase() === q.correctAnswer.toLowerCase()
-          ) {
+          const userAnswer = userAnswers[index]?.[0] || ""; // беремо перший інпут
+          if (userAnswer.toLowerCase() === q.correctAnswer.toLowerCase())
             correct++;
-          }
         });
 
         const total = questions.length;
@@ -851,29 +975,25 @@ const questions = [
         const scoreDisplay = document.getElementById("scoreDisplay");
         scoreDisplay.textContent = percentage + "%";
 
-        if (percentage >= 90) {
+        if (percentage >= 90)
           scoreDisplay.className = "score-display excellent";
-        } else if (percentage >= 70) {
+        else if (percentage >= 70)
           scoreDisplay.className = "score-display good";
-        } else if (percentage >= 50) {
+        else if (percentage >= 50)
           scoreDisplay.className = "score-display average";
-        } else {
-          scoreDisplay.className = "score-display poor";
-        }
+        else scoreDisplay.className = "score-display poor";
 
         document.getElementById("correctCount").textContent = correct;
         document.getElementById("incorrectCount").textContent = incorrect;
 
         let message = "";
-        if (percentage >= 90) {
-          message = " Відмінно! Ви чудово знаєте Python!";
-        } else if (percentage >= 70) {
+        if (percentage >= 90)
+          message = " Відмінно! Ви чудово знаєте JavaScript!";
+        else if (percentage >= 70)
           message = " Добре! Є невеликі прогалини, але загалом непогано!";
-        } else if (percentage >= 50) {
+        else if (percentage >= 50)
           message = " Задовільно. Варто повторити матеріал.";
-        } else {
-          message = " Потрібно краще вивчити тему.";
-        }
+        else message = " Потрібно краще вивчити тему.";
 
         document.getElementById("resultMessage").textContent = message;
       }
@@ -888,6 +1008,7 @@ const questions = [
 
         loadQuestion();
       }
+
 
       function backToStart() {
         window.location.href = "All-Practice-HTML.html";
