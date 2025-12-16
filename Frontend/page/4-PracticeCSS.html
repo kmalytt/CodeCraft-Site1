@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JHTML - Практика | CodeCraft</title>
+    <title>CSS - Практика | CodeCraft</title>
 
     <style>
       * {
@@ -748,108 +748,143 @@
         window.location.href = "login.html";
       });
 
-
 const questions = [
   {
-    question: "Введіть тег для вставки зображення.",
-    codeLines: [{ type: "input", before: "", after: "" }],
-    correctAnswer: "<img"
+    question: "Введіть цикл @for від 1 до 5 для класів .col-#{$i}.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .col-#{$i} { width: 20% * $i; } }" }
+    ],
+    correctAnswer: "@for $i from 1 through 5"
   },
   {
-    question: "Введіть атрибут, що визначає шлях до зображення.",
-    codeLines: [{ type: "input", before: "<img ", after: "=\"image.jpg\" alt=\"Фото\">" }],
-    correctAnswer: "src"
+    question: "Введіть цикл @each для списку кольорів red, green, blue.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .text-#{$color} { color: $color; } }" }
+    ],
+    correctAnswer: "@each $color in red, green, blue"
   },
   {
-    question: "Введіть атрибут для альтернативного тексту зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" ", after: ">" }],
-    correctAnswer: "alt"
+    question: "Введіть цикл @for для створення .item-#{$i}::before від 1 до 3.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .item-#{$i}::before { content: 'Item #{$i}'; } }" }
+    ],
+    correctAnswer: "@for $i from 1 through 3"
   },
   {
-    question: "Введіть атрибут для ширини зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" alt=\"Фото\" ", after: ">" }],
-    correctAnswer: "width"
+    question: "Введіть цикл @each для перебору словника $themes.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .btn-#{$name} { background-color: $color; } }" }
+    ],
+    correctAnswer: "@each $name, $color in $themes"
   },
   {
-    question: "Введіть тег для додавання фавікону.",
-    codeLines: [{ type: "input", before: "", after: " rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "<link"
+    question: "Введіть цикл @while поки $i <= 3 для .item-#{$i}.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .item-#{$i} { width: 100px * $i; } }" }
+    ],
+    correctAnswer: "@while $i <= 3"
   },
   {
-    question: "Введіть атрибут для підключення фавікону.",
-    codeLines: [{ type: "input", before: "<link ", after: " href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "rel"
+    question: "Введіть нескінченний цикл @while true з обмеженням $i > 10.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .item-#{$i} { width: 50px * $i; } @if $i > 10 { @break; } }" }
+    ],
+    correctAnswer: "@while true"
   },
   {
-    question: "Введіть атрибут для шляху фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" ", after: " type=\"image/x-icon\">" }],
-    correctAnswer: "href"
+    question: "Введіть @break у циклі @for при $i == 5.",
+    codeLines: [
+      { type: "input", before: "@for $i from 1 through 10 {", after: "@if $i == 5 { @break; } .item-#{$i} { width: 20px * $i; } }" }
+    ],
+    correctAnswer: "@if $i == 5 { @break; }"
   },
   {
-    question: "Введіть атрибут для типу файлу фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" href=\"favicon.ico\" ", after: ">" }],
-    correctAnswer: "type"
+    question: "Введіть @continue у циклі @for при $i == 3.",
+    codeLines: [
+      { type: "input", before: "@for $i from 1 through 5 {", after: "@if $i == 3 { @continue; } .item-#{$i} { width: 20px * $i; } }" }
+    ],
+    correctAnswer: "@if $i == 3 { @continue; }"
   },
   {
-    question: "Введіть тег для заголовка сторінки.",
-    codeLines: [{ type: "input", before: "", after: ">Моя сторінка</title>" }],
-    correctAnswer: "<title"
+    question: "Введіть змінну $i з початковим значенням 1.",
+    codeLines: [
+      { type: "input", before: "", after: ";" }
+    ],
+    correctAnswer: "$i: 1"
   },
   {
-    question: "Введіть тег для створення таблиці.",
-    codeLines: [{ type: "input", before: "", after: " border=\"1\">" }],
-    correctAnswer: "<table"
+    question: "Введіть вкладений цикл @for для .item-#{$i}-#{$j} від 1..3 та 1..2.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .item-#{$i}-#{$j} { width: 20px * $j; } }" }
+    ],
+    correctAnswer: "@for $i from 1 through 3"
   },
   {
-    question: "Введіть тег для рядка таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<tr"
+    question: "Введіть вкладений цикл @for для внутрішнього $j від 1 до 2.",
+    codeLines: [
+      { type: "input", before: "@for $i from 1 through 3 {", after: "{ .item-#{$i}-#{$j} { width: 20px * $j; } } }" }
+    ],
+    correctAnswer: "@for $j from 1 through 2"
   },
   {
-    question: "Введіть тег для заголовка стовпця таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<th"
+    question: "Введіть цикл @for для створення ширини .col-#{$i} з множником 10%.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .col-#{$i} { width: 10% * $i; } }" }
+    ],
+    correctAnswer: "@for $i from 1 through 10"
   },
   {
-    question: "Введіть тег для клітинки таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<td"
+    question: "Введіть цикл @each для списку (small, medium, large).",
+    codeLines: [
+      { type: "input", before: "", after: "{ .size-#{$size} { font-size: $size; } }" }
+    ],
+    correctAnswer: "@each $size in small, medium, large"
   },
   {
-    question: "Введіть тег для нумерованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ol"
+    question: "Введіть цикл @for для .box-#{$i} з шириною 50px*$i від 1 до 5.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .box-#{$i} { width: 50px * $i; } }" }
+    ],
+    correctAnswer: "@for $i from 1 through 5"
   },
   {
-    question: "Введіть тег для маркованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ul"
+    question: "Введіть умову @if для перевірки $i == 2 у циклі.",
+    codeLines: [
+      { type: "input", before: "@for $i from 1 through 4 {", after: "{ color: red; } }" }
+    ],
+    correctAnswer: "@if $i == 2"
   },
   {
-    question: "Введіть тег для пункту списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<li"
+    question: "Введіть @continue у циклі @for, щоб пропустити $i == 4.",
+    codeLines: [
+      { type: "input", before: "@for $i from 1 through 5 {", after: ".item-#{$i} { width: 20px * $i; } }" }
+    ],
+    correctAnswer: "@if $i == 4 { @continue; }"
   },
   {
-    question: "Введіть атрибут для додавання бордера таблиці.",
-    codeLines: [{ type: "input", before: "<table ", after: "=\"1\">" }],
-    correctAnswer: "border"
+    question: "Введіть цикл @while з умовою $i < 5 для .item-#{$i}.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .item-#{$i} { height: 30px * $i; } }" }
+    ],
+    correctAnswer: "@while $i < 5"
   },
   {
-    question: "Введіть тег для вставки відео.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<video"
+    question: "Введіть змінну $j для внутрішнього циклу, початкове значення 1.",
+    codeLines: [
+      { type: "input", before: "", after: ";" }
+    ],
+    correctAnswer: "$j: 1"
   },
   {
-    question: "Введіть тег для вставки аудіо.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<audio"
-  },
- 
+    question: "Введіть нескінченний цикл @while true з умовою @break при $i > 20.",
+    codeLines: [
+      { type: "input", before: "", after: "{ .item-#{$i} { width: 10px * $i; } @if $i > 20 { @break; } }" }
+    ],
+    correctAnswer: "@while true"
+  }
 ];
 
-
-      let currentQuestion = 0;
+let currentQuestion = 0;
       let userAnswers = {};
 
       const btnPrev = document.getElementById("btnPrev");
@@ -1007,8 +1042,9 @@ const questions = [
         loadQuestion();
       }
 
+     
       function backToStart() {
-        window.location.href = "All-Practice-HTML.html";
+        window.location.href = "All-Practice-CSS.html";
       }
 
       loadQuestion();

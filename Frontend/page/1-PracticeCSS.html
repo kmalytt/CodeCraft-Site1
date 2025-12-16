@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JHTML - Практика | CodeCraft</title>
+    <title>CSS - Практика | CodeCraft</title>
 
     <style>
       * {
@@ -748,107 +748,148 @@
         window.location.href = "login.html";
       });
 
-
 const questions = [
   {
-    question: "Введіть тег для вставки зображення.",
-    codeLines: [{ type: "input", before: "", after: "" }],
-    correctAnswer: "<img"
+    question: "Введіть селектор для стилізації всіх абзаців.",
+    codeLines: [
+      { type: "input", before: "", after: " { color: blue; font-size: 16px; }" }
+    ],
+    correctAnswer: "p"
   },
   {
-    question: "Введіть атрибут, що визначає шлях до зображення.",
-    codeLines: [{ type: "input", before: "<img ", after: "=\"image.jpg\" alt=\"Фото\">" }],
-    correctAnswer: "src"
+    question: "Введіть властивість для зміни кольору тексту.",
+    codeLines: [
+      { type: "input", before: "p { ", after: ": blue; font-size: 16px; }" }
+    ],
+    correctAnswer: "color"
   },
   {
-    question: "Введіть атрибут для альтернативного тексту зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" ", after: ">" }],
-    correctAnswer: "alt"
+    question: "Введіть значення властивості font-size для 16px.",
+    codeLines: [
+      { type: "input", before: "p { color: blue; font-size: ", after: "; }" }
+    ],
+    correctAnswer: "16px"
   },
   {
-    question: "Введіть атрибут для ширини зображення.",
-    codeLines: [{ type: "input", before: "<img src=\"image.jpg\" alt=\"Фото\" ", after: ">" }],
-    correctAnswer: "width"
+    question: "Введіть селектор для заголовка h1.",
+    codeLines: [
+      { type: "input", before: "", after: " { color: red; text-align: center; }" }
+    ],
+    correctAnswer: "h1"
   },
   {
-    question: "Введіть тег для додавання фавікону.",
-    codeLines: [{ type: "input", before: "", after: " rel=\"icon\" href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "<link"
+    question: "Введіть властивість для центрування тексту.",
+    codeLines: [
+      { type: "input", before: "h1 { color: red; ", after: ": center; }" }
+    ],
+    correctAnswer: "text-align"
   },
   {
-    question: "Введіть атрибут для підключення фавікону.",
-    codeLines: [{ type: "input", before: "<link ", after: " href=\"favicon.ico\" type=\"image/x-icon\">" }],
-    correctAnswer: "rel"
+    question: "Вставте CSS-коментар.",
+    codeLines: [
+      { type: "input", before: "", after: " Це коментар */" }
+    ],
+    correctAnswer: "/*"
   },
   {
-    question: "Введіть атрибут для шляху фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" ", after: " type=\"image/x-icon\">" }],
-    correctAnswer: "href"
+    question: "Введіть селектор класу .highlight.",
+    codeLines: [
+      { type: "input", before: "", after: " { background-color: yellow; }" }
+    ],
+    correctAnswer: ".highlight"
   },
   {
-    question: "Введіть атрибут для типу файлу фавікону.",
-    codeLines: [{ type: "input", before: "<link rel=\"icon\" href=\"favicon.ico\" ", after: ">" }],
-    correctAnswer: "type"
+    question: "Введіть селектор ID #id-name.",
+    codeLines: [
+      { type: "input", before: "", after: " { color: red; }" }
+    ],
+    correctAnswer: "#id-name"
   },
   {
-    question: "Введіть тег для заголовка сторінки.",
-    codeLines: [{ type: "input", before: "", after: ">Моя сторінка</title>" }],
-    correctAnswer: "<title"
+    question: "Введіть універсальний селектор для всіх елементів.",
+    codeLines: [
+      { type: "input", before: "", after: " { margin: 0; padding: 0; }" }
+    ],
+    correctAnswer: "*"
   },
   {
-    question: "Введіть тег для створення таблиці.",
-    codeLines: [{ type: "input", before: "", after: " border=\"1\">" }],
-    correctAnswer: "<table"
+    question: "Введіть псевдоклас для посилання при наведенні.",
+    codeLines: [
+      { type: "input", before: "a", after: " { color: red; }" }
+    ],
+    correctAnswer: ":hover"
   },
   {
-    question: "Введіть тег для рядка таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<tr"
+    question: "Введіть псевдоелемент перед абзацом.",
+    codeLines: [
+      { type: "input", before: "p", after: " { content: '>> '; }" }
+    ],
+    correctAnswer: "::before"
   },
   {
-    question: "Введіть тег для заголовка стовпця таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<th"
+    question: "Введіть псевдоелемент після абзацу.",
+    codeLines: [
+      { type: "input", before: "p", after: " { content: ' <- '; }" }
+    ],
+    correctAnswer: "::after"
   },
   {
-    question: "Введіть тег для клітинки таблиці.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<td"
+    question: "Введіть властивість для зміни шрифту всього body.",
+    codeLines: [
+      { type: "input", before: "body { ", after: ": Arial; }" }
+    ],
+    correctAnswer: "font-family"
   },
   {
-    question: "Введіть тег для нумерованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ol"
+    question: "Введіть властивість для зміни кольору тексту абзацу.",
+    codeLines: [
+      { type: "input", before: "p { ", after: ": black; }" }
+    ],
+    correctAnswer: "color"
   },
   {
-    question: "Введіть тег для маркованого списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<ul"
+    question: "Введіть властивість з !important для зеленої тексту.",
+    codeLines: [
+      { type: "input", before: "p { color: ", after: " }" }
+    ],
+    correctAnswer: "green !important"
   },
   {
-    question: "Введіть тег для пункту списку.",
-    codeLines: [{ type: "input", before: "", after: ">" }],
-    correctAnswer: "<li"
+    question: "Введіть фон сторінки для body.",
+    codeLines: [
+      { type: "input", before: "body { background-color: ", after: "; }" }
+    ],
+    correctAnswer: "#f0f0f0"
   },
   {
-    question: "Введіть атрибут для додавання бордера таблиці.",
-    codeLines: [{ type: "input", before: "<table ", after: "=\"1\">" }],
-    correctAnswer: "border"
+    question: "Введіть колір заголовка h1.",
+    codeLines: [
+      { type: "input", before: "h1 { color: ", after: "; }" }
+    ],
+    correctAnswer: "#333"
   },
   {
-    question: "Введіть тег для вставки відео.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<video"
+    question: "Введіть колір тексту абзацу p.",
+    codeLines: [
+      { type: "input", before: "p { color: ", after: "; }" }
+    ],
+    correctAnswer: "#555"
   },
   {
-    question: "Введіть тег для вставки аудіо.",
-    codeLines: [{ type: "input", before: "", after: " controls>" }],
-    correctAnswer: "<audio"
+    question: "Введіть властивість для міжрядкового інтервалу абзацу.",
+    codeLines: [
+      { type: "input", before: "p { line-height: ", after: "; }" }
+    ],
+    correctAnswer: "1.5"
   },
- 
+  {
+    question: "Введіть властивість для зміни шрифту в body на sans-serif як запасний.",
+    codeLines: [
+      { type: "input", before: "body { font-family: 'Arial', ", after: "; }" }
+    ],
+    correctAnswer: "sans-serif"
+  }
 ];
-
-
       let currentQuestion = 0;
       let userAnswers = {};
 
@@ -1007,8 +1048,9 @@ const questions = [
         loadQuestion();
       }
 
+
       function backToStart() {
-        window.location.href = "All-Practice-HTML.html";
+        window.location.href = "All-Practice-CSS.html";
       }
 
       loadQuestion();
