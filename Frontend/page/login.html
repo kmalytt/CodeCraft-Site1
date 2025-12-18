@@ -164,6 +164,57 @@
             box-shadow: 0 5px 20px rgba(0, 217, 255, 0.4);
         }
 
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider span {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 8px;
+            background: transparent;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: #00D9FF;
+        }
+
+        .social-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
         .links {
             text-align: center;
             margin-top: 20px;
@@ -295,35 +346,29 @@
             window.location.href = 'home.html';
         });
 
-        // Обробка форми
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Отримуємо ім'я з email
-            const emailName = email.split('@')[0];
-            const userName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
-            
-            // Зберігаємо дані користувача
-            const userData = {
-                email: email,
-                name: userName,
-                avatar: emailName.charAt(0).toUpperCase(),
-                isLoggedIn: true
-            };
-            
-            // Зберігаємо в localStorage
-            localStorage.setItem('userLoggedIn', 'true');
-            localStorage.setItem('userData', JSON.stringify(userData));
-            
-            alert('Ви успішно увійшли!');
-            
-            // Переходимо на головну сторінку
-            window.location.href = 'home.html';
-        });
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    // (перевірку пароля поки опускаємо)
+
+    const userData = {
+        name: email.split('@')[0],
+        email: email,
+        avatar: email.charAt(0).toUpperCase(),
+        avatarColor: 'linear-gradient(135deg, #00D9FF, #00FF88)'
+    };
+
+    // ✅ ОЦЕ ГОЛОВНЕ
+    localStorage.setItem('userLoggedIn', 'true');
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    // Перехід на головну
+    window.location.href = 'home.html';
+});
+
     </script>
-    <script src="user-session.js"></script>
 </body>
 </html>
