@@ -13,11 +13,14 @@ function initUserSession() {
     const isProfilePage = currentPage === 'profile.html';
 
     if (isLoggedIn && userData.avatar) {
+        // Отримуємо збережений колір аватара
+        const avatarColor = userData.avatarColor || 'linear-gradient(135deg, #00D9FF, #00FF88)';
+        
         // Користувач залогінений
         if (isProfilePage) {
             // На сторінці профілю - показуємо профіль і кнопку виходу
             navRight.innerHTML = `
-                <button class="profile-btn" id="profileBtn" title="Профіль">
+                <button class="profile-btn" id="profileBtn" title="Профіль" style="background: ${avatarColor}">
                     ${userData.avatar}
                 </button>
                 <button class="logout-btn" id="logoutBtn">
@@ -43,9 +46,9 @@ function initUserSession() {
                 }
             });
         } else {
-            // На інших сторінках - тільки профіль
+            // На інших сторінках - тільки профіль з кольором
             navRight.innerHTML = `
-                <button class="profile-btn" id="profileBtn" title="Профіль">
+                <button class="profile-btn" id="profileBtn" title="Профіль" style="background: ${avatarColor}">
                     ${userData.avatar}
                 </button>
             `;
@@ -65,7 +68,7 @@ function initUserSession() {
                 </svg>
                 Вхід
             </button>
-
+            
         `;
     }
 }
